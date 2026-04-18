@@ -4,13 +4,12 @@
 
 <h1>Schools</h1>
 
-<div id="schools">
+<ul id="schools">
   <% @schools.each do |school| %>
-    <%= render school %>
-    <p>
-      <%= link_to "Show this school", school %>
-    </p>
+    <li>
+      <%= link_to school.name, school %>
+    </li>
   <% end %>
-</div>
+</ul>
 
 <%= link_to "New school", new_school_path %>
