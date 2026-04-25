@@ -12,5 +12,6 @@
     prefersdark: false;
     color-scheme: light;
     --color-primary: rgb(113, 190, 183);
+    --color-primary-content: white;
     --color-secondary: #B5E56D;
 }
