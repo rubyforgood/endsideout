@@ -8,11 +8,3 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
-
-@import "./variables.css";
-@import "./admin.css";
-@import "./buttons.css";
-
-*, ::before, ::after {
-  box-sizing: border-box;
-}
