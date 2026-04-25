@@ -1,4 +1,5 @@
 <%= form_with(model: [@school, student]) do |form| %>
+  <div class="flex flex-col gap-2">
   <% if student.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(student.errors.count, "error") %> prohibited this student from being saved:</h2>
@@ -11,32 +12,21 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :first_name, style: "display: block" %>
-    <%= form.text_field :first_name %>
-  </div>
+    <%= form.label :first_name, class: "label" %>
+    <%= form.text_field :first_name, class: "input w-full" %>
 
-  <div>
-    <%= form.label :last_name, style: "display: block" %>
-    <%= form.text_field :last_name %>
-  </div>
+    <%= form.label :last_name, class: "label" %>
+    <%= form.text_field :last_name, class: "input w-full" %>
 
-  <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
-  </div>
+    <%= form.label :email, class: "label" %>
+    <%= form.text_field :email, class: "input w-full" %>
 
-  <div>
-    <%= form.label :grade_level, style: "display: block" %>
-    <%= form.number_field :grade_level %>
-  </div>
+    <%= form.label :grade_level, class: "label" %>
+    <%= form.number_field :grade_level, class: "input w-full" %>
 
-  <div>
-    <%= form.label :gender, style: "display: block" %>
-    <%= form.text_field :gender %>
-  </div>
+    <%= form.label :gender, class: "label" %>
+    <%= form.text_field :gender, class: "input w-full" %>
 
-  <div>
-    <%= form.submit %>
+    <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>

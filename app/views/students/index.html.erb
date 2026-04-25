@@ -1,12 +1,12 @@
 <p style="color: green"><%= notice %></p>
 
 <% content_for :title, [ @school.name, "Students" ].join(" - ") %>
-<header class="index-header">
-  <h1>Students for <%= @school.name %></h1>
-  <%= link_to "New student", new_school_student_path(@school), class: "btn" %>
+<header class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl">Students for <%= @school.name %></h1>
+  <%= link_to "New student", new_school_student_path(@school), class: "btn btn-primary" %>
 </header>
-
-<table id="students" class="index-table">
+<div class="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
+<table id="students" class="table">
 
   <thead>
   <tr>
@@ -27,10 +27,11 @@
       <td><%= student.grade_level %></td>
       <td><%= student.gender %></td>
       <td>
-        <div class="actions">
-          <%= link_to "Edit", edit_student_path(student), class: "btn" %>
-          <%= button_to "Delete", student, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn--danger" %>
+        <div class="flex gap-2">
+          <%= link_to "Edit", edit_student_path(student), class: "btn btn-primary" %>
+          <%= button_to "Delete", student, method: :delete, data: { 'turbo-confirm': "Are you sure?" }, class: "btn btn-error" %>
         </div>
   <% end %>
   </tbody>
 </table>
+</div>
