@@ -1,5 +1,6 @@
 class Student < ApplicationRecord
   belongs_to :school
+  belongs_to :classroom
 
   enum :gender, %i[male female other].index_by(&:itself)
 

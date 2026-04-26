@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   scope :admin do
     resources :schools do
       resources :students, shallow: true
+      resources :classrooms, shallow: true, only: %i[edit update]
     end
   end
   root to: "schools#index"
