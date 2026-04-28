@@ -2,7 +2,9 @@ Rails.application.routes.draw do
   resource :session
   resources :passwords, param: :token
   scope :admin do
-    resources :schools
+    resources :schools do
+      resources :students, shallow: true
+    end
   end
   root to: "schools#index"
 
