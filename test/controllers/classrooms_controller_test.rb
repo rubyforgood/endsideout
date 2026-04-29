@@ -12,6 +12,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update classroom" do
+    sign_in_as users(:admin)
     patch classroom_url(@classroom), params: { classroom: { name: @classroom.name, teacher: @classroom.teacher } }
     assert_redirected_to school_students_url(@classroom.school)
   end

@@ -1,5 +1,6 @@
 class ClassroomsController < ApplicationController
   before_action :set_classroom, only: %i[ edit update ]
+
   # GET /classrooms/1/edit
   def edit
   end

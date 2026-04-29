@@ -19,7 +19,7 @@
     <%= form.text_field :teacher, class: "input w-full" %>
 
     <%= form.label :Link, class: "label" %>
-    <a href="https://www.classroom.google.com/" target="_blank" class="link">https://www.classroom.google.com/</a>
+    <%= link_to classroom_roster_url(classroom.uuid), classroom_roster_path(classroom.uuid), class: 'link' %>
 
     <%= form.submit class: "btn btn-primary" %>
   </div>
