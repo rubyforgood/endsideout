@@ -13,8 +13,9 @@ class AdrGenerator < Rails::Generators::NamedBase
 
   def next_number
     @next_number ||= begin
-      existing = Dir[File.join(destination_root, "docs/adrs/[0-9]*.md")].map { |f| File.basename(f).to_i }.max || 0
-      format("%04d", existing + 1)
+      highest_existing_adr = Dir.glob(File.join(destination_root, "docs/adrs/[0-9]*.md")).last
+      highest_existing_number = highest_existing_adr ? File.basename(highest_existing_adr).to_i : 0
+      format("%04d", highest_existing_number + 1)
     end
   end
 end
