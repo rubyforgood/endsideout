@@ -6,6 +6,22 @@ They provide a clear and concise record of the reasoning behind each decision, m
 A good ADR provides a clear "why" regarding a decision around the architecture of the system, especially when the decision is not obvious.
 
 
+## Creating a New ADR
+
+Use the built-in Rails generator to create a new ADR with the correct filename and template pre-filled:
+
+```sh
+bin/rails generate adr <title_in_snake_case>
+```
+
+For example:
+
+```sh
+bin/rails generate adr use_postgres_as_primary_database
+```
+
+This will create `docs/adrs/0001_use_postgres_as_primary_database.md` with today's date and all required sections. The number is assigned automatically based on existing ADRs. The title is normalized to snake_case regardless of how it's provided — kebab-case, CamelCase, and spaces all work.
+
 ## Format
 Each ADR should follow a consistent format to ensure clarity and ease of understanding. A common format includes the following sections:
 1. **Title**: A brief and descriptive title for the decision.
