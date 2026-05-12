@@ -3,7 +3,7 @@ require "axe-capybara"
 require "axe/matchers/be_axe_clean"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
-  driven_by :selenium, using: :headless_firefox, screen_size: [1400, 1400]
+  driven_by :selenium, using: :headless_firefox, screen_size: [ 1400, 1400 ]
 
   def assert_accessible
     matcher = Axe::Matchers::BeAxeClean.new
