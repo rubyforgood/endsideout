@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_29_230254) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_16_200133) do
   create_table "classrooms", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -20,6 +20,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_230254) do
     t.string "uuid", null: false
     t.index ["school_id"], name: "index_classrooms_on_school_id"
     t.index ["uuid"], name: "index_classrooms_on_uuid", unique: true
+  end
+
+  create_table "classrooms_programs", id: false, force: :cascade do |t|
+    t.integer "classroom_id", null: false
+    t.integer "program_id", null: false
+    t.index ["classroom_id"], name: "index_classrooms_programs_on_classroom_id"
+    t.index ["program_id"], name: "index_classrooms_programs_on_program_id"
+  end
+
+  create_table "programs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
   end
 
   create_table "schools", force: :cascade do |t|

@@ -1,5 +1,7 @@
 return unless Rails.env.development?
 
+programs = Program.create! [{name: "Know Your Health"}, {name: "3D Wellness"}]
+
 User.find_or_create_by!(email_address: "admin@example.com") do |user|
   user.name = "Admin"
   user.password = "password"
@@ -26,7 +28,13 @@ end
 grades = (1..12).to_a.sample(3)
 grades.each do |grade|
   classrooms = 2.times.map do |i|
-    school.classrooms.create!(name: "Classroom #{ i + 1 }", teacher: maybe { Faker::Name.name }, uuid: SecureRandom.urlsafe_base64(32))
+    classroom = school.classrooms.create!(name: "Classroom #{ i + 1 }", teacher: maybe { Faker::Name.name }, uuid: SecureRandom.urlsafe_base64(32))
+    if Faker::Boolean.boolean
+      classroom.programs << programs.sample
+    else
+      classroom.programs << programs
+    end
+    classroom
   end
   students = 10.times.map { |i| build_student_attrs(grade_level: grade, classroom_id: classrooms[i % 2].id) }
   school.students.create!(students)
