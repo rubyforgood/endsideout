@@ -29,10 +29,9 @@ grades = (1..12).to_a.sample(3)
 grades.each do |grade|
   classrooms = 2.times.map do |i|
     classroom = school.classrooms.create!(name: "Classroom #{ i + 1 }", teacher: maybe { Faker::Name.name }, uuid: SecureRandom.urlsafe_base64(32))
-    if Faker::Boolean.boolean
-      classroom.programs << programs.sample
-    else
-      classroom.programs << programs
+    assigned = Faker::Boolean.boolean ? [ programs.sample ] : programs
+    assigned.each do |program|
+      classroom.classroom_programs.create!(program: program, level: %w[basic moderate advanced].sample)
     end
     classroom
   end

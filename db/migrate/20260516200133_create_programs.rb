@@ -6,9 +6,14 @@ class CreatePrograms < ActiveRecord::Migration[8.1]
       t.timestamps
     end
 
-    create_join_table :classrooms, :programs do |t|
-      t.index :program_id
-      t.index :classroom_id
+    create_table :classroom_programs do |t|
+      t.references :classroom, null: false, foreign_key: true
+      t.references :program, null: false, foreign_key: true
+      t.string :level, null: false
+
+      t.timestamps
     end
+
+    add_index :classroom_programs, [ :classroom_id, :program_id ], unique: true
   end
 end

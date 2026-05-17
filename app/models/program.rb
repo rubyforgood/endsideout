@@ -1,3 +1,4 @@
 class Program < ApplicationRecord
-  has_and_belongs_to_many :classrooms
+  has_many :classroom_programs, dependent: :destroy
+  has_many :classrooms, through: :classroom_programs
 end

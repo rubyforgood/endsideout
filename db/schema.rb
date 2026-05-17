@@ -11,6 +11,17 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[8.1].define(version: 2026_05_16_200133) do
+  create_table "classroom_programs", force: :cascade do |t|
+    t.integer "classroom_id", null: false
+    t.datetime "created_at", null: false
+    t.string "level", null: false
+    t.integer "program_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["classroom_id", "program_id"], name: "index_classroom_programs_on_classroom_id_and_program_id", unique: true
+    t.index ["classroom_id"], name: "index_classroom_programs_on_classroom_id"
+    t.index ["program_id"], name: "index_classroom_programs_on_program_id"
+  end
+
   create_table "classrooms", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -20,13 +31,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_16_200133) do
     t.string "uuid", null: false
     t.index ["school_id"], name: "index_classrooms_on_school_id"
     t.index ["uuid"], name: "index_classrooms_on_uuid", unique: true
-  end
-
-  create_table "classrooms_programs", id: false, force: :cascade do |t|
-    t.integer "classroom_id", null: false
-    t.integer "program_id", null: false
-    t.index ["classroom_id"], name: "index_classrooms_programs_on_classroom_id"
-    t.index ["program_id"], name: "index_classrooms_programs_on_program_id"
   end
 
   create_table "programs", force: :cascade do |t|
@@ -80,6 +84,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_16_200133) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "classroom_programs", "classrooms"
+  add_foreign_key "classroom_programs", "programs"
   add_foreign_key "classrooms", "schools"
   add_foreign_key "sessions", "users"
   add_foreign_key "student_sessions", "students"

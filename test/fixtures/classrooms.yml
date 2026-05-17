@@ -5,11 +5,9 @@ one:
   school: one
   teacher: Teacher 1
   uuid: abcd-1234-efgh-5678
-  programs: [kyh]
 
 two:
   name: Classroom 2
   school: two
   teacher:
   uuid: wxyz-9876-ijkl-5432
-  programs: [3dw]
