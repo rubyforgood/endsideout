@@ -1,6 +1,6 @@
 return unless Rails.env.development?
 
-programs = Program.create! [{name: "Know Your Health"}, {name: "3D Wellness"}]
+programs = Program.create! [ { name: "Know Your Health" }, { name: "3D Wellness" } ]
 
 User.find_or_create_by!(email_address: "admin@example.com") do |user|
   user.name = "Admin"

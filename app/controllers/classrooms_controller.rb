@@ -32,6 +32,6 @@ class ClassroomsController < AdminController
     end
 
     def classroom_params
-      params.expect(classroom: [ :name, :teacher, classroom_programs_attributes: [[ :id, :program_id, :level, :_destroy ]] ])
+      params.expect(classroom: [ :name, :teacher, classroom_programs_attributes: [ [ :id, :program_id, :level, :_destroy ] ] ])
     end
 end
