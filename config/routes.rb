@@ -9,6 +9,9 @@ Rails.application.routes.draw do
       resources :students, shallow: true
       resources :classrooms, shallow: true, only: %i[edit update]
     end
+    resources :content_modules do
+      resources :links, shallow: true
+    end
   end
   root to: "schools#index"
 
