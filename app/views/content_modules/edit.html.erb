@@ -33,7 +33,7 @@
             <tbody>
               <% @content_module.links.each do |link| %>
                 <tr>
-                  <td><%= link_to link.url, target: "_blank", class: "link inline-flex items-center gap-1" do %><%= link.title %> ↗<% end %></td>
+                  <td><a href="<%= safe_external_url(link.url) %>" target="_blank" class="link inline-flex items-center gap-1"><%= link.title %> ↗</a></td>
                   <td><%= link.link_type.humanize %></td>
                   <td>
                     <div class="flex gap-2">
