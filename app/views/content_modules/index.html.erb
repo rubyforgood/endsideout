@@ -12,6 +12,7 @@
   <% @programs.each do |program| %>
     <%= link_to content_modules_path(program_id: program.id),
           role: "tab",
+          aria: { selected: program == @active_program },
           class: "tab #{"tab-active" if program == @active_program}" do %>
       <%= program.name %>
     <% end %>

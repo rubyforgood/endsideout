@@ -11,6 +11,12 @@ class ContentModulesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "index marks the active program tab as selected" do
+    program = programs(:kyh)
+    get content_modules_url(program_id: program.id)
+    assert_select "a[role='tab'][aria-selected='true'][href*='program_id=#{program.id}']"
+  end
+
   test "should get new" do
     get new_content_module_url
     assert_response :success

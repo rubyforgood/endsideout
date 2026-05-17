@@ -124,4 +124,21 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert_equal "basic", enrollment.reload.level
   end
+
+  test "should get schedule" do
+    get schedule_classroom_url(@classroom)
+    assert_response :success
+  end
+
+  test "schedule marks the first enrollment tab as selected by default" do
+    first_enrollment = @classroom.classroom_programs.includes(:program).order("programs.name").first
+    get schedule_classroom_url(@classroom)
+    assert_select "a[role='tab'][aria-selected='true'][href*='classroom_program_id=#{first_enrollment.id}']"
+  end
+
+  test "schedule marks the requested enrollment tab as selected" do
+    enrollment = classroom_programs(:one)
+    get schedule_classroom_url(@classroom, classroom_program_id: enrollment.id)
+    assert_select "a[role='tab'][aria-selected='true'][href*='classroom_program_id=#{enrollment.id}']"
+  end
 end
