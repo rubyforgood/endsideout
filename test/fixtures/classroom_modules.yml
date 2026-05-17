@@ -1,0 +1,8 @@
+one:
+  classroom_program: one
+  content_module: intro
+
+scheduled:
+  classroom_program: two
+  content_module: moderate_wellness
+  publish_on: 2026-05-01

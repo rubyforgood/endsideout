@@ -8,6 +8,7 @@ class ClassroomsController < AdminController
   def update
     respond_to do |format|
       if @classroom.update(classroom_params)
+        @classroom.classroom_programs.reload.each(&:generate_modules!)
         format.html { redirect_to school_students_url(@classroom.school), notice: "Classroom was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @classroom }
       else
