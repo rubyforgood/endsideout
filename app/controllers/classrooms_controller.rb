@@ -24,9 +24,10 @@ class ClassroomsController < AdminController
     end
 
     def build_missing_program_enrollments
-      existing = @classroom.classroom_programs.includes(:program).index_by(&:program_id)
+      @classroom.classroom_programs.load unless @classroom.classroom_programs.loaded?
+      enrolled_ids = @classroom.classroom_programs.target.map(&:program_id).to_set
       Program.order(:name).each do |program|
-        existing[program.id] || @classroom.classroom_programs.build(program: program)
+        @classroom.classroom_programs.build(program: program) unless enrolled_ids.include?(program.id)
       end
     end
 

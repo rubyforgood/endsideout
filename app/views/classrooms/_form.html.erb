@@ -28,6 +28,7 @@
           <label class="flex items-center gap-2 cursor-pointer">
             <input type="checkbox" class="checkbox checkbox-primary"
                    <%= "checked" if enrolled %>
+                   autocomplete="off"
                    data-action="change->program-enrollment#toggle">
             <span class="label"><%= cp_form.object.program.name %></span>
           </label>
