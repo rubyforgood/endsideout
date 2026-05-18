@@ -35,6 +35,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update an existing enrollment level" do
     enrollment = classroom_programs(:one)
+    enrollment.classroom_modules.update_all(publish_on: nil)
 
     patch classroom_url(@classroom), params: {
       classroom: {

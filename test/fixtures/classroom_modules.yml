@@ -1,6 +1,7 @@
 one:
   classroom_program: one
   content_module: intro
+  publish_on: 2026-05-01
 
 scheduled:
   classroom_program: two
