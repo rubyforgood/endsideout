@@ -36,10 +36,11 @@ class ContentModulesController < AdminController
   end
 
   def destroy
-    @content_module.destroy!
-    redirect_to content_modules_path, notice: "Module was successfully deleted.", status: :see_other
-  rescue ActiveRecord::DeleteRestrictionError
-    redirect_to content_modules_path, alert: "Cannot delete a module that has been assigned to classrooms."
+    if @content_module.destroy
+      redirect_to content_modules_path, notice: "Module was successfully deleted.", status: :see_other
+    else
+      redirect_to content_modules_path, alert: "Cannot delete a module that has been assigned to classrooms."
+    end
   end
 
   private

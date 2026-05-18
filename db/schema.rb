@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_17_180806) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_17_183252) do
+  create_table "classroom_modules", force: :cascade do |t|
+    t.integer "classroom_program_id", null: false
+    t.integer "content_module_id", null: false
+    t.datetime "created_at", null: false
+    t.date "publish_on"
+    t.datetime "updated_at", null: false
+    t.index ["classroom_program_id", "content_module_id"], name: "index_classroom_modules_on_classroom_program_and_content_module", unique: true
+    t.index ["classroom_program_id"], name: "index_classroom_modules_on_classroom_program_id"
+    t.index ["content_module_id"], name: "index_classroom_modules_on_content_module_id"
+  end
+
   create_table "classroom_programs", force: :cascade do |t|
     t.integer "classroom_id", null: false
     t.datetime "created_at", null: false
@@ -105,6 +116,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_17_180806) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "classroom_modules", "classroom_programs"
+  add_foreign_key "classroom_modules", "content_modules"
   add_foreign_key "classroom_programs", "classrooms"
   add_foreign_key "classroom_programs", "programs"
   add_foreign_key "classrooms", "schools"
