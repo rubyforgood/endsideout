@@ -16,25 +16,26 @@ class ClassroomTest < ActiveSupport::TestCase
 
   test "updates level via nested attributes" do
     classroom = classrooms(:one)
-    cp = classroom_programs(:one)
+    enrollment = classroom_programs(:one)
+    enrollment.classroom_modules.update_all(publish_on: nil)
 
     classroom.update!(
-      classroom_programs_attributes: [ { id: cp.id, program_id: cp.program_id, level: "advanced" } ]
+      classroom_programs_attributes: [ { id: enrollment.id, program_id: enrollment.program_id, level: "advanced" } ]
     )
 
-    assert_equal "advanced", cp.reload.level
+    assert_equal "advanced", enrollment.reload.level
   end
 
   test "destroys enrollment via nested attributes" do
     classroom = classrooms(:one)
-    cp = classroom_programs(:one)
+    enrollment = classroom_programs(:one)
 
     # Add a second enrollment first so the classroom still has one after destruction
     classroom.classroom_programs.create!(program: programs(:"3dw"), level: "basic")
 
     assert_difference "ClassroomProgram.count", -1 do
       classroom.update!(
-        classroom_programs_attributes: [ { id: cp.id, _destroy: "1" } ]
+        classroom_programs_attributes: [ { id: enrollment.id, _destroy: "1" } ]
       )
     end
   end
@@ -64,10 +65,10 @@ class ClassroomTest < ActiveSupport::TestCase
 
   test "is invalid when all programs are removed" do
     classroom = classrooms(:one)
-    cp = classroom_programs(:one)
+    enrollment = classroom_programs(:one)
 
     classroom.assign_attributes(
-      classroom_programs_attributes: [ { id: cp.id, _destroy: "1" } ]
+      classroom_programs_attributes: [ { id: enrollment.id, _destroy: "1" } ]
     )
 
     assert_not classroom.valid?

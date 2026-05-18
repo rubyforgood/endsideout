@@ -1,13 +1,21 @@
 class ClassroomsController < AdminController
-  before_action :set_classroom, only: %i[ edit update ]
+  before_action :set_classroom, only: %i[edit update schedule]
 
   def edit
     build_missing_program_enrollments
   end
 
+  def schedule
+    @classroom_programs = @classroom.classroom_programs
+      .includes(:program, classroom_modules: :content_module)
+      .order("programs.name")
+    @active_enrollment = @classroom_programs.find { |cp| cp.id.to_s == params[:classroom_program_id] } || @classroom_programs.first
+  end
+
   def update
     respond_to do |format|
       if @classroom.update(classroom_params)
+        @classroom.classroom_programs.reload.each(&:generate_modules!)
         format.html { redirect_to school_students_url(@classroom.school), notice: "Classroom was successfully updated.", status: :see_other }
         format.json { render :show, status: :ok, location: @classroom }
       else
