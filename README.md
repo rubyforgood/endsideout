@@ -32,11 +32,12 @@ Built on **Ruby on Rails 8** with Hotwire, Tailwind, SQLite, and the Solid stack
 
 ### Prerequisites
 
-- **[mise](https://mise.jdx.dev/)**: Recommended environment and tool version manager for Ruby.
+- **[mise](https://mise.jdx.dev/)**: Recommended environment and tool version manager for Ruby (macOS & Linux / WSL2).
 - **libvips**: Native image processing library required by Active Storage.
   - **macOS**: `brew install libvips`
   - **Ubuntu/Debian**: `sudo apt-get install -y libvips`
   - **Fedora**: `sudo dnf install vips`
+  - **Windows**: Use [WSL2 (Windows Subsystem for Linux)](https://learn.microsoft.com/en-us/windows/wsl/install) with Ubuntu/Debian.
 - **SQLite3**: Database engine (pre-installed on macOS).
 
 ### Local Setup
