@@ -66,7 +66,8 @@ Built on **Ruby on Rails 8** with Hotwire, Tailwind, SQLite, and the Solid stack
 
 ### Useful Commands
 
+- **Run all CI checks (Recommended before pushing)**: `bin/ci` (runs setup, RuboCop, security audits, and tests)
 - **Run unit & integration tests**: `bin/rails test`
 - **Run system tests**: `bin/rails test:system`
 - **Code style & linting**: `bin/rubocop`
-- **Security audits**: `bin/brakeman` and `bin/bundler-audit`
+- **Security audits**: `bin/brakeman`, `bin/bundler-audit`, and `bin/importmap audit`
