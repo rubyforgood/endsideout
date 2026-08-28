@@ -1,4 +1,5 @@
 class GamesController < AdminController
+  before_action :set_content_module, only: %i[ new create ]
   before_action :set_game, only: %i[ edit update destroy ]
 
   def index
@@ -6,22 +7,20 @@ class GamesController < AdminController
   end
 
   def new
-    @game = Game.new
+    @game = @content_module.games.build
   end
 
   def edit
   end
 
   def create
-    @game = Game.new(game_params)
+    @game = @content_module.games.build(game_params)
 
     respond_to do |format|
       if @game.save
-        format.html { redirect_to @game, notice: "Game was successfully created." }
-        format.json { render :show, status: :created, location: @game }
+        format.html { redirect_to @content_module, notice: "Game was successfully created." }
       else
         format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @game.errors, status: :unprocessable_content }
       end
     end
   end
@@ -54,5 +53,9 @@ class GamesController < AdminController
 
     def game_params
       params.expect(game: [ :title, :slug, :content_module_id, :description ])
+    end
+
+    def set_content_module
+      @content_module = ContentModule.find(params[:content_module_id])
     end
 end
