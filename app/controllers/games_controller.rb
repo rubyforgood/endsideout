@@ -1,6 +1,6 @@
 class GamesController < AdminController
   before_action :set_content_module, only: %i[ new create ]
-  before_action :set_game, only: %i[ edit update destroy ]
+  before_action :set_game, only: %i[ show edit update destroy ]
 
   def index
     @games = Game.all

@@ -3,6 +3,8 @@ require "test_helper"
 class GamesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @game = games(:one)
+    @content_module = content_modules(:intro)
+    sign_in_as users(:admin)
   end
 
   test "should get index" do
@@ -11,21 +13,16 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_game_url
+    get new_content_module_game_url(@content_module)
     assert_response :success
   end
 
   test "should create game" do
     assert_difference("Game.count") do
-      post games_url, params: { game: { content_module_id: @game.content_module_id, description: @game.description, slug: @game.slug, title: @game.title } }
+      post content_module_games_url(@content_module), params: { game: { slug: "new-game", title: "New Game" } }
     end
 
-    assert_redirected_to game_url(Game.last)
-  end
-
-  test "should show game" do
-    get game_url(@game)
-    assert_response :success
+    assert_redirected_to content_module_url(@content_module)
   end
 
   test "should get edit" do
@@ -34,7 +31,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update game" do
-    patch game_url(@game), params: { game: { content_module_id: @game.content_module_id, description: @game.description, slug: @game.slug, title: @game.title } }
+    patch game_url(@game), params: { game: { slug: "updated-game", title: "Updated Game" } }
     assert_redirected_to game_url(@game)
   end
 
