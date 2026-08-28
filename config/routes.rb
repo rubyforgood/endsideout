@@ -15,6 +15,11 @@ Rails.application.routes.draw do
       resources :links, shallow: true
     end
     resources :classroom_modules, only: %i[update]
+
+  end
+
+  namespace :admin do
+    get :csv_template, to: "csv#download"
   end
   root to: "schools#index"
 
