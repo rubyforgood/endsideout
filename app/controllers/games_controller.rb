@@ -1,25 +1,17 @@
-class GamesController < ApplicationController
-  before_action :set_game, only: %i[ show edit update destroy ]
+class GamesController < AdminController
+  before_action :set_game, only: %i[ edit update destroy ]
 
-  # GET /games or /games.json
   def index
     @games = Game.all
   end
 
-  # GET /games/1 or /games/1.json
-  def show
-  end
-
-  # GET /games/new
   def new
     @game = Game.new
   end
 
-  # GET /games/1/edit
   def edit
   end
 
-  # POST /games or /games.json
   def create
     @game = Game.new(game_params)
 
@@ -34,7 +26,6 @@ class GamesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /games/1 or /games/1.json
   def update
     respond_to do |format|
       if @game.update(game_params)
@@ -47,7 +38,6 @@ class GamesController < ApplicationController
     end
   end
 
-  # DELETE /games/1 or /games/1.json
   def destroy
     @game.destroy!
 
@@ -58,12 +48,10 @@ class GamesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_game
       @game = Game.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def game_params
       params.expect(game: [ :title, :slug, :content_module_id, :description ])
     end

@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       resources :links, shallow: true
     end
     resources :classroom_modules, only: %i[update]
+    resources :games, shallow: true
   end
   root to: "schools#index"
 
