@@ -11,8 +11,8 @@ Rails.application.routes.draw do
         member { get :schedule }
       end
     end
-    resources :content_modules do
-      resources :links, shallow: true
+    resources :content_modules, except: [:show] do
+      resources :links, shallow: true, except: %i[index show]
     end
     resources :classroom_modules, only: %i[update]
   end
