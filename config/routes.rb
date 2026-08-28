@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :games
   resource :session
   resources :passwords, param: :token
   resource :student_session, only: %i[new create destroy]
