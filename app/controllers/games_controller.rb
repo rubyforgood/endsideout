@@ -18,6 +18,8 @@ class GamesController < AdminController
 
     respond_to do |format|
       if @game.save
+        # TODO: This should go back to the previous page, but it doesn't
+        # TODO: Rewrite these to match the house `redirect_to` style
         format.html { redirect_back(fallback_location: @content_module, notice: "Game was successfully created.") }
       else
         format.html { render :new, status: :unprocessable_content }
