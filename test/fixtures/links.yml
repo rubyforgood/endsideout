@@ -5,9 +5,9 @@ survey_one:
   link_type: survey
   position: 1
 
-game_one:
+link_one:
   content_module: intro
-  title: Health Game
-  url: https://example.com/game/1
-  link_type: game
+  title: Health Link
+  url: https://example.com/link/1
+  link_type: link
   position: 2
