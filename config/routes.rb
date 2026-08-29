@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
   namespace :admin do
     get :csv_template, to: "csv#download"
+    post :csv_import, to: "csv#import"
   end
   root to: "schools#index"
 
