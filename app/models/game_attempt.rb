@@ -4,8 +4,10 @@ class GameAttempt < ApplicationRecord
 
   validates :student_id, :game_id, presence: true
 
-  before_create do
-    self.token = SecureRandom.hex(12)
+  before_validation :ensure_token, on: :create
+
+  def ensure_token
+    self.token ||= SecureRandom.hex(12)
   end
 
   def start!
