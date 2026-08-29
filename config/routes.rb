@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resource :student_session, only: %i[new create destroy]
   resources :student_homes, only: %i[index]
   resources :classroom_rosters, only: %i[show], param: :uuid
+  resources :game_attempts, only: %i[show create update]
   scope :admin do
     resources :schools do
       resources :students, shallow: true, except: [ :show ]
