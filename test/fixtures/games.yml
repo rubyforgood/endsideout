@@ -5,3 +5,9 @@ one:
   slug: game-1
   content_module: intro
   description: MyText
+
+two:
+  title: Game 2
+  slug: game-2
+  content_module: intro
+  description: MyText
