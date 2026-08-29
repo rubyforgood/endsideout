@@ -32,10 +32,15 @@ class GameAttemptsController < ApplicationController
       @game_attempt = GameAttempt.find_by(token: params[:token])
       return if @game_attempt.present?
 
-      game_attempt_attrs = GameAttempt.verify_token(params[:token])
-      @game_attempt = GameAttempt.create!(game_attempt_attrs.merge(token: params[:token]))
+      @game_attempt = GameAttempt.create!(create_game_attempt_params)
     end
 
+    def create_game_attempt_params
+      game_attempt_attrs = GameAttempt.verify_token(params[:token])
+      game_attempt_attrs.merge(token: params[:token])
+    end
+
+    # NOTE (@abachman): add params that can be updated by games here
     def game_attempt_params
       params.expect(game_attempt: [ :outcome, :score ])
     end
