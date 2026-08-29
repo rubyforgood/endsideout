@@ -71,7 +71,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_29_155338) do
   end
 
   create_table "games", force: :cascade do |t|
-    t.integer "content_module_id", null: false
+    t.integer "content_module_id"
     t.datetime "created_at", null: false
     t.text "description"
     t.string "slug", null: false
