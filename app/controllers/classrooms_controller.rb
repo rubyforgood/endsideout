@@ -30,6 +30,7 @@ class ClassroomsController < AdminController
   end
 
   def edit
+    @teachers = @classroom.school.teachers
     build_missing_program_enrollments
   end
 
@@ -41,6 +42,8 @@ class ClassroomsController < AdminController
   end
 
   def update
+    @teachers = @classroom.school.teachers
+
     respond_to do |format|
       if @classroom.update(classroom_params)
         @classroom.classroom_programs.reload.each(&:generate_modules!)
@@ -72,6 +75,6 @@ class ClassroomsController < AdminController
     end
 
     def classroom_params
-      params.expect(classroom: [ :name, :teacher, classroom_programs_attributes: [ [ :id, :program_id, :level, :_destroy ] ] ])
+      params.expect(classroom: [ :name, :teacher_id, classroom_programs_attributes: [ [ :id, :program_id, :level, :_destroy ] ] ])
     end
 end

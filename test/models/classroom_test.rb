@@ -74,4 +74,17 @@ class ClassroomTest < ActiveSupport::TestCase
     assert_not classroom.valid?
     assert_includes classroom.errors[:base], "must have at least one program enrolled"
   end
+
+  test "belongs to a teacher" do
+    association = Classroom.reflect_on_association(:teacher)
+
+    assert_not_nil association
+    assert_equal :belongs_to, association.macro
+  end
+
+  test "teacher association is optional" do
+    association = Classroom.reflect_on_association(:teacher)
+
+    assert_equal true, association.options[:optional]
+  end
 end
