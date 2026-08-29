@@ -1,8 +1,6 @@
 class Link < ApplicationRecord
   include Ordered
 
-  belongs_to :content_module
-
   enum :link_type, { survey: "survey" }, validate: true
 
   validates :title, :url, :link_type, presence: true
