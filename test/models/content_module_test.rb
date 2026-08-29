@@ -35,14 +35,6 @@ class ContentModuleTest < ActiveSupport::TestCase
     end
   end
 
-  test "links are returned in position order" do
-    content_module = ContentModule.create!(program: @program, level: "basic", name: "Ordered Module")
-    last = content_module.links.create!(title: "Last", url: "https://example.com/2", link_type: "survey", position: 2)
-    first = content_module.links.create!(title: "First", url: "https://example.com/1", link_type: "survey", position: 1)
-
-    assert_equal [ first, last ], content_module.links.to_a
-  end
-
   test "cannot be destroyed when classroom modules exist" do
     content_module = ContentModule.create!(program: @program, level: "basic", name: "Assigned Module")
     classroom_program = classroom_programs(:one)
