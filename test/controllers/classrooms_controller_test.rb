@@ -3,7 +3,7 @@ require "test_helper"
 class ClassroomsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @classroom = classrooms(:one)
-    sign_in_as users(:admin)
+    sign_in_as users(:one)
   end
 
   test "should get edit" do

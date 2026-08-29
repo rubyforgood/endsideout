@@ -4,7 +4,7 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @school = schools(:one)
     @student = students(:one)
-    sign_in_as users(:admin)
+    sign_in_as users(:one)
   end
 
   test "should get index" do

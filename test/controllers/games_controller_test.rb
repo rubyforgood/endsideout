@@ -4,7 +4,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @game = games(:one)
     @content_module = content_modules(:one)
-    sign_in_as users(:admin)
+    sign_in_as users(:one)
   end
 
   test "should get index" do

@@ -3,7 +3,7 @@ require "test_helper"
 class ContentModulesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @content_module = content_modules(:one)
-    sign_in_as users(:admin)
+    sign_in_as users(:one)
   end
 
   test "should get index" do

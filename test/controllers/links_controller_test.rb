@@ -4,7 +4,7 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   setup do
     @link = links(:one)
     @mod = content_modules(:one)
-    sign_in_as users(:admin)
+    sign_in_as users(:one)
   end
 
   test "should get new" do
