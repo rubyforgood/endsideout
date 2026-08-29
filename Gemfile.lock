@@ -108,6 +108,13 @@ GEM
     connection_pool (3.0.2)
     crass (1.0.7)
     csv (3.3.6)
+    cruise (0.2.0)
+    cruise (0.2.0-aarch64-linux-gnu)
+    cruise (0.2.0-aarch64-linux-musl)
+    cruise (0.2.0-arm-linux-gnu)
+    cruise (0.2.0-arm64-darwin)
+    cruise (0.2.0-x86_64-linux-gnu)
+    cruise (0.2.0-x86_64-linux-musl)
     date (3.5.1)
     debug (1.11.1)
       irb (~> 1.10)
@@ -127,6 +134,7 @@ GEM
     ffi (1.17.4-arm-linux-gnu)
     ffi (1.17.4-arm-linux-musl)
     ffi (1.17.4-arm64-darwin)
+    ffi (1.17.4-x86_64-darwin)
     ffi (1.17.4-x86_64-linux-gnu)
     ffi (1.17.4-x86_64-linux-musl)
     fugit (1.13.0)
@@ -134,6 +142,14 @@ GEM
       raabro (~> 1.4)
     globalid (1.4.0)
       activesupport (>= 6.1)
+    herb (0.10.3-aarch64-linux-gnu)
+    herb (0.10.3-aarch64-linux-musl)
+    herb (0.10.3-arm-linux-gnu)
+    herb (0.10.3-arm-linux-musl)
+    herb (0.10.3-arm64-darwin)
+    herb (0.10.3-x86_64-darwin)
+    herb (0.10.3-x86_64-linux-gnu)
+    herb (0.10.3-x86_64-linux-musl)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     image_processing (2.0.3)
@@ -147,9 +163,6 @@ GEM
       prism (>= 1.3.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jbuilder (2.15.1)
-      actionview (>= 7.0.0)
-      activesupport (>= 7.0.0)
     json (2.21.2)
     kamal (2.12.0)
       activesupport (>= 7.0)
@@ -205,6 +218,8 @@ GEM
     nokogiri (1.19.4-arm-linux-musl)
       racc (~> 1.4)
     nokogiri (1.19.4-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.19.4-x86_64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-linux-gnu)
       racc (~> 1.4)
@@ -277,6 +292,10 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
+    reactionview (0.4.0)
+      actionview (>= 7.0)
+      cruise
+      herb (>= 0.10.0, < 0.11.0)
     regexp_parser (2.12.0)
     reline (0.7.0)
       io-console (~> 0.5)
@@ -342,6 +361,7 @@ GEM
     sqlite3 (2.9.6-arm-linux-gnu)
     sqlite3 (2.9.6-arm-linux-musl)
     sqlite3 (2.9.6-arm64-darwin)
+    sqlite3 (2.9.6-x86_64-darwin)
     sqlite3 (2.9.6-x86_64-linux-gnu)
     sqlite3 (2.9.6-x86_64-linux-musl)
     sshkit (1.25.1)
@@ -360,12 +380,14 @@ GEM
     tailwindcss-ruby (4.3.3-aarch64-linux-gnu)
     tailwindcss-ruby (4.3.3-aarch64-linux-musl)
     tailwindcss-ruby (4.3.3-arm64-darwin)
+    tailwindcss-ruby (4.3.3-x86_64-darwin)
     tailwindcss-ruby (4.3.3-x86_64-linux-gnu)
     tailwindcss-ruby (4.3.3-x86_64-linux-musl)
     thor (1.5.0)
     thruster (0.1.26)
     thruster (0.1.26-aarch64-linux)
     thruster (0.1.26-arm64-darwin)
+    thruster (0.1.26-x86_64-darwin)
     thruster (0.1.26-x86_64-linux)
     timeout (0.6.1)
     tsort (0.2.0)
@@ -401,6 +423,7 @@ PLATFORMS
   arm64-darwin-23
   arm64-darwin-24
   arm64-darwin-25
+  x86_64-darwin-24
   x86_64-linux
   x86_64-linux-gnu
   x86_64-linux-musl
@@ -415,13 +438,14 @@ DEPENDENCIES
   csv
   debug
   faker (~> 3.8)
+  herb
   image_processing (~> 2.0)
   importmap-rails
-  jbuilder
   kamal
   propshaft
   puma (>= 5.0)
   rails (~> 8.1.3)
+  reactionview
   rubocop-rails-omakase
   ruby-vips (~> 2.0)
   selenium-webdriver
@@ -468,6 +492,13 @@ CHECKSUMS
   connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
   crass (1.0.7) sha256=94868719948664c89ddcaf0a37c65048413dfcb1c869470a5f7a7ceb5390b295
   csv (3.3.6) sha256=aba61e7e507a66f03d45cb1f3c4b6359861c3504038b422962875dce099e4456
+  cruise (0.2.0) sha256=ffdbc6f9fa7b6071dbf2c7435bf887d41a822fe9b6ab422fa8a8456c0f034d71
+  cruise (0.2.0-aarch64-linux-gnu) sha256=87a5a3fbda8070b4a531b84161c7c5acbcc54f62e57b9ffa6960df61e9b9c2c3
+  cruise (0.2.0-aarch64-linux-musl) sha256=9f14c9a00aeeb67d75a29dd3d3bd4ce60bef23d148c35e525461e5990b986d25
+  cruise (0.2.0-arm-linux-gnu) sha256=7faf04aef6b0b5e2308827450d9e4626026bd35b91e0727cef91aa508057e07c
+  cruise (0.2.0-arm64-darwin) sha256=fb3e9b265868e077dd754b4a430ab14d8abb209281c61c906b74f326b797a10a
+  cruise (0.2.0-x86_64-linux-gnu) sha256=3d16f6a6a3409f2cae5dbdb3fb322389fa61a6a18d80a2df50fc4c807f1f0fd9
+  cruise (0.2.0-x86_64-linux-musl) sha256=2be5c5f2fb474ff5a4f42e3421dbb27fb439008a53697f7a6a3d2f3ec2de711c
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   debug (1.11.1) sha256=2e0b0ac6119f2207a6f8ac7d4a73ca8eb4e440f64da0a3136c30343146e952b6
   dotenv (3.2.0) sha256=e375b83121ea7ca4ce20f214740076129ab8514cd81378161f11c03853fe619d
@@ -483,16 +514,24 @@ CHECKSUMS
   ffi (1.17.4-arm-linux-gnu) sha256=d6dbddf7cb77bf955411af5f187a65b8cd378cb003c15c05697f5feee1cb1564
   ffi (1.17.4-arm-linux-musl) sha256=9d4838ded0465bef6e2426935f6bcc93134b6616785a84ffd2a3d82bc3cf6f95
   ffi (1.17.4-arm64-darwin) sha256=19071aaf1419251b0a46852abf960e77330a3b334d13a4ab51d58b31a937001b
+  ffi (1.17.4-x86_64-darwin) sha256=aa70390523cf3235096cf64962b709b4cfbd5c082a2cb2ae714eb0fe2ccda496
   ffi (1.17.4-x86_64-linux-gnu) sha256=9d3db14c2eae074b382fa9c083fe95aec6e0a1451da249eab096c34002bc752d
   ffi (1.17.4-x86_64-linux-musl) sha256=3fdf9888483de005f8ef8d1cf2d3b20d86626af206cbf780f6a6a12439a9c49e
   fugit (1.13.0) sha256=a4f093fce740da52f216740a5041e2a594ea763cdb89e8b2754ca4399634ab18
   globalid (1.4.0) sha256=037f12fbf1d9d7a014d501c2d5c77356fd4ddd96d7a7991d6700bba96706f427
+  herb (0.10.3-aarch64-linux-gnu) sha256=1eaea87e6577557492a1b0ddaae989fba8a8ddd382e888ee5f939ce6ded06eb8
+  herb (0.10.3-aarch64-linux-musl) sha256=4ac7ccd194f8f284ffc7bf093676f5194cf0f44ea4a7d3888eac095e81c43e1f
+  herb (0.10.3-arm-linux-gnu) sha256=d5f007b665a705b5566f1068b54e1600d5ffe6cb0b7d274e27dd7ed5918ca54e
+  herb (0.10.3-arm-linux-musl) sha256=09a0979f64ee3aff0b25a345c2cecd15992a0532295fd00249d73f13a3e313b1
+  herb (0.10.3-arm64-darwin) sha256=1a5bef57d925d775496328e7a01a9c1260e1d83bed8038b60a4f8c81b12c15a3
+  herb (0.10.3-x86_64-darwin) sha256=e02e43b3bb1977f4fd08f3330b5f2aa3292ca2d572a8bd59688eca8b79725f46
+  herb (0.10.3-x86_64-linux-gnu) sha256=cbb49b66f2bdc92d17109d1ea9452e88ba6a8ae52e9ddd5279deff83dcc4c66d
+  herb (0.10.3-x86_64-linux-musl) sha256=c84482d6b57f13c2e1a0fa029649efb0e5fdc876a3fd564bae09cf42bd4d5ae1
   i18n (1.15.2) sha256=00f9eb62412fe593b2a65a97daa75300d37abb8f7202ec748e94b6d46a9dd1b5
   image_processing (2.0.3) sha256=793e33f38470edd0a2d6bfd00acf8cb239c76284ba2e3dfb76633ac2b457f23a
   importmap-rails (2.2.3) sha256=7101be2a4dc97cf1558fb8f573a718404c5f6bcfe94f304bf1f39e444feeb16a
   io-console (0.9.2) sha256=efa74f891dd03c0939a931dfc6e74c2813d904763d456ea9762b0525e748db08
   irb (1.18.0) sha256=de9454a0703a54704b9811a5ef31a60c86949fbf4013fcf244fabc7c775248e3
-  jbuilder (2.15.1) sha256=2430bec28fb0cebacb5875b1009cf9d8bc3c303ccb810c4c8b062a4b51457637
   json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
   kamal (2.12.0) sha256=c51d1ab085e515470f98d0c0f043637122b5ebf76e8b610cb1fbbed0b7f9b8fa
   language_server-protocol (3.17.0.6) sha256=5ef2c0c138f8267e1bc631d3328347d354f96724b0af22f2c79516120443b7f0
@@ -518,6 +557,7 @@ CHECKSUMS
   nokogiri (1.19.4-arm-linux-gnu) sha256=a301313e38bb065d68239e79734bcd6f56fb6efaacebde29e9abf2a4735340ca
   nokogiri (1.19.4-arm-linux-musl) sha256=588923c101bcfa78869734d247d25b598674323e7f22474fc468f6e5647311eb
   nokogiri (1.19.4-arm64-darwin) sha256=a46db9853286e6597b36ebc6953817d15acf3a299583eb3f89fdc6f91dd63527
+  nokogiri (1.19.4-x86_64-darwin) sha256=7fd17057d3e1f00e9954a74b3cd76595d3d4a5ef233b7ed9599047c204f70551
   nokogiri (1.19.4-x86_64-linux-gnu) sha256=379fae440b28915e3f19d752ce2dcf8465ed2b2fbefd2a7ca0dd497bc981a06a
   nokogiri (1.19.4-x86_64-linux-musl) sha256=17dfb7c1fa194ae02fbf7c51a7afc8d278045ab3fdacfd86f91d02d7b274470b
   ostruct (0.6.3) sha256=95a2ed4a4bd1d190784e666b47b2d3f078e4a9efda2fccf18f84ddc6538ed912
@@ -543,6 +583,7 @@ CHECKSUMS
   rake (13.4.2) sha256=cb825b2bd5f1f8e91ca37bddb4b9aaf345551b4731da62949be002fa89283701
   rbs (4.2.0) sha256=51f7b886dcc05bc09e10b901daa6a81829f6adc03101d6ca9ea4aac6103e0674
   rdoc (8.0.0) sha256=03bf8c08a9639658855a0cfd77c0abca8325c227693f7f33f82957811348c469
+  reactionview (0.4.0) sha256=a0e4341415ac2c70fdd681b49746da1395d70a68750ac6e834d8e500fada38ee
   regexp_parser (2.12.0) sha256=35a916a1d63190ab5c9009457136ae5f3c0c7512d60291d0d1378ba18ce08ebb
   reline (0.7.0) sha256=5b012d8e55dbf9d450f12bde2cf7d15ff546ae80b3f8f3b30e570d431815583d
   rexml (3.4.4) sha256=19e0a2c3425dfbf2d4fc1189747bdb2f849b6c5e74180401b15734bc97b5d142
@@ -564,6 +605,7 @@ CHECKSUMS
   sqlite3 (2.9.6-arm-linux-gnu) sha256=33541500e3615da02afe54a9cc38b17a6985d3cf9d8b76d6d0a83002f114e7ec
   sqlite3 (2.9.6-arm-linux-musl) sha256=c5490af48bb228fefa54314e9541375c3907e70f8109f3881b5ff97e1c93ae33
   sqlite3 (2.9.6-arm64-darwin) sha256=849b5d7f795e60fe25076d62c72dd722beb45b3850b516ad978d60ee848ec15b
+  sqlite3 (2.9.6-x86_64-darwin) sha256=b5842fea77781c14da03fa7bc0feb82db03a69e135affcb6f5399cbd2797a5f3
   sqlite3 (2.9.6-x86_64-linux-gnu) sha256=613188ce02f614126ddbc38c5e217ccffd6306d0dcd9adca9764547aa890a634
   sqlite3 (2.9.6-x86_64-linux-musl) sha256=d493b11818a3573387a1d56e1ee8fa00da23a683a7a1cc063e7a0feeed843abf
   sshkit (1.25.1) sha256=be3f10b9d6eb0b44d5eaba3f7cbe41bc6bb894bce4339688ac20124391455b78
@@ -573,12 +615,14 @@ CHECKSUMS
   tailwindcss-ruby (4.3.3-aarch64-linux-gnu) sha256=c86d6dd3eccc85fe0d792a832b06f2bf3c0a7a83b399308aeb9d8f5725f42a6a
   tailwindcss-ruby (4.3.3-aarch64-linux-musl) sha256=72b77ca9edea82383dd09510ab520a122e3cb9f9864ca5b38e27698098d2b899
   tailwindcss-ruby (4.3.3-arm64-darwin) sha256=776c51fc734aac64bde0c253eadd2ed2e610b2ba0d8e760501fe7cbec55fd6cf
+  tailwindcss-ruby (4.3.3-x86_64-darwin) sha256=483011e5d3792cf5ef4afdfb04c1d95daccf42c30cdb6fe53b77520954e7b922
   tailwindcss-ruby (4.3.3-x86_64-linux-gnu) sha256=2337017ff8b02698480eae1e9637cf01faa0e4824db89d067a13c5a5ee38c9b2
   tailwindcss-ruby (4.3.3-x86_64-linux-musl) sha256=27d478c417bcf73828e5b544744c5bdfd5b5cb54f1a266fc4f185281c32efe6c
   thor (1.5.0) sha256=e3a9e55fe857e44859ce104a84675ab6e8cd59c650a49106a05f55f136425e73
   thruster (0.1.26) sha256=6e45e807086b29d51404841bd1ad493b67cd95892fd65dc5afcdd32e82e94ce8
   thruster (0.1.26-aarch64-linux) sha256=2171cb34928c0250830008f535c4ab2ee57846cc3f5d3e96c3475f7b3de7a541
   thruster (0.1.26-arm64-darwin) sha256=40676164c433abf31313422305d9e9e9210cf941b1befad88e2428b3b8dcc36c
+  thruster (0.1.26-x86_64-darwin) sha256=c7f7f0cbefd8030ea03bf88f6a988f595a0618a35a1a0d358e729c6898eb5b6a
   thruster (0.1.26-x86_64-linux) sha256=3117a6ee430663f845a0457699fe9a05232dcc6c396e2cc83504de5a223c60e8
   timeout (0.6.1) sha256=78f57368a7e7bbadec56971f78a3f5ecbcfb59b7fcbb0a3ed6ddc08a5094accb
   tsort (0.2.0) sha256=9650a793f6859a43b6641671278f79cfead60ac714148aabe4e3f0060480089f

@@ -1,4 +1,11 @@
+require "uri"
+
 Rails.application.routes.draw do
+  direct :external_game do |slug|
+    URI::HTTPS.build(host: "endsideoutgames.netlify.app", path: "/games/#{slug}").to_s
+  end
+
+  resources :games
   resource :session
   resources :passwords, param: :token
   resource :student_session, only: %i[new create destroy]
@@ -6,13 +13,14 @@ Rails.application.routes.draw do
   resources :classroom_rosters, only: %i[show], param: :uuid
   scope :admin do
     resources :schools do
-      resources :students, shallow: true
-      resources :classrooms, shallow: true, only: %i[edit update] do
+      resources :students, shallow: true, except: [ :show ]
+      resources :classrooms, shallow: true, except: %i[destroy] do
         member { get :schedule }
       end
+      resources :teachers, shallow: true
     end
-    resources :content_modules do
-      resources :links, shallow: true
+    resources :content_modules, except: [ :show ] do
+      resources :links, shallow: true, except: %i[index show]
     end
     resources :classroom_modules, only: %i[update]
 
