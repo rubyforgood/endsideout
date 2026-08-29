@@ -57,7 +57,7 @@
       <div class="card-body">
         <div class="flex justify-between items-center mb-2">
           <h2 class="card-title text-lg">Games</h2>
-          <%= link_to "Add game", new_content_module_game_path(@content_module), class: "btn btn-sm btn-primary" %>
+          <%= link_to "Add game", new_game_path(content_module_id: @content_module.id), class: "btn btn-sm btn-primary" %>
         </div>
         <% if @content_module.games.any? %>
           <table class="table">

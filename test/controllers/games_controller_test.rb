@@ -13,16 +13,16 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_content_module_game_url(@content_module)
+    get new_game_url(content_module_id: @content_module.id)
     assert_response :success
   end
 
   test "should create game" do
     assert_difference("Game.count") do
-      post content_module_games_url(@content_module), params: { game: { slug: "new-game", title: "New Game" } }
+      post games_url, params: { game: { slug: "new-game", title: "New Game", content_module_id: @content_module.id } }
     end
 
-    assert_redirected_to content_module_url(@content_module)
+    assert_redirected_to games_url
   end
 
   test "should get edit" do

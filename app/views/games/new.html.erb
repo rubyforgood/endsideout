@@ -3,7 +3,9 @@
 <nav class="breadcrumbs text-sm">
   <ul>
     <li><%= link_to "Content Modules", content_modules_path %></li>
-    <li><%= link_to @content_module.name, edit_content_module_path(@content_module) %></li>
+    <% if @content_module %>
+      <li><%= link_to @content_module.name, edit_content_module_path(@content_module) %></li>
+    <% end %>
     <li>New Game</li>
   </ul>
 </nav>

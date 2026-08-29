@@ -1,5 +1,4 @@
 class GamesController < AdminController
-  before_action :set_content_module, only: %i[ new create ]
   before_action :set_game, only: %i[ show edit update destroy ]
 
   def index
@@ -7,20 +6,19 @@ class GamesController < AdminController
   end
 
   def new
-    @game = @content_module.games.build
+    @game = Game.new(content_module_id: params[:content_module_id])
+    @content_module = @game.content_module
   end
 
   def edit
   end
 
   def create
-    @game = @content_module.games.build(game_params)
+    @game = Game.new(game_params)
 
     respond_to do |format|
       if @game.save
-        # TODO: This should go back to the previous page, but it doesn't
-        # TODO: Rewrite these to match the house `redirect_to` style
-        format.html { redirect_back(fallback_location: @content_module, notice: "Game was successfully created.") }
+        format.html { redirect_back(fallback_location: games_path, notice: "Game was successfully created.") }
       else
         format.html { render :new, status: :unprocessable_content }
       end
@@ -55,9 +53,5 @@ class GamesController < AdminController
 
     def game_params
       params.expect(game: [ :title, :slug, :content_module_id, :description ])
-    end
-
-    def set_content_module
-      @content_module = ContentModule.find(params[:content_module_id])
     end
 end
