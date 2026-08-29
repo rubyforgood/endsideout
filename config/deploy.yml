@@ -7,8 +7,7 @@ image: endsideout
 # Deploy to these servers.
 servers:
   web:
-  # This is a specific EC2 host that will not be usable after 2026-08-31
-    - 3.129.68.195
+    - 18.117.181.111
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -28,6 +27,9 @@ servers:
 # Where you keep your container images.
 registry:
   # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
+  # We set up an ECR because
+  # - push/pull of images with kamal over SSH was not working over the RfG event wifi
+  # - it should be fairly inexpensive for our expected use (famous last AWS words, I suppose)
   server: 024757002197.dkr.ecr.us-east-2.amazonaws.com
   # server: localhost:5555
 
@@ -80,7 +82,10 @@ asset_path: /rails/public/assets
 
 # Configure the image builder.
 builder:
-  arch: amd64
+  arch:
+    - amd64
+    # - arm64
+
 
   # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
   # remote: ssh://docker@docker-builder-server
@@ -95,7 +100,7 @@ builder:
 # Use a different ssh user than root
 ssh:
   user: ec2-user
-  keys: ["~/.ssh/2026rfg-plur.pem"]
+  keys: ["~/.ssh/2026rfg-staging.pem"]
 
 
 # Use accessory services (secrets come from .kamal/secrets).
