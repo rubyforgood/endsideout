@@ -21,7 +21,7 @@ class ClassroomsController < AdminController
     respond_to do |format|
       if @classroom.save
         @classroom.classroom_programs.reload.each(&:generate_modules!)
-        format.html { redirect_to school_url(@school, tab: "classrooms"), notice: "Classroom was successfully created.", status: :see_other }
+        format.html { redirect_to school_path(@school, tab: "classrooms"), notice: "Classroom was successfully created.", status: :see_other }
       else
         build_missing_program_enrollments
         format.html { render :new, status: :unprocessable_entity }
@@ -47,7 +47,7 @@ class ClassroomsController < AdminController
     respond_to do |format|
       if @classroom.update(classroom_params)
         @classroom.classroom_programs.reload.each(&:generate_modules!)
-        format.html { redirect_to school_url(@classroom.school, tab: "classrooms"), notice: "Classroom was successfully updated.", status: :see_other }
+        format.html { redirect_to school_path(@classroom.school, tab: "classrooms"), notice: "Classroom was successfully updated.", status: :see_other }
       else
         build_missing_program_enrollments
         format.html { render :edit, status: :unprocessable_entity }
