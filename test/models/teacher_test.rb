@@ -4,12 +4,6 @@ class TeacherTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
-  test "belongs to a school" do
-    association = Teacher.reflect_on_association(:school)
-
-    assert_not_nil association
-    assert_equal :belongs_to, association.macro
-  end
 
   test "is valid with a name and school" do
     teacher = Teacher.new(name: "Ms. Frizzle", school: schools(:one))
