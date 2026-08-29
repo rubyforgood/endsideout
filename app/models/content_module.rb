@@ -5,6 +5,7 @@ class ContentModule < ApplicationRecord
   has_many :links, -> { ordered }, dependent: :destroy
   has_many :games, dependent: :nullify
   has_many :classroom_modules, dependent: :restrict_with_error
+  has_many :contentables, dependent: :destroy
 
   enum :level, { basic: "basic", moderate: "moderate", advanced: "advanced" }, validate: true
 
