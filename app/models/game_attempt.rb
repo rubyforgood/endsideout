@@ -3,11 +3,22 @@ class GameAttempt < ApplicationRecord
   belongs_to :game
 
   validates :student_id, :game_id, presence: true
+  validates_uniqueness_of :token, allow_nil: true
 
-  before_validation :ensure_token, on: :create
+  class << self
+    def generate_token(student_id:, game_id:)
+      Rails.application.message_verifier(:game_attempt).generate({
+        student_id:,
+        game_id:,
+        # nonce value ensures that each token is unique, even for the same student
+        # and game
+        n: SecureRandom.hex(4)
+      })
+    end
 
-  def ensure_token
-    self.token ||= SecureRandom.hex(12)
+    def verify_token(token)
+      Rails.application.message_verifier(:game_attempt).verify(token).except("n")
+    end
   end
 
   def start!

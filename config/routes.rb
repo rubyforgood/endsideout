@@ -11,8 +11,8 @@ Rails.application.routes.draw do
   resource :student_session, only: %i[new create destroy]
   resources :student_homes, only: %i[index]
   resources :classroom_rosters, only: %i[show], param: :uuid
-  resources :game_attempts, only: %i[show], param: :token do
-    member do
+  resources :game_attempts, only: %i[show] do
+    collection do
       post :start
       post :finish
     end
