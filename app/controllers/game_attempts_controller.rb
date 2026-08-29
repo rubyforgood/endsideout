@@ -1,22 +1,28 @@
 class GameAttemptsController < ApplicationController
-  before_action :set_game_attempt, only: %i[show update]
+  before_action :set_game_attempt, only: %i[show start finish]
 
   def show
     render json: @game_attempt
   end
 
-  def create
+  def start
+    @game_attempt.start!
+    render json: { status: "ok" }
   end
 
-  def update
+  def finish
+    if @game_attempt.update(game_attempt_params)
+      @game_attempt.finish!
+      render json: { status: "ok" }
+    end
   end
 
   private
     def set_game_attempt
-      @game_attempt = GameAttempt.find(params.expect(:id))
+      @game_attempt = GameAttempt.find_by!(token: params.expect(:token))
     end
 
     def game_attempt_params
-      params.expect(game_attempt: [ :student_id, :game_id, :outcome, :score ])
+      params.expect(game_attempt: [ :outcome, :score ])
     end
 end
