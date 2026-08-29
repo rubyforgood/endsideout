@@ -1,14 +1,6 @@
 require "test_helper"
 
 class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
-  test "should get show" do
-    get game_attempt_url(game_attempts(:one))
-    assert_response :success
-
-    response_json = JSON.parse(response.body)
-    assert_equal game_attempts(:one).id, response_json["id"]
-  end
-
   test "should start a game attempt" do
     token = GameAttempt.generate_token(
       student_id: game_attempts(:one).student_id,

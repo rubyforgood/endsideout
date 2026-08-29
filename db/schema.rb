@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_29_203815) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_29_155338) do
   create_table "classroom_modules", force: :cascade do |t|
     t.integer "classroom_program_id", null: false
     t.integer "content_module_id", null: false
@@ -73,7 +73,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_29_203815) do
     t.integer "score"
     t.datetime "started_at"
     t.integer "student_id", null: false
-    t.text "token"
+    t.string "token", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_game_attempts_on_game_id"
     t.index ["student_id"], name: "index_game_attempts_on_student_id"
