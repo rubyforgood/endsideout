@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  link: one
+  game: one
+  contentable_type: MyString
+
+two:
+  link: two
+  game: two
+  contentable_type: MyString
