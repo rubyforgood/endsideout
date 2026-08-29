@@ -1,10 +1,6 @@
 require "test_helper"
 
 class GameTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
-
   test "should not save game without title" do
     game = Game.new(slug: "test-slug", content_module: ContentModule.new)
     assert_not game.save, "Saved the game without a title"

@@ -3,7 +3,7 @@ class CreateGames < ActiveRecord::Migration[8.1]
     create_table :games do |t|
       t.string :title, null: false
       t.string :slug, null: false
-      t.references :content_module, null: false, foreign_key: true
+      t.references :content_module, foreign_key: true
       t.text :description
 
       t.index :slug, unique: true
