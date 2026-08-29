@@ -12,7 +12,7 @@ class ContentModulesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index marks the active program tab as selected" do
-    program = programs(:kyh)
+    program = programs(:one)
     get content_modules_url(program_id: program.id)
     assert_select "a[role='tab'][aria-selected='true'][href*='program_id=#{program.id}']"
   end
@@ -25,7 +25,7 @@ class ContentModulesControllerTest < ActionDispatch::IntegrationTest
   test "should create content module" do
     assert_difference "ContentModule.count" do
       post content_modules_url, params: {
-        content_module: { name: "New Module", program_id: programs(:kyh).id, level: "moderate", position: 1 }
+        content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate", position: 1 }
       }
     end
     assert_redirected_to content_modules_url
@@ -34,7 +34,7 @@ class ContentModulesControllerTest < ActionDispatch::IntegrationTest
   test "should not create with missing name" do
     assert_no_difference "ContentModule.count" do
       post content_modules_url, params: {
-        content_module: { name: "", program_id: programs(:kyh).id, level: "basic" }
+        content_module: { name: "", program_id: programs(:one).id, level: "basic" }
       }
     end
     assert_response :unprocessable_entity
@@ -65,7 +65,7 @@ class ContentModulesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy content module" do
-    content_module = ContentModule.create!(program: programs(:kyh), level: "basic", name: "To Delete")
+    content_module = ContentModule.create!(program: programs(:one), level: "basic", name: "To Delete")
     assert_difference "ContentModule.count", -1 do
       delete content_module_url(content_module)
     end

@@ -27,7 +27,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should add a program enrollment" do
-    program = programs(:"3dw")
+    program = programs(:two)
 
     assert_difference "ClassroomProgram.count" do
       patch classroom_url(@classroom), params: {
@@ -59,7 +59,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
 
   test "should remove an enrollment" do
     enrollment = classroom_programs(:one)
-    @classroom.classroom_programs.create!(program: programs(:"3dw"), level: "basic")
+    @classroom.classroom_programs.create!(program: programs(:two), level: "basic")
 
     assert_difference "ClassroomProgram.count", -1 do
       patch classroom_url(@classroom), params: {
@@ -89,7 +89,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "is invalid when a program is selected without a level" do
-    program = programs(:"3dw")
+    program = programs(:two)
 
     assert_no_difference "ClassroomProgram.count" do
       patch classroom_url(@classroom), params: {
@@ -104,7 +104,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "generates modules when a new enrollment is added" do
-    program = programs(:"3dw")
+    program = programs(:two)
 
     assert_difference "ClassroomModule.count" do
       patch classroom_url(@classroom), params: {
@@ -159,7 +159,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create classroom" do
     school = schools(:one)
-    program = programs(:kyh)
+    program = programs(:one)
     teacher = Teacher.create!(name: "Teacher 3", school: school)
 
     assert_difference "Classroom.count" do
@@ -185,7 +185,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
     post school_classrooms_url(school), params: {
       classroom: {
         name: "Classroom 4",
-        classroom_programs_attributes: [ { program_id: programs(:kyh).id, level: "basic" } ]
+        classroom_programs_attributes: [ { program_id: programs(:one).id, level: "basic" } ]
       }
     }
 
@@ -201,7 +201,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
       post school_classrooms_url(school), params: {
         classroom: {
           name: "Classroom 5",
-          classroom_programs_attributes: [ { program_id: programs(:kyh).id, level: "basic" } ]
+          classroom_programs_attributes: [ { program_id: programs(:one).id, level: "basic" } ]
         }
       }
     end

@@ -2,7 +2,7 @@ require "test_helper"
 
 class ContentModuleTest < ActiveSupport::TestCase
   setup do
-    @program = programs(:kyh)
+    @program = programs(:one)
   end
 
   test "is valid with required fields" do

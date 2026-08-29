@@ -28,7 +28,7 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
   test "most recently published module has the open attribute" do
     # Add a second published module so there's a distinct "most recent"
     second_module = ContentModule.create!(
-      program: programs(:kyh), level: "basic", name: "Second Module", position: 2
+      program: programs(:one), level: "basic", name: "Second Module", position: 2
     )
     classroom_programs(:one).classroom_modules.create!(
       content_module: second_module, publish_on: Date.current
@@ -40,7 +40,7 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
 
   test "all modules published on the same latest date have the open attribute" do
     second_module = ContentModule.create!(
-      program: programs(:kyh), level: "basic", name: "Second Module", position: 2
+      program: programs(:one), level: "basic", name: "Second Module", position: 2
     )
     classroom_modules(:one).update!(publish_on: Date.current)
     classroom_programs(:one).classroom_modules.create!(
@@ -64,7 +64,7 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
 
   test "shows tab bar when classroom has multiple program enrollments" do
     classroom_programs(:one).classroom.classroom_programs.create!(
-      program: programs(:"3dw"), level: "moderate"
+      program: programs(:two), level: "moderate"
     )
 
     get student_homes_url
@@ -74,7 +74,7 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
 
   test "tab switching shows the selected program as active" do
     enrollment = classroom_programs(:one)
-    enrollment.classroom.classroom_programs.create!(program: programs(:"3dw"), level: "moderate")
+    enrollment.classroom.classroom_programs.create!(program: programs(:two), level: "moderate")
 
     get student_homes_url(classroom_program_id: enrollment.id)
     assert_select "a[role='tab'][aria-selected='true'][href*='classroom_program_id=#{enrollment.id}']"
