@@ -9,9 +9,3 @@ moderate_wellness:
   level: moderate
   name: Moderate Wellness
   position: 1
-
-advanced_wellness:
-  program: 3dw
-  level: advanced
-  name: Advanced Wellness
-  position: 1
