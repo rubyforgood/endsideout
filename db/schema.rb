@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_29_155338) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_29_195031) do
   create_table "classroom_modules", force: :cascade do |t|
     t.integer "classroom_program_id", null: false
     t.integer "content_module_id", null: false
@@ -71,25 +71,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_29_155338) do
   end
 
   create_table "games", force: :cascade do |t|
-    t.integer "content_module_id"
     t.datetime "created_at", null: false
     t.text "description"
     t.string "slug", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false
-    t.index ["content_module_id"], name: "index_games_on_content_module_id"
     t.index ["slug"], name: "index_games_on_slug", unique: true
   end
 
   create_table "links", force: :cascade do |t|
-    t.integer "content_module_id", null: false
     t.datetime "created_at", null: false
     t.string "link_type", null: false
     t.integer "position"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.string "url", null: false
-    t.index ["content_module_id"], name: "index_links_on_content_module_id"
   end
 
   create_table "programs", force: :cascade do |t|
@@ -161,8 +157,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_29_155338) do
   add_foreign_key "content_modules", "programs"
   add_foreign_key "game_attempts", "games"
   add_foreign_key "game_attempts", "students"
-  add_foreign_key "games", "content_modules"
-  add_foreign_key "links", "content_modules"
   add_foreign_key "sessions", "users"
   add_foreign_key "student_sessions", "students"
   add_foreign_key "students", "classrooms"
