@@ -1,10 +1,10 @@
-intro:
+one:
   program: one
   level: basic
   name: Introduction to Health
   position: 1
 
-moderate_wellness:
+two:
   program: two
   level: moderate
   name: Moderate Wellness

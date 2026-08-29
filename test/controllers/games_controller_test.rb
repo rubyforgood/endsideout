@@ -3,7 +3,7 @@ require "test_helper"
 class GamesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @game = games(:one)
-    @content_module = content_modules(:intro)
+    @content_module = content_modules(:one)
     sign_in_as users(:admin)
   end
 

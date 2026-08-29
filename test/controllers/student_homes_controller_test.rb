@@ -21,7 +21,7 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
   test "shows links inside published modules" do
     get student_homes_url
     assert_response :success
-    link = content_modules(:intro).links.first
+    link = content_modules(:one).links.first
     assert_select "a[target='_blank']", text: /#{link.title}/ if link
   end
 

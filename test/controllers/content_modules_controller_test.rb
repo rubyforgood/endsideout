@@ -2,7 +2,7 @@ require "test_helper"
 
 class ContentModulesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @content_module = content_modules(:intro)
+    @content_module = content_modules(:one)
     sign_in_as users(:admin)
   end
 

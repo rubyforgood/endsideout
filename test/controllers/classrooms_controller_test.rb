@@ -116,7 +116,7 @@ class ClassroomsControllerTest < ActionDispatch::IntegrationTest
     end
 
     cp = @classroom.classroom_programs.find_by!(program: program)
-    assert cp.classroom_modules.exists?(content_module: content_modules(:moderate_wellness))
+    assert cp.classroom_modules.exists?(content_module: content_modules(:two))
   end
 
   test "is invalid when changing a level that has scheduled modules" do
