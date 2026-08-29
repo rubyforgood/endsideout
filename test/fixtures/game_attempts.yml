@@ -7,6 +7,7 @@ one:
   finished_at: 2026-08-29 11:53:38
   student: ada
   game: one
+  token: onetoken
 
 two:
   score: 1
@@ -15,3 +16,4 @@ two:
   finished_at: 2026-08-29 11:53:38
   student: grace
   game: two
+  token: twotoken

@@ -4,6 +4,10 @@ class GameAttempt < ApplicationRecord
 
   validates :student_id, :game_id, presence: true
 
+  before_create do
+    self.token = SecureRandom.hex(12)
+  end
+
   def start!
     update(started_at: Time.current)
   end

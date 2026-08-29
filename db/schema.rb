@@ -63,13 +63,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_29_155338) do
     t.integer "score"
     t.datetime "started_at"
     t.integer "student_id", null: false
+    t.string "token", null: false
     t.datetime "updated_at", null: false
     t.index ["game_id"], name: "index_game_attempts_on_game_id"
     t.index ["student_id"], name: "index_game_attempts_on_student_id"
+    t.index ["token"], name: "index_game_attempts_on_token", unique: true
   end
 
   create_table "games", force: :cascade do |t|
-    t.integer "content_module_id"
+    t.integer "content_module_id", null: false
     t.datetime "created_at", null: false
     t.text "description"
     t.string "slug", null: false
