@@ -2,7 +2,7 @@ require "test_helper"
 
 class StudentHomesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @student = students(:ada)
+    @student = students(:one)
     student_sign_in_as @student
   end
 

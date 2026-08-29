@@ -2,7 +2,7 @@ require "test_helper"
 
 class StudentHomeControllerTest < ActionDispatch::IntegrationTest
   test "should get index" do
-    student_sign_in_as(students(:ada))
+    student_sign_in_as(students(:one))
 
     get student_homes_path
     assert_response :success

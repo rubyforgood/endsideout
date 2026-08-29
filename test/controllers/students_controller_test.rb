@@ -3,7 +3,7 @@ require "test_helper"
 class StudentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @school = schools(:one)
-    @student = students(:ada)
+    @student = students(:one)
     sign_in_as users(:admin)
   end
 
