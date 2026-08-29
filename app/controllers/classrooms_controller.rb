@@ -10,11 +10,13 @@ class ClassroomsController < AdminController
 
   def new
     @classroom = @school.classrooms.build
+    @teachers = @school.teachers
     build_missing_program_enrollments
   end
 
   def create
     @classroom = @school.classrooms.build(classroom_params)
+    @teachers = @school.teachers
 
     respond_to do |format|
       if @classroom.save
