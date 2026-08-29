@@ -22,8 +22,9 @@ class GameAttemptTest < ActiveSupport::TestCase
     assert attempt.finished?
   end
 
-  test "new game attempts have a token" do
+  test "new game attempts require a token" do
     attempt = GameAttempt.create(student: students(:ada), game: games(:one))
-    assert attempt.token.present?
+    assert_not attempt.valid?
+    assert_includes attempt.errors[:token], "can't be blank"
   end
 end
