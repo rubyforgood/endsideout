@@ -1,4 +1,4 @@
-survey_one:
+one:
   content_module: intro
   title: Health Survey
   url: https://example.com/survey/1

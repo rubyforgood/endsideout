@@ -2,7 +2,7 @@ require "test_helper"
 
 class LinksControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @link = links(:survey_one)
+    @link = links(:one)
     @mod = content_modules(:intro)
     sign_in_as users(:admin)
   end
