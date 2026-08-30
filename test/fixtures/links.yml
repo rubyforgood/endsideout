@@ -1,13 +1,6 @@
-survey_one:
-  content_module: intro
+one:
+  content_module: one
   title: Health Survey
   url: https://example.com/survey/1
   link_type: survey
   position: 1
-
-survey_two:
-  content_module: intro
-  title: Health Survey 2
-  url: https://example.com/survey/2
-  link_type: survey
-  position: 2

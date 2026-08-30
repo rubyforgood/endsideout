@@ -3,11 +3,11 @@
 one:
   title: Game 1
   slug: game-1
-  content_module: intro
+  content_module: one
   description: MyText
 
 two:
   title: Game 2
   slug: game-2
-  content_module: moderate_wellness
+  content_module: one
   description: MyText

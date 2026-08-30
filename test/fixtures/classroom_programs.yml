@@ -1,9 +1,9 @@
 one:
   classroom: one
-  program: kyh
+  program: one
   level: basic
 
 two:
   classroom: two
-  program: 3dw
+  program: two
   level: moderate

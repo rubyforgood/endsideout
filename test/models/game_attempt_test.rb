@@ -2,7 +2,7 @@ require "test_helper"
 
 class GameAttemptTest < ActiveSupport::TestCase
   test "can start a game attempt" do
-    attempt = GameAttempt.create(student: students(:ada), game: games(:one))
+    attempt = GameAttempt.create(student: students(:one), game: games(:one))
 
     refute attempt.started?
 
@@ -12,7 +12,7 @@ class GameAttemptTest < ActiveSupport::TestCase
   end
 
   test "can complete a game attempt" do
-    attempt = GameAttempt.create(student: students(:ada), game: games(:one))
+    attempt = GameAttempt.create(student: students(:one), game: games(:one))
     attempt.start!
 
     refute attempt.finished?
@@ -23,7 +23,7 @@ class GameAttemptTest < ActiveSupport::TestCase
   end
 
   test "new game attempts have a token" do
-    attempt = GameAttempt.create(student: students(:ada), game: games(:one))
+    attempt = GameAttempt.create(student: students(:one), game: games(:one))
     assert attempt.token.present?
   end
 end

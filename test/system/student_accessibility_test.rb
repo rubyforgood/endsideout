@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class StudentAccessibilityTest < ApplicationSystemTestCase
   test "student can login from classroom roster and home page is accessible" do
-    student = students(:ada)
+    student = students(:one)
     classroom = classrooms(:one)
 
     # Visit classroom roster

@@ -3,8 +3,8 @@ require "test_helper"
 class StudentsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @school = schools(:one)
-    @student = students(:ada)
-    sign_in_as users(:admin)
+    @student = students(:one)
+    sign_in_as users(:one)
   end
 
   test "should get index" do
