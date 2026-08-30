@@ -7,7 +7,7 @@ image: endsideout
 # Deploy to these servers.
 servers:
   web:
-    - 192.168.0.1
+    - 18.117.181.111
   # job:
   #   hosts:
   #     - 192.168.0.1
@@ -22,19 +22,23 @@ servers:
 #
 # proxy:
 #   ssl: true
-#   host: app.example.com
+#   host: staging.endsideout.org
 
 # Where you keep your container images.
 registry:
   # Alternatives: hub.docker.com / registry.digitalocean.com / ghcr.io / ...
-  server: localhost:5555
+  # We set up an ECR because
+  # - push/pull of images with kamal over SSH was not working over the RfG event wifi
+  # - it should be fairly inexpensive for our expected use (famous last AWS words, I suppose)
+  server: 024757002197.dkr.ecr.us-east-2.amazonaws.com
+  # server: localhost:5555
 
   # Needed for authenticated registries.
-  # username: your-user
+  username: AWS
 
   # Always use an access token rather than real password when possible.
-  # password:
-  #   - KAMAL_REGISTRY_PASSWORD
+  password:
+    - KAMAL_REGISTRY_PASSWORD
 
 # Inject ENV variables into containers (secrets come from .kamal/secrets).
 env:
@@ -78,7 +82,10 @@ asset_path: /rails/public/assets
 
 # Configure the image builder.
 builder:
-  arch: amd64
+  arch:
+    - amd64
+    # - arm64
+
 
   # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
   # remote: ssh://docker@docker-builder-server
@@ -86,13 +93,15 @@ builder:
   # # Pass arguments and secrets to the Docker build process
   # args:
   #   RUBY_VERSION: ruby-4.0.6
-  # secrets:
+  secrets:
   #   - GITHUB_TOKEN
-  #   - RAILS_MASTER_KEY
+    - RAILS_MASTER_KEY
 
 # Use a different ssh user than root
-# ssh:
-#   user: app
+ssh:
+  user: ec2-user
+  keys: ["~/.ssh/2026rfg-staging.pem"]
+
 
 # Use accessory services (secrets come from .kamal/secrets).
 # accessories:
