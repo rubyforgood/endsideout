@@ -3,13 +3,14 @@ class LinksController < AdminController
   before_action :set_link, only: %i[edit update destroy]
 
   def new
-    @link = @content_module.links.build
+    @link = Link.new(content_module: @content_module)
   end
 
   def create
-    @link = @content_module.links.build(link_params)
+    @link = Link.new(link_params.merge(content_module: @content_module))
 
     if @link.save
+      @content_module.contents.create!(contentable: @link)
       redirect_to edit_content_module_path(@content_module), notice: "Link was successfully created."
     else
       render :new, status: :unprocessable_entity

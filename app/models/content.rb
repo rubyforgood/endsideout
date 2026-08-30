@@ -1,5 +1,5 @@
 class Content < ApplicationRecord
-  belongs_to :content_module, optional: true
+  belongs_to :content_module
 
   delegated_type :contentable, types: %w[Link Game]
 

@@ -18,6 +18,7 @@ class GamesController < AdminController
 
     respond_to do |format|
       if @game.save
+        Content.create!(content_module: @game.content_module, contentable: @game) if @game.content_module
         format.html { redirect_back(fallback_location: games_path, notice: "Game was successfully created.") }
       else
         format.html { render :new, status: :unprocessable_content }
