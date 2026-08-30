@@ -5,7 +5,12 @@ Rails.application.routes.draw do
     URI::HTTPS.build(host: "endsideoutgames.netlify.app", path: "/games/#{slug}").to_s
   end
 
-  resources :games
+  resources :games do
+    member do
+      get :play, to: "game_landing#show"
+      get :embed, to: "game_landing#embed"
+    end
+  end
   resource :session
   resources :passwords, param: :token
   resource :student_session, only: %i[new create destroy]
