@@ -1,18 +1,23 @@
-class InvalidClassroomError < StandardError; end
-class InvalidStudentError < StandardError; end
+
 
 class StudentCsvImporter
+  class InvalidClassroomError < ActiveRecord::Rollback; end
+  class InvalidStudentError < ActiveRecord::Rollback; end
+  class InvalidTeacherError < ActiveRecord::Rollback; end
+
   def initialize(csv:, school_id:)
     @csv = csv
     @school_id = school_id
+    @error_messages = { students: {}, classrooms: {}, teachers: {} }
+    @students = []
+    @classrooms = []
+    @teachers = []
   end
 
 
   def import
-    puts "Importing students"
-    error_messages = {students: {}, classrooms: {}} # key = csv row, value = row data
-    students = []
-    classrooms = []
+    puts "Importing classrooms, teachers, and students"
+
 
     @csv.each_with_index do |row, index|
       next if row.blank?
@@ -23,11 +28,11 @@ class StudentCsvImporter
       #Loop over classrooms array and save! classroom records if error_messages[:classrooms] is empty 
       classroom = Classroom.new(
         school_id: @school_id,
-        name: row['Classroom Name'],
-        teacher: row['Teacher'],
+        name: row['Class Name'],
       )
-      error_messages[:classrooms][index] = classroom.errors.full_messages if classroom.invalid?
-      classrooms << classroom
+
+      @error_messages[:classrooms][index] = classroom.errors.full_messages if classroom.invalid?
+      @classrooms << classroom
 
       
       # Classrooms must exist before checking validity of student records 
@@ -38,23 +43,43 @@ class StudentCsvImporter
         school_id: @school_id,
       )
 
-      students << student
+      student.classroom = classroom
+
+      @students << student
+
+      teacher = Teacher.new(
+        name: row['Teacher'],
+        school_id: @school_id,
+      )
+
+      @error_messages[:teachers][index] = teacher.errors.full_messages if teacher.invalid?
+      @teachers << teacher
 
     end
 
-    if error_messages[:classrooms].empty?
-      classrooms.each(&:save!)
-    elsif error_messages[:classrooms].any? Raise InvalidClassroomError, error_messages[:classrooms]
-    end
+    ActiveRecord::Base.transaction do
+      if @error_messages[:classrooms].empty?
+        @classrooms.each(&:save!)
+      else
+        raise InvalidClassroomError.new(error_messages[:classrooms])
+      end
 
-    students.each { |student| error_messages[:students][index] = student.errors.full_messages if student.invalid? }
-    
-    puts "CSV Passed Validations... Creating School Records"
-    puts "Are error messages empty?: #{error_messages.empty?}"
-    puts "Error Messages: #{error_messages}"
-    if error_messages[:students].empty?
-      create_school_records
-      elsif error_messages[:students].any? Raise InvalidStudentError, error_messages[:students]
+      if @error_messages[:teachers].empty?
+        @teachers.each(&:save!)
+      else
+        raise InvalidTeacherError, @error_messages[:teachers]
+      end
+
+      @students.each_with_index { |student, index| @error_messages[:students][index] = student.errors.full_messages if student.invalid? }
+
+      puts "CSV Passed Validations... Creating School Records"
+
+      if @error_messages[:students].empty?
+        create_school_records
+      else
+        raise InvalidStudentError, error_messages[:students]
+      end
+
     end
   end
 
@@ -63,7 +88,9 @@ class StudentCsvImporter
     #Iterate CSV rows
     @csv.each do |row|
     #Extract and apply teacher column when creating classroom
-      classroom = Classroom.find_by!(school_id: school_id, teacher: row['Teacher'], name: row['Classroom Name'])
+      teacher = Teacher.find_by!(school_id: @school_id, name: row['Teacher'])
+
+      classroom = Classroom.find_by!(school_id: @school_id, teacher_id: teacher.id, name: row['Class Name'])
       puts "Found Classroom: #{classroom.name}"
     #Extract and apply uuid column when creating classroom
     #Extract and apply program column when creating classroom

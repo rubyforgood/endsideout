@@ -107,7 +107,6 @@ GEM
     concurrent-ruby (1.3.8)
     connection_pool (3.0.2)
     crass (1.0.7)
-    csv (3.3.6)
     cruise (0.2.0)
     cruise (0.2.0-aarch64-linux-gnu)
     cruise (0.2.0-aarch64-linux-musl)
@@ -115,6 +114,7 @@ GEM
     cruise (0.2.0-arm64-darwin)
     cruise (0.2.0-x86_64-linux-gnu)
     cruise (0.2.0-x86_64-linux-musl)
+    csv (3.3.6)
     date (3.5.1)
     debug (1.11.1)
       irb (~> 1.10)
@@ -491,7 +491,6 @@ CHECKSUMS
   concurrent-ruby (1.3.8) sha256=b2f1be836e968ccc78ccfce277ea79c72a88633f22306782c16ff23fb415d1e1
   connection_pool (3.0.2) sha256=33fff5ba71a12d2aa26cb72b1db8bba2a1a01823559fb01d29eb74c286e62e0a
   crass (1.0.7) sha256=94868719948664c89ddcaf0a37c65048413dfcb1c869470a5f7a7ceb5390b295
-  csv (3.3.6) sha256=aba61e7e507a66f03d45cb1f3c4b6359861c3504038b422962875dce099e4456
   cruise (0.2.0) sha256=ffdbc6f9fa7b6071dbf2c7435bf887d41a822fe9b6ab422fa8a8456c0f034d71
   cruise (0.2.0-aarch64-linux-gnu) sha256=87a5a3fbda8070b4a531b84161c7c5acbcc54f62e57b9ffa6960df61e9b9c2c3
   cruise (0.2.0-aarch64-linux-musl) sha256=9f14c9a00aeeb67d75a29dd3d3bd4ce60bef23d148c35e525461e5990b986d25
@@ -499,6 +498,7 @@ CHECKSUMS
   cruise (0.2.0-arm64-darwin) sha256=fb3e9b265868e077dd754b4a430ab14d8abb209281c61c906b74f326b797a10a
   cruise (0.2.0-x86_64-linux-gnu) sha256=3d16f6a6a3409f2cae5dbdb3fb322389fa61a6a18d80a2df50fc4c807f1f0fd9
   cruise (0.2.0-x86_64-linux-musl) sha256=2be5c5f2fb474ff5a4f42e3421dbb27fb439008a53697f7a6a3d2f3ec2de711c
+  csv (3.3.6) sha256=aba61e7e507a66f03d45cb1f3c4b6359861c3504038b422962875dce099e4456
   date (3.5.1) sha256=750d06384d7b9c15d562c76291407d89e368dda4d4fff957eb94962d325a0dc0
   debug (1.11.1) sha256=2e0b0ac6119f2207a6f8ac7d4a73ca8eb4e440f64da0a3136c30343146e952b6
   dotenv (3.2.0) sha256=e375b83121ea7ca4ce20f214740076129ab8514cd81378161f11c03853fe619d
