@@ -24,8 +24,6 @@ class Admin::CsvController < ApplicationController
     csv_file = params[:file]
     if csv_file.present?
       csv = CSV.read(csv_file.path, headers: true)
-      puts "CSV File is present"
-      puts "CSV Headers: #{csv.headers}"
       #check if headers are equal to CSV_HEADERS and return with Headers must match CSV headers error if not
       raise CSVHeadersError, "Headers must match CSV headers" unless CSV_HEADERS == csv.headers
 
@@ -35,7 +33,7 @@ class Admin::CsvController < ApplicationController
       csv.each do |row|
         raise CSVHeadersError, "Row must have same number of columns as headers" unless CSV_HEADERS.length == row.length
         raise StudentBulkImportError, "Student already exists" if Student.find_by(first_name: row["Student First Name"], last_name: row["Student Last Name"])
-        raise ClassroomBulkImportError, "Classroom already exists" if Classroom.find_by(name: row["Class Name"])
+        raise ClassroomBulkImportError, "Classroom: #{row["Class Name"]} already exists" if Classroom.find_by(name: row["Class Name"])
       end
       # pass file to importer
       StudentCsvImporter.new(csv: csv, school_id: 1).import
