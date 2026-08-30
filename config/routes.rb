@@ -26,6 +26,12 @@ Rails.application.routes.draw do
 
   resource :student_session, only: %i[new create destroy]
   resources :student_homes, only: %i[index]
+  resources :games, only: [] do
+    member do
+      get :play, to: "game_landing#show"
+      get :embed, to: "game_landing#embed"
+    end
+  end
   resources :classroom_rosters, only: %i[show], param: :uuid
   resources :game_attempts, only: [] do
     collection do
