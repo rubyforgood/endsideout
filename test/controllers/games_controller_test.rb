@@ -18,7 +18,7 @@ class GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create game" do
-    assert_difference("Game.count") do
+    assert_difference [ "Game.count", "Content.count" ] do
       post games_url, params: { game: { slug: "new-game", title: "New Game", content_module_id: @content_module.id } }
     end
 
