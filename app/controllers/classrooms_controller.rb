@@ -21,12 +21,10 @@ class ClassroomsController < AdminController
     respond_to do |format|
       if @classroom.save
         @classroom.classroom_programs.reload.each(&:generate_modules!)
-        format.html { redirect_to school_classrooms_url(@school), notice: "Classroom was successfully created.", status: :see_other }
-        format.json { render json: @classroom, status: :created }
+        format.html { redirect_to school_path(@school, tab: "classrooms"), notice: "Classroom was successfully created.", status: :see_other }
       else
         build_missing_program_enrollments
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @classroom.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -49,12 +47,10 @@ class ClassroomsController < AdminController
     respond_to do |format|
       if @classroom.update(classroom_params)
         @classroom.classroom_programs.reload.each(&:generate_modules!)
-        format.html { redirect_to school_students_url(@classroom.school), notice: "Classroom was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @classroom }
+        format.html { redirect_to school_path(@classroom.school, tab: "classrooms"), notice: "Classroom was successfully updated.", status: :see_other }
       else
         build_missing_program_enrollments
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @classroom.errors, status: :unprocessable_entity }
       end
     end
   end
