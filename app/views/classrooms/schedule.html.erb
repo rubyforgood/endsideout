@@ -3,8 +3,7 @@
 <nav class="breadcrumbs text-sm">
   <ul>
     <li><%= link_to "All Schools", schools_path %></li>
-    <li><%= link_to @classroom.school.name, school_students_path(@classroom.school) %></li>
-    <li><%= link_to "Classrooms", school_classrooms_path(@classroom.school) %></li>
+    <li><%= link_to @classroom.school.name, school_path(@classroom.school, tab: "classrooms") %></li>
     <li><%= link_to "Edit Classroom", edit_classroom_path(@classroom) %></li>
     <li>Schedule</li>
   </ul>
@@ -16,7 +15,7 @@
 
 <% if @classroom_programs.any? %>
   <div role="tablist" class="tabs tabs-border mb-6">
-    <% @classroom_programs.each do |enrollment| %>
+    <% @classroom_programs.each do |enrollment| # herb:debug disable %>
       <%= link_to schedule_classroom_path(@classroom, classroom_program_id: enrollment.id),
             role: "tab",
             aria: { selected: enrollment == @active_enrollment },
