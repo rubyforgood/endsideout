@@ -28,11 +28,17 @@ class ContentModuleTest < ActiveSupport::TestCase
 
   test "destroys associated links" do
     content_module = ContentModule.create!(program: @program, level: "basic", name: "With Links")
-    content_module.links.create!(title: "A Link", url: "https://example.com", link_type: "survey")
+    link = Link.create!(content_module: content_module, title: "A Link", url: "https://example.com", link_type: "survey")
+    Content.create!(content_module: content_module, contentable: link)
 
     assert_difference "Link.count", -1 do
       content_module.destroy!
     end
+  end
+
+  test "exposes delegated contentables" do
+    assert_equal [ links(:survey_one) ], content_modules(:intro).links.to_a
+    assert_equal [ games(:one) ], content_modules(:intro).games.to_a
   end
 
   test "cannot be destroyed when classroom modules exist" do
