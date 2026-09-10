@@ -1,106 +1,102 @@
 
 
 class StudentCsvImporter
-  class InvalidClassroomError < ActiveRecord::Rollback; end
-  class InvalidStudentError < ActiveRecord::Rollback; end
-  class InvalidTeacherError < ActiveRecord::Rollback; end
+  class InvalidClassroomError < StandardError; end
+  class InvalidStudentError < StandardError; end
+  class InvalidTeacherError < StandardError; end
 
   def initialize(csv:, school_id:)
     @csv = csv
     @school_id = school_id
-    @error_messages = { students: {}, classrooms: {}, teachers: {} }
+    @error_messages = {
+      classrooms: {},
+      teachers: {},
+      students: {}
+    }
+    @classrooms = {}
+    @teachers = {}
     @students = []
-    @classrooms = []
-    @teachers = []
   end
 
 
   def import
-    puts "Importing classrooms, teachers, and students"
-
-
     @csv.each_with_index do |row, index|
       next if row.blank?
 
-      classroom = Classroom.new(
-        school_id: @school_id,
-        name: row['Class Name'],
-      )
+      teacher = find_or_build_teacher(row)
+      classroom = find_or_build_classroom(row, teacher)
 
-      @error_messages[:classrooms][index] = classroom.errors.full_messages if classroom.invalid?
-      @classrooms << classroom
-
-      
-      # Student must be associated with a Classroom before checking validity of Student records
       student = Student.new(
         first_name: row['Student First Name'],
         last_name: row['Student Last Name'],
         grade_level: row['Grade Level'],
         school_id: @school_id,
+        classroom: classroom
       )
 
-      student.classroom = classroom
+      collect_errors(:teachers, teacher, index)
+      collect_errors(:classrooms, classroom, index)
+      collect_errors(:students, student, index)
 
       @students << student
-
-      teacher = Teacher.new(
-        name: row['Teacher'],
-        school_id: @school_id,
-      )
-
-      @error_messages[:teachers][index] = teacher.errors.full_messages if teacher.invalid?
-      teacher.classrooms << classroom
-      @teachers << teacher
     end
 
     save_records
-
-
   end
+
+
+
+private
 
   def save_records
     ActiveRecord::Base.transaction do
-      if @error_messages[:classrooms].empty?
-        @classrooms.each(&:save!)
-      else
-        raise InvalidClassroomError.new(error_messages[:classrooms])
-      end
+      raise_validation_errors!
 
-      if @error_messages[:teachers].empty?
-        @teachers.each(&:save!)
-      else
-        raise InvalidTeacherError, @error_messages[:teachers]
-      end
+      @teachers.each_value(&:save!)
+      @classrooms.each_value(&:save!)
+      @students.each(&:save!)
 
-      @students.each_with_index { |student, index| @error_messages[:students][index] = student.errors.full_messages if student.invalid? }
-
-      puts "CSV Passed Validations... Creating School Records"
-
-      if @error_messages[:students].empty?
-        create_school_records
-      else
-        raise InvalidStudentError, error_messages[:students]
-      end
-
+      create_program_associations
     end
   end
 
-  def create_school_records
-    #school_id should be passed in from the url params
-    #Iterate CSV rows
+  def create_program_associations
     @csv.each do |row|
-    #Extract and apply teacher column when creating classroom
-      teacher = Teacher.find_by!(school_id: @school_id, name: row['Teacher'])
-
-      classroom = Classroom.find_by!(school_id: @school_id, teacher_id: teacher.id, name: row['Class Name'])
-      puts "Found Classroom: #{classroom.name}"
+      teacher = @teachers[row["Teacher"]]
+      classroom = @classrooms[[teacher.name, row["Class Name"]]]
 
       program = Program.create_or_find_by!(name: row['Program'])
+
       classroom.classroom_programs.create_or_find_by!(program: program, level: row['Program Level'])
-      puts "Created Program: #{classroom.programs.first.name}"
-    #Extract and apply program level column when creating classroom
-      classroom.students.create_or_find_by!(first_name: row['Student First Name'], last_name: row['Student Last Name'], grade_level: row['Grade Level'], school_id: @school_id)
-      puts "Created Student: #{classroom.students.first.first_name}"
     end
+
+  end
+  def collect_errors(type, record, index)
+    return if record.valid?
+
+    @error_messages[type][index] = record.errors.full_messages
+  end
+
+  def raise_validation_errors!
+    raise InvalidClassroomError, @error_messages[:classrooms].to_s if @error_messages[:classrooms].any?
+    raise InvalidStudentError, @error_messages[:students].to_s if @error_messages[:students].any?
+    raise InvalidTeacherError, @error_messages[:teachers].to_s if @error_messages[:teachers].any?
+  end
+
+  def find_or_build_teacher(row)
+    @teachers[row["Teacher"]] ||= Teacher.new(
+      name: row["Teacher"],
+      school_id: @school_id
+    )
+  end
+
+  def find_or_build_classroom(row, teacher)
+    key = [teacher.name, row["Class Name"]]
+
+    @classrooms[key] ||= Classroom.new(
+      school_id: @school_id,
+      name: row["Class Name"],
+      teacher: teacher
+    )
   end
 end
