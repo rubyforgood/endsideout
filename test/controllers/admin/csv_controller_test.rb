@@ -125,7 +125,7 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to school_students_path(@school)
-    assert_match "Grade level can't be blank", flash[:alert]
+    assert_equal "Row 2: Grade level can't be blank", flash[:alert]
   end
 
   test "should report a missing file" do

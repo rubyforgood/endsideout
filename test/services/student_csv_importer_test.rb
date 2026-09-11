@@ -128,12 +128,24 @@ class StudentCsvImporterTest < ActiveSupport::TestCase
         CSV
       end
 
-      assert_match "Email has already been taken", error.message
-      assert_match "1", error.message
+      assert_equal "Row 3: Email has already been taken", error.message
     end
   end
 
-  test "reports the row index of each invalid record" do
+  test "names every invalid row and every message in one error" do
+    error = assert_raises StudentCsvImporter::InvalidStudentError do
+      import(<<~CSV)
+        Alan,,,Room A,Nina Simone,nsimone@example.com,Know Your Health,basic
+        Mae,Jemison,,Room B,Duke Ellington,dellington@example.com,3D Wellness,moderate
+      CSV
+    end
+
+    assert_equal "Row 2: Last name can't be blank and Grade level can't be blank; " \
+                 "Row 3: Grade level can't be blank",
+                 error.message
+  end
+
+  test "names the spreadsheet row of each invalid record" do
     error = assert_raises StudentCsvImporter::InvalidStudentError do
       import(<<~CSV)
         Alan,Turing,5,Room A,Nina Simone,nsimone@example.com,Know Your Health,basic
@@ -141,8 +153,7 @@ class StudentCsvImporterTest < ActiveSupport::TestCase
       CSV
     end
 
-    assert_match "1", error.message
-    assert_match "Grade level can't be blank", error.message
+    assert_equal "Row 3: Grade level can't be blank", error.message
   end
 
   private

@@ -68,7 +68,7 @@ private
     records.each do |record|
       record.save!
     rescue ActiveRecord::RecordInvalid => error
-      raise error_class, { @row_indexes[record.object_id] => error.record.errors.full_messages }.to_s
+      raise error_class, format_errors(@row_indexes[record.object_id] => error.record.errors.full_messages)
     end
   end
 
@@ -91,9 +91,15 @@ private
   end
 
   def raise_validation_errors!
-    raise InvalidClassroomError, @error_messages[:classrooms].to_s if @error_messages[:classrooms].any?
-    raise InvalidStudentError, @error_messages[:students].to_s if @error_messages[:students].any?
-    raise InvalidTeacherError, @error_messages[:teachers].to_s if @error_messages[:teachers].any?
+    raise InvalidClassroomError, format_errors(@error_messages[:classrooms]) if @error_messages[:classrooms].any?
+    raise InvalidStudentError, format_errors(@error_messages[:students]) if @error_messages[:students].any?
+    raise InvalidTeacherError, format_errors(@error_messages[:teachers]) if @error_messages[:teachers].any?
+  end
+
+  # Row numbers count the heading, so they line up with what the person sees in
+  # the spreadsheet they uploaded.
+  def format_errors(messages_by_row)
+    messages_by_row.map { |index, messages| "Row #{index + 2}: #{messages.to_sentence}" }.join("; ")
   end
 
   def find_or_build_teacher(row)
