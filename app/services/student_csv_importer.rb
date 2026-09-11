@@ -16,6 +16,7 @@ class StudentCsvImporter
     @classrooms = {}
     @teachers = {}
     @students = []
+    @row_indexes = {}
   end
 
 
@@ -27,9 +28,9 @@ class StudentCsvImporter
       classroom = find_or_build_classroom(row, teacher)
 
       student = Student.new(
-        first_name: row['Student First Name'],
-        last_name: row['Student Last Name'],
-        grade_level: row['Grade Level'],
+        first_name: row["Student First Name"],
+        last_name: row["Student Last Name"],
+        grade_level: row["Grade Level"],
         school_id: @school_id,
         classroom: classroom
       )
@@ -52,26 +53,38 @@ private
     ActiveRecord::Base.transaction do
       raise_validation_errors!
 
-      @teachers.each_value(&:save!)
-      @classrooms.each_value(&:save!)
-      @students.each(&:save!)
+      save_all(@teachers.values, InvalidTeacherError)
+      save_all(@classrooms.values, InvalidClassroomError)
+      save_all(@students, InvalidStudentError)
 
       create_program_associations
+    end
+  end
+
+  # A uniqueness collision between two rows of the same file survives `valid?`,
+  # because neither record is persisted yet. Re-raise it in the shape the
+  # validation errors already use so callers only have to handle one thing.
+  def save_all(records, error_class)
+    records.each do |record|
+      record.save!
+    rescue ActiveRecord::RecordInvalid => error
+      raise error_class, { @row_indexes[record.object_id] => error.record.errors.full_messages }.to_s
     end
   end
 
   def create_program_associations
     @csv.each do |row|
       teacher = @teachers[row["Teacher"]]
-      classroom = @classrooms[[teacher.name, row["Class Name"]]]
+      classroom = @classrooms[[ teacher.name, row["Class Name"] ]]
 
-      program = Program.create_or_find_by!(name: row['Program'])
+      program = Program.find_or_create_by!(name: row["Program"])
 
-      classroom.classroom_programs.create_or_find_by!(program: program, level: row['Program Level'])
+      classroom.classroom_programs.create_or_find_by!(program: program, level: row["Program Level"])
     end
-
   end
   def collect_errors(type, record, index)
+    @row_indexes[record.object_id] ||= index
+
     return if record.valid?
 
     @error_messages[type][index] = record.errors.full_messages
@@ -86,12 +99,13 @@ private
   def find_or_build_teacher(row)
     @teachers[row["Teacher"]] ||= Teacher.new(
       name: row["Teacher"],
+      email: row["Teacher Email"],
       school_id: @school_id
     )
   end
 
   def find_or_build_classroom(row, teacher)
-    key = [teacher.name, row["Class Name"]]
+    key = [ teacher.name, row["Class Name"] ]
 
     @classrooms[key] ||= Classroom.new(
       school_id: @school_id,
