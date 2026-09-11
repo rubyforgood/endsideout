@@ -25,17 +25,15 @@ Rails.application.routes.draw do
         member { get :schedule }
       end
       resources :teachers, shallow: true, except: [ :show ]
+      scope module: :admin do
+        get :csv_template, to: "csv#download"
+        post :csv_import, to: "csv#import"
+      end
     end
     resources :content_modules, except: [ :show ] do
       resources :links, shallow: true, except: %i[index show]
     end
     resources :classroom_modules, only: %i[update]
-
-  end
-
-  namespace :admin do
-    get :csv_template, to: "csv#download"
-    post :csv_import, to: "csv#import"
   end
   root to: "schools#index"
 
