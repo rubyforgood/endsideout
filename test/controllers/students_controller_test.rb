@@ -12,6 +12,17 @@ class StudentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should offer the csv import dialog on index" do
+    get school_students_url(@school)
+
+    assert_select "a[href=?]", school_csv_template_path(@school), text: "Download the CSV template"
+    assert_select "form[action=?][method=post][enctype=?]",
+                  school_csv_import_path(@school),
+                  "multipart/form-data" do
+      assert_select "input[type=file][name=file]"
+    end
+  end
+
   test "should get new" do
     get new_school_student_url(@school)
     assert_response :success

@@ -1,0 +1,33 @@
+<div data-controller="dialog">
+  <button type="button" class="btn btn-secondary" data-action="dialog#open">Import CSV</button>
+
+  <dialog class="modal" data-dialog-target="dialog">
+    <div class="modal-box">
+      <h3 class="text-lg font-semibold">Import students</h3>
+
+      <ol class="list-decimal list-inside my-4 space-y-1 text-sm">
+        <li><%= link_to "Download the CSV template", school_csv_template_path(school), class: "link" %></li>
+        <li>Fill it in, one student per row. Leave the column headings alone.</li>
+        <li>Upload it below.</li>
+      </ol>
+
+      <p class="text-sm text-base-content/70 mb-4">
+        Every student, teacher and classroom in the file is created at once.
+        If any row is rejected, nothing is imported.
+      </p>
+
+      <%= form_with url: school_csv_import_path(school), method: :post do |form| %>
+        <%= form.file_field :file, accept: ".csv,text/csv", required: true, class: "file-input w-full" %>
+
+        <div class="modal-action">
+          <button type="button" class="btn btn-ghost" data-action="dialog#close">Cancel</button>
+          <%= form.submit "Import", class: "btn btn-primary" %>
+        </div>
+      <% end %>
+    </div>
+
+    <form method="dialog" class="modal-backdrop">
+      <button>Close</button>
+    </form>
+  </dialog>
+</div>
