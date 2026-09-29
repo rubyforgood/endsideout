@@ -11,13 +11,20 @@ Rails.application.routes.draw do
   resource :student_session, only: %i[new create destroy]
   resources :student_homes, only: %i[index]
   resources :classroom_rosters, only: %i[show], param: :uuid
+  resources :game_attempts, only: [] do
+    collection do
+      post :start
+      post :finish
+    end
+  end
+
   scope :admin do
     resources :schools do
       resources :students, shallow: true, except: [ :show ]
-      resources :classrooms, shallow: true, except: %i[destroy] do
+      resources :classrooms, shallow: true, except: %i[destroy show] do
         member { get :schedule }
       end
-      resources :teachers, shallow: true
+      resources :teachers, shallow: true, except: [ :show ]
     end
     resources :content_modules, except: [ :show ] do
       resources :links, shallow: true, except: %i[index show]
