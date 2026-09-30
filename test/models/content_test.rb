@@ -9,8 +9,8 @@ class ContentTest < ActiveSupport::TestCase
   end
 
   test "belongs to a content module" do
-    content = contents(:two)
+    content = contents(:one)
 
-    assert_equal content_modules(:intro), content.content_module
+    assert_equal content_modules(:one), content.content_module
   end
 end
