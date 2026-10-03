@@ -64,7 +64,9 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
 
   test "should reject a student who already belongs to the school" do
     assert_no_difference "Student.count" do
-      post school_csv_import_url(@school), params: { file: csv_upload("students_existing_student.csv") }
+      post school_csv_import_url(@school), params: { file: csv_upload_from([
+        [ "Ada", "Lovelace", "5", "Room A", "Nina Simone", "nsimone@example.com", "Know Your Health", "basic" ]
+      ]) }
     end
 
     assert_redirected_to school_students_path(@school)
@@ -73,7 +75,9 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
 
   test "should reject a classroom that already belongs to the school" do
     assert_no_difference "Classroom.count" do
-      post school_csv_import_url(@school), params: { file: csv_upload("students_existing_classroom_name.csv") }
+      post school_csv_import_url(@school), params: { file: csv_upload_from([
+        [ "Alan", "Turing", "5", "Classroom 1", "Nina Simone", "nsimone@example.com", "Know Your Health", "basic" ]
+      ]) }
     end
 
     assert_redirected_to school_students_path(@school)
@@ -84,15 +88,23 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
     other_school = schools(:two)
 
     assert_difference -> { other_school.classrooms.count }, 1 do
-      post school_csv_import_url(other_school), params: { file: csv_upload("students_existing_classroom_name.csv") }
+      post school_csv_import_url(other_school), params: { file: csv_upload_from([
+        [ "Alan", "Turing", "5", "Classroom 1", "Nina Simone", "nsimone@example.com", "Know Your Health", "basic" ]
+      ]) }
     end
 
     assert_equal "Students were successfully imported.", flash[:notice]
   end
 
   test "should reject headers that do not match the template" do
+    headers = [ "First Name", "Last Name", "Grade", "Class", "Teacher", "Email", "Program", "Level" ]
+    file = csv_upload_from(
+      [ [ "Alan", "Turing", "5", "Room A", "Nina Simone", "nsimone@example.com", "Know Your Health", "basic" ] ],
+      headers: headers
+    )
+
     assert_no_difference "Student.count" do
-      post school_csv_import_url(@school), params: { file: csv_upload("students_bad_headers.csv") }
+      post school_csv_import_url(@school), params: { file: file }
     end
 
     assert_redirected_to school_students_path(@school)
@@ -103,7 +115,9 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
   # rather than the per-row column count check.
   test "should reject a row with more columns than the template" do
     assert_no_difference "Student.count" do
-      post school_csv_import_url(@school), params: { file: csv_upload("students_extra_column.csv") }
+      post school_csv_import_url(@school), params: { file: csv_upload_from([
+        [ "Alan", "Turing", "5", "Room A", "Nina Simone", "nsimone@example.com", "Know Your Health", "basic", "Extra" ]
+      ]) }
     end
 
     assert_redirected_to school_students_path(@school)
@@ -112,7 +126,10 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
 
   test "should report two rows giving different teachers the same email" do
     assert_no_difference [ "Student.count", "Teacher.count" ] do
-      post school_csv_import_url(@school), params: { file: csv_upload("students_duplicate_teacher_email.csv") }
+      post school_csv_import_url(@school), params: { file: csv_upload_from([
+        [ "Alan", "Turing", "5", "Room A", "Nina Simone", "shared@example.com", "Know Your Health", "basic" ],
+        [ "Mae", "Jemison", "6", "Room B", "Duke Ellington", "shared@example.com", "3D Wellness", "moderate" ]
+      ]) }
     end
 
     assert_redirected_to school_students_path(@school)
@@ -121,7 +138,9 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
 
   test "should report validation errors and write nothing" do
     assert_no_difference [ "Student.count", "Teacher.count", "Classroom.count" ] do
-      post school_csv_import_url(@school), params: { file: csv_upload("students_missing_grade_level.csv") }
+      post school_csv_import_url(@school), params: { file: csv_upload_from([
+        [ "Alan", "Turing", "", "Room A", "Nina Simone", "nsimone@example.com", "Know Your Health", "basic" ]
+      ]) }
     end
 
     assert_redirected_to school_students_path(@school)
@@ -130,7 +149,9 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
 
   test "should reject an unknown program without creating it or any students" do
     assert_no_difference [ "Program.count", "Student.count", "Teacher.count", "Classroom.count" ] do
-      post school_csv_import_url(@school), params: { file: csv_upload("students_unknown_program.csv") }
+      post school_csv_import_url(@school), params: { file: csv_upload_from([
+        [ "Alan", "Turing", "5", "Room A", "Nina Simone", "nsimone@example.com", "Mindful Movement", "basic" ]
+      ]) }
     end
 
     assert_redirected_to school_students_path(@school)
@@ -157,5 +178,13 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
   private
     def csv_upload(name)
       fixture_file_upload(name, "text/csv")
+    end
+
+    def csv_upload_from(rows, headers: Admin::CsvController::CSV_HEADERS)
+      content = CSV.generate do |csv|
+        csv << headers
+        rows.each { |row| csv << row }
+      end
+      Rack::Test::UploadedFile.new(StringIO.new(content), "text/csv", original_filename: "students.csv")
     end
 end
