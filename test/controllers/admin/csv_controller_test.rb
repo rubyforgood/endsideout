@@ -4,7 +4,7 @@ require "csv"
 class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
   setup do
     @school = schools(:one)
-    sign_in_as users(:admin)
+    sign_in_as users(:one)
   end
 
   test "should redirect the template download when not authenticated" do
@@ -48,7 +48,7 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
     room_a = @school.classrooms.find_by(name: "Room A")
     assert_equal "Nina Simone", room_a.teacher.name
     assert_equal [ "Alan Turing", "Katherine Johnson" ], room_a.students.map(&:full_name).sort
-    assert_equal [ programs(:kyh) ], room_a.programs.to_a
+    assert_equal [ programs(:one) ], room_a.programs.to_a
     assert_equal [ "basic" ], room_a.classroom_programs.map(&:level)
   end
 
@@ -126,6 +126,15 @@ class Admin::CsvControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to school_students_path(@school)
     assert_match "Grade level can't be blank", flash[:alert]
+  end
+
+  test "should reject an unknown program without creating it or any students" do
+    assert_no_difference [ "Program.count", "Student.count", "Teacher.count", "Classroom.count" ] do
+      post school_csv_import_url(@school), params: { file: csv_upload("students_unknown_program.csv") }
+    end
+
+    assert_redirected_to school_students_path(@school)
+    assert_equal "Program: Mindful Movement does not exist", flash[:alert]
   end
 
   test "should report a missing file" do

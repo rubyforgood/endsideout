@@ -68,9 +68,9 @@ class StudentCsvImporterTest < ActiveSupport::TestCase
     room_a = @school.classrooms.find_by!(name: "Room A")
     room_b = @school.classrooms.find_by!(name: "Room B")
 
-    assert_equal [ programs(:kyh) ], room_a.programs.to_a
+    assert_equal [ programs(:one) ], room_a.programs.to_a
     assert_equal "basic", room_a.classroom_programs.sole.level
-    assert_equal [ programs(:"3dw") ], room_b.programs.to_a
+    assert_equal [ programs(:two) ], room_b.programs.to_a
     assert_equal "advanced", room_b.classroom_programs.sole.level
   end
 
@@ -81,17 +81,20 @@ class StudentCsvImporterTest < ActiveSupport::TestCase
       CSV
     end
 
-    assert_equal programs(:kyh), @school.classrooms.find_by!(name: "Room A").programs.sole
+    assert_equal programs(:one), @school.classrooms.find_by!(name: "Room A").programs.sole
   end
 
-  test "creates a program that does not exist yet" do
-    assert_difference "Program.count", 1 do
-      import(<<~CSV)
-        Alan,Turing,5,Room A,Nina Simone,nsimone@example.com,Mindful Movement,basic
-      CSV
-    end
+  test "raises and writes nothing when the program does not exist" do
+    assert_no_difference [ "Program.count", "Student.count", "Teacher.count", "Classroom.count",
+                           "ClassroomProgram.count" ] do
+      error = assert_raises StudentCsvImporter::InvalidProgramError do
+        import(<<~CSV)
+          Alan,Turing,5,Room A,Nina Simone,nsimone@example.com,Mindful Movement,basic
+        CSV
+      end
 
-    assert_equal "Mindful Movement", @school.classrooms.find_by!(name: "Room A").programs.sole.name
+      assert_equal "Program: Mindful Movement does not exist", error.message
+    end
   end
 
   test "raises and writes nothing when a student is invalid" do

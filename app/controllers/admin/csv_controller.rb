@@ -11,6 +11,7 @@ class Admin::CsvController < AdminController
     ClassroomBulkImportError,
     CSV::MalformedCSVError,
     StudentCsvImporter::InvalidClassroomError,
+    StudentCsvImporter::InvalidProgramError,
     StudentCsvImporter::InvalidStudentError,
     StudentCsvImporter::InvalidTeacherError
   ].freeze

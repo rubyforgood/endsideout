@@ -2,6 +2,7 @@
 
 class StudentCsvImporter
   class InvalidClassroomError < StandardError; end
+  class InvalidProgramError < StandardError; end
   class InvalidStudentError < StandardError; end
   class InvalidTeacherError < StandardError; end
 
@@ -77,11 +78,18 @@ private
       teacher = @teachers[row["Teacher"]]
       classroom = @classrooms[[ teacher.name, row["Class Name"] ]]
 
-      program = Program.find_or_create_by!(name: row["Program"])
+      program = find_existing_program!(row["Program"])
 
       classroom.classroom_programs.create_or_find_by!(program: program, level: row["Program Level"])
     end
   end
+
+  def find_existing_program!(name)
+    Program.find_by!(name: name)
+  rescue ActiveRecord::RecordNotFound
+    raise InvalidProgramError, "Program: #{name} does not exist"
+  end
+
   def collect_errors(type, record, index)
     @row_indexes[record.object_id] ||= index
 
