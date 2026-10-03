@@ -3,7 +3,7 @@ require "test_helper"
 class ClassroomModulesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @classroom_module = classroom_modules(:one)
-    sign_in_as users(:admin)
+    sign_in_as users(:one)
   end
 
   test "update sets publish_on and responds with turbo stream" do

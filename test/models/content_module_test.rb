@@ -2,7 +2,7 @@ require "test_helper"
 
 class ContentModuleTest < ActiveSupport::TestCase
   setup do
-    @program = programs(:kyh)
+    @program = programs(:one)
   end
 
   test "is valid with required fields" do
@@ -37,8 +37,8 @@ class ContentModuleTest < ActiveSupport::TestCase
   end
 
   test "exposes delegated contentables" do
-    assert_equal [ links(:survey_one) ], content_modules(:intro).links.to_a
-    assert_equal [ games(:one) ], content_modules(:intro).games.to_a
+    assert_equal [ links(:one) ], content_modules(:one).links.to_a
+    assert_equal [ games(:one) ], content_modules(:one).games.to_a
   end
 
   test "cannot be destroyed when classroom modules exist" do

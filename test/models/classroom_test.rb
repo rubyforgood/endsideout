@@ -3,7 +3,7 @@ require "test_helper"
 class ClassroomTest < ActiveSupport::TestCase
   test "creates enrollment via nested attributes" do
     classroom = classrooms(:one)
-    program = programs(:"3dw")
+    program = programs(:two)
 
     assert_difference "ClassroomProgram.count" do
       classroom.update!(
@@ -31,7 +31,7 @@ class ClassroomTest < ActiveSupport::TestCase
     enrollment = classroom_programs(:one)
 
     # Add a second enrollment first so the classroom still has one after destruction
-    classroom.classroom_programs.create!(program: programs(:"3dw"), level: "basic")
+    classroom.classroom_programs.create!(program: programs(:two), level: "basic")
 
     assert_difference "ClassroomProgram.count", -1 do
       classroom.update!(
@@ -42,7 +42,7 @@ class ClassroomTest < ActiveSupport::TestCase
 
   test "rejects new enrollment when checkbox is unchecked (_destroy: 1)" do
     classroom = classrooms(:one)
-    program = programs(:"3dw")
+    program = programs(:two)
 
     assert_no_difference "ClassroomProgram.count" do
       classroom.update!(
@@ -53,7 +53,7 @@ class ClassroomTest < ActiveSupport::TestCase
 
   test "is invalid when a new enrollment has no level selected" do
     classroom = classrooms(:one)
-    program = programs(:"3dw")
+    program = programs(:two)
 
     classroom.assign_attributes(
       classroom_programs_attributes: [ { program_id: program.id, level: "" } ]

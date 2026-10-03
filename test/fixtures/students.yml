@@ -1,4 +1,4 @@
-ada:
+one:
   first_name: Ada
   last_name: Lovelace
   email:
@@ -7,7 +7,7 @@ ada:
   school: one
   classroom: one
 
-grace:
+two:
   first_name: Grace
   last_name: Hopper
   email: ghopper@example.com

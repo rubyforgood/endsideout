@@ -2,9 +2,9 @@ require "test_helper"
 
 class LinksControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @link = links(:survey_one)
-    @mod = content_modules(:intro)
-    sign_in_as users(:admin)
+    @link = links(:one)
+    @mod = content_modules(:one)
+    sign_in_as users(:one)
   end
 
   test "should get new" do

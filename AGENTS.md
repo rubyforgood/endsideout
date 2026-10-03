@@ -13,8 +13,8 @@ There are 2 separate sets of models using authentication:
 - Students (non-traditional Magic Links) used for Students to access their specific content
 
 ## Skills
-
-- Look in the [Skills](./skills) Folder for relevant skills
+- [rails-test-fixtures-conventions](./skills/rails-test-fixtures-conventions.md)
+- [erb-templates-conventions](./skills/erb-templates-conventions.md)
 
 ## Conventions
 

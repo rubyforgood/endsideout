@@ -1,7 +1,7 @@
 require "test_helper"
 
 class StudentSessionsControllerTest < ActionDispatch::IntegrationTest
-    setup { @student = students(:ada) }
+    setup { @student = students(:one) }
 
     test "new" do
       get new_student_session_path
