@@ -42,3 +42,6 @@ node_modules/
 # editor settings and extension recommendations
 /.vscode/*
 !/.vscode/extensions.json
+
+# Ignore key files for decrypting credentials and more.
+/config/credentials/*.key
