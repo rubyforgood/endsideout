@@ -20,9 +20,9 @@ servers:
 #
 # Don't use this when deploying to multiple web servers (then you have to terminate SSL at your load balancer).
 #
-# proxy:
-#   ssl: true
-#   host: staging.endsideout.org
+proxy:
+  ssl: false
+  forward_headers: true # the ALB handles the SSL termination, so we need to forward the headers to Rails for correct URL generation.
 
 # Where you keep your container images.
 registry:
