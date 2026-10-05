@@ -25,6 +25,8 @@ Rails.application.routes.draw do
         member { get :schedule }
       end
       resources :teachers, shallow: true, except: [ :show ]
+      get :csv_template, to: "admin/csv#download"
+      post :csv_import, to: "admin/csv#import"
     end
     resources :content_modules, except: [ :show ] do
       resources :links, shallow: true, except: %i[index show]
