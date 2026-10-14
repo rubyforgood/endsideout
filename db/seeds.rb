@@ -1,3 +1,8 @@
+def maybe(&block)
+  return unless Faker::Boolean.boolean
+
+  block.call
+end
 
 programs = [
   Program.find_or_create_by!(name: "Know Your Health"),
@@ -8,15 +13,16 @@ User.find_or_create_by!(email_address: "admin@example.com") do |user|
   user.password = "password"
 end
 
+# Production should not have any seeded data for the content or schools
 return if Rails.env.production?
 
-kyh, tdw = programs
-ContentModule.levels.keys.each_with_index do |level, li|
-  [ kyh, tdw ].each do |program|
+ContentModule.levels.keys.each do |level|
+  programs.each do |program|
     2.times do |i|
       mod = program.content_modules.create!(name: "#{program.name} #{level.humanize} Module #{i + 1}", level: level, position: i + 1)
-      # TODO: Fix this
-      mod.links.create!(title: "Survey #{i + 1}", url: "https://example.com/survey/#{program.id}-#{level}-#{i}", link_type: "survey", position: 1)
+      # TODO: Update this when the delegated types migration is completed
+      link = Link.new(title: "Survey #{i + 1}", url: "https://example.com/survey/#{program.id}-#{level}-#{i}", link_type: "survey", position: 1, content_module: mod)
+      mod.contents.create! contentable: link
     end
   end
 end
@@ -24,12 +30,6 @@ end
 
 
 school = School.find_or_create_by!(name: "Example School")
-
-def maybe(&block)
-  return unless Faker::Boolean.boolean
-
-  block.call
-end
 
 teachers = 3.times.map do
   school.teachers.create!(
