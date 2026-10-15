@@ -56,9 +56,6 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
-
-  # Used for database seeding
-  gem "faker", "~> 3.8"
 end
 
 group :development do
@@ -74,3 +71,5 @@ group :test do
 end
 
 gem "tailwindcss-rails", "~> 4.6"
+# Used for database seeding
+gem "faker", "~> 3.8"
