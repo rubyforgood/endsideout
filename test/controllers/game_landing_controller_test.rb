@@ -2,7 +2,7 @@ require "test_helper"
 
 class GameLandingControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @student = students(:ada)
+    @student = students(:one)
     @game = games(:one)
     student_sign_in_as @student
   end
