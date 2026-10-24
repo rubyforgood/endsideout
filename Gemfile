@@ -71,4 +71,5 @@ group :test do
 end
 
 gem "tailwindcss-rails", "~> 4.6"
-gem "faker", "~> 3.8", group: :development
+# Used for database seeding
+gem "faker", "~> 3.8"
