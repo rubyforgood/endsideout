@@ -1,0 +1,14 @@
+# Staging destination. Deploy with: bin/kamal deploy -d staging
+# Values here are merged over config/deploy.yml.
+
+servers:
+  web:
+    - 18.117.181.111
+
+ssh:
+  user: ec2-user
+  keys: ["~/.ssh/2026rfg-staging.pem"]
+
+env:
+  clear:
+    RAILS_ENV: staging
