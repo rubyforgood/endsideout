@@ -25,10 +25,10 @@ If the game loads without a `token`, the game cannot report play. In that case, 
 
 ## Hosts
 
-| Environment | Game host | LMS host |
-| --- | --- | --- |
-| Production | `endsideoutgames.netlify.app` | `LMS_HOST` (ask EndsideOut for the production address) |
-| Staging | `staging--endsideout-games.netlify.app` | `LMS_HOST` (ask EndsideOut for the staging address) |
+| Environment | Game host | LMS host                         |
+| --- | --- |----------------------------------|
+| Production | `endsideoutgames.netlify.app` | classroom.endsideout.org         |
+| Staging | `staging--endsideout-games.netlify.app` | staging-classroom.endsideout.org |
 
 Only a game that runs on the matching game host can call the LMS from a browser.
 A call from any other origin fails the browser CORS check (the browser rule for calls between sites).
@@ -91,7 +91,7 @@ The `game_attempt` fields are:
 
 | Field | Type | Meaning |
 | --- | --- | --- |
-| `outcome` | string | The result of the play, for example `win`. |
+| `outcome` | string | The result of the play. |
 | `score` | integer | The score of the student. |
 
 Success response, status 200:
