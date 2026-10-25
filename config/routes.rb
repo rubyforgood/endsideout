@@ -1,8 +1,12 @@
 require "uri"
 
 Rails.application.routes.draw do
-  direct :external_game do |slug|
-    URI::HTTPS.build(host: "endsideoutgames.netlify.app", path: "/games/#{slug}").to_s
+  direct :external_game do |slug, options|
+    URI::HTTPS.build(
+      host: Rails.configuration.x.external_games.host,
+      path: "/games/#{slug}",
+      query: options&.slice(:token)&.to_query.presence
+    ).to_s
   end
 
   namespace :admin do
