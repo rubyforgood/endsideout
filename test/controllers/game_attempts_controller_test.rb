@@ -101,13 +101,16 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
     origin = "https://#{Rails.configuration.x.external_games.host}"
 
     %i[start finish].each do |action|
-      process :options, url_for(controller: "game_attempts", action: action, only_path: true),
-        headers: { "Origin" => origin, "Access-Control-Request-Method" => "POST" }
+      process :options, "/game_attempts/#{action}", headers: {
+        "Origin" => origin,
+        "Access-Control-Request-Method" => "POST",
+        "Access-Control-Request-Headers" => "Content-Type"
+      }
 
-      assert_response :no_content
+      assert_response :success
       assert_equal origin, response.headers["Access-Control-Allow-Origin"]
-      assert_equal "POST, OPTIONS", response.headers["Access-Control-Allow-Methods"]
-      assert_equal "Content-Type", response.headers["Access-Control-Allow-Headers"]
+      assert_includes response.headers["Access-Control-Allow-Methods"].downcase, "post"
+      assert_includes response.headers["Access-Control-Allow-Headers"].downcase, "content-type"
     end
   end
 

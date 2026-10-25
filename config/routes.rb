@@ -40,8 +40,6 @@ Rails.application.routes.draw do
     collection do
       post :start
       post :finish
-      match :start, via: :options, action: :preflight, as: nil
-      match :finish, via: :options, action: :preflight, as: nil
     end
   end
 
