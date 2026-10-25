@@ -33,7 +33,6 @@ Rails.application.routes.draw do
   resources :games, only: [] do
     member do
       get :play, to: "game_landing#show"
-      get :embed, to: "game_landing#embed"
     end
   end
   resources :classroom_rosters, only: %i[show], param: :uuid
