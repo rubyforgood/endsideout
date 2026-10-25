@@ -29,8 +29,8 @@ class GameAttempt < ApplicationRecord
     started_at.present?
   end
 
-  def finish!(outcome = "completed")
-    update(finished_at: Time.current, outcome: outcome)
+  def finish!(params)
+    update(params.merge(finished_at: Time.current))
   end
 
   def finished?

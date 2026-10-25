@@ -20,8 +20,7 @@ class GameAttemptsController < ApplicationController
       return
     end
 
-    if @game_attempt.update(game_attempt_params)
-      @game_attempt.finish!
+    if @game_attempt.finish!(game_attempt_params)
       render json: { status: "ok" }
     end
   end
