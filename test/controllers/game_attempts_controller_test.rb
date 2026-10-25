@@ -56,4 +56,75 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "error", response_json["status"]
     assert_equal "Game attempt has not been started", response_json["message"]
   end
+
+  test "rejects a tampered token with a JSON error" do
+    post start_game_attempts_url, params: { token: "not-a-real-token" }, as: :json
+    assert_response :unprocessable_entity
+
+    response_json = JSON.parse(response.body)
+    assert_equal "error", response_json["status"]
+    assert_equal "Invalid token", response_json["message"]
+    assert_equal 0, GameAttempt.where(token: "not-a-real-token").count
+  end
+
+  test "accepts a JSON body" do
+    token = valid_token
+
+    post start_game_attempts_url, params: { token: token }, as: :json
+    assert_response :success
+    assert GameAttempt.find_by(token: token).started?
+  end
+
+  test "does not require a CSRF token" do
+    with_forgery_protection do
+      post start_game_attempts_url, params: { token: valid_token }, as: :json
+      assert_response :success
+    end
+  end
+
+  test "allows CORS requests from the games host" do
+    origin = "https://#{Rails.configuration.x.external_games.host}"
+
+    post start_game_attempts_url, params: { token: valid_token }, as: :json, headers: { "Origin" => origin }
+    assert_response :success
+    assert_equal origin, response.headers["Access-Control-Allow-Origin"]
+    assert_includes response.headers["Vary"], "Origin"
+  end
+
+  test "does not allow CORS requests from other origins" do
+    post start_game_attempts_url, params: { token: valid_token }, as: :json,
+      headers: { "Origin" => "https://example.com" }
+    assert_nil response.headers["Access-Control-Allow-Origin"]
+  end
+
+  test "answers CORS preflight requests for start and finish" do
+    origin = "https://#{Rails.configuration.x.external_games.host}"
+
+    %i[start finish].each do |action|
+      process :options, url_for(controller: "game_attempts", action: action, only_path: true),
+        headers: { "Origin" => origin, "Access-Control-Request-Method" => "POST" }
+
+      assert_response :no_content
+      assert_equal origin, response.headers["Access-Control-Allow-Origin"]
+      assert_equal "POST, OPTIONS", response.headers["Access-Control-Allow-Methods"]
+      assert_equal "Content-Type", response.headers["Access-Control-Allow-Headers"]
+    end
+  end
+
+  private
+
+  def valid_token
+    GameAttempt.generate_token(
+      student_id: game_attempts(:one).student_id,
+      game_id: game_attempts(:one).game_id
+    )
+  end
+
+  def with_forgery_protection
+    original = ActionController::Base.allow_forgery_protection
+    ActionController::Base.allow_forgery_protection = true
+    yield
+  ensure
+    ActionController::Base.allow_forgery_protection = original
+  end
 end

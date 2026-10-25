@@ -1,5 +1,13 @@
 class GameAttemptsController < ApplicationController
+  # Games run on another origin and have no Rails session. The signed token is the credential.
+  skip_forgery_protection
+
   before_action :game_attempt_from_token, only: %i[start finish]
+  after_action :set_cors_headers
+
+  rescue_from ActiveSupport::MessageVerifier::InvalidSignature do
+    render json: { status: "error", message: "Invalid token" }, status: :unprocessable_entity
+  end
 
   def start
     @game_attempt.start!
@@ -18,6 +26,10 @@ class GameAttemptsController < ApplicationController
     end
   end
 
+  def preflight
+    head :no_content
+  end
+
   private
     def game_attempt_from_token
       @game_attempt = GameAttempt.find_by(token: params[:token])
@@ -34,5 +46,14 @@ class GameAttemptsController < ApplicationController
     # NOTE (@abachman): add params that can be updated by games here
     def game_attempt_params
       params.expect(game_attempt: [ :outcome, :score ])
+    end
+
+    def set_cors_headers
+      response.headers["Vary"] = [ response.headers["Vary"], "Origin" ].compact_blank.join(", ")
+      return unless request.origin == "https://#{Rails.configuration.x.external_games.host}"
+
+      response.headers["Access-Control-Allow-Origin"] = request.origin
+      response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+      response.headers["Access-Control-Allow-Headers"] = "Content-Type"
     end
 end
