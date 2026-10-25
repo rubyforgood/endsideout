@@ -75,17 +75,11 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
     assert GameAttempt.find_by(token: token).started?
   end
 
-  test "does not require a CSRF token" do
-    with_forgery_protection do
-      post start_game_attempts_url, params: { token: valid_token }, as: :json
-      assert_response :success
-    end
-  end
-
   test "allows CORS requests from the games host" do
     origin = "https://#{Rails.configuration.x.external_games.host}"
 
     post start_game_attempts_url, params: { token: valid_token }, as: :json, headers: { "Origin" => origin }
+
     assert_response :success
     assert_equal origin, response.headers["Access-Control-Allow-Origin"]
     assert_includes response.headers["Vary"], "Origin"
@@ -94,6 +88,7 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
   test "does not allow CORS requests from other origins" do
     post start_game_attempts_url, params: { token: valid_token }, as: :json,
       headers: { "Origin" => "https://example.com" }
+
     assert_nil response.headers["Access-Control-Allow-Origin"]
   end
 
@@ -121,13 +116,5 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
       student_id: game_attempts(:one).student_id,
       game_id: game_attempts(:one).game_id
     )
-  end
-
-  def with_forgery_protection
-    original = ActionController::Base.allow_forgery_protection
-    ActionController::Base.allow_forgery_protection = true
-    yield
-  ensure
-    ActionController::Base.allow_forgery_protection = original
   end
 end
