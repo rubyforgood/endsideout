@@ -3,15 +3,101 @@
 This document tells game developers how a game reports play to the EndsideOut LMS.
 A game runs inside an iframe (a web page embedded in another page). The LMS shows the iframe to a signed-in student.
 
-## How a game starts
+## Summary
+- The LMS loads your game in an iframe with a `token` GET parameter in the URL.
+- The game calls the LMS API using the token to report when the game starts and finishes.
 
-The LMS loads your game at this address:
+## API Request Documentation
+
+### Start a game
+
+```http
+POST https://LMS_HOST/game_attempts/start
+Content-Type: application/json
+```
+
+**Request Body Schema:**
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "description": "The signed token from the URL."
+    }
+  },
+  "required": ["token"]
+}
+```
+
+**Example**
+```json
+{ 
+  "token": "abcd" 
+}
+```
+
+### Finish a game
+
+```http
+POST https://LMS_HOST/game_attempts/finish
+Content-Type: application/json
+```
+
+**Request Body Schema:**
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string",
+      "description": "The signed token from the URL."
+    },
+    "game_attempt": {
+      "type": "object",
+      "properties": {
+        "outcome": {
+          "type": "string",
+          "description": "The result of the play.",
+          "enum": ["game_completed", "game_over"]
+        },
+        "score": {
+          "type": "integer",
+          "description": "The score of the student."
+        }
+      },
+      "required": ["outcome"]
+    }
+  },
+  "required": ["token", "game_attempt"]
+}
+```
+
+**Example**
+```json
+{ 
+  "token": "abcd",
+  "game_attempt": {
+    "outcome": "game_completed",
+    "score": 93
+  }
+}
+```
+
+
+## Details
+
+The LMS loads the game in an iframe using the following URL:
 
 ```
-https://<game host>/games/<slug>?token=<token>
+https://<game host>/<slug>?token=<token>
 ```
 
-The `slug` is the short name of the game in the LMS. The `token` is a signed value that identifies one play session of one student.
+The `slug` is the unique name of the game, such as `fruit-veggie-quiz`. The `token` is a signed value that identifies one play session of one student.
 The token is a GET parameter (a value in the URL query string).
 
 When your game loads, read the `token` from the URL. For example:
@@ -31,7 +117,7 @@ If the game loads without a `token`, the game cannot report play. In that case, 
 | Staging | `staging--endsideout-games.netlify.app` | staging-classroom.endsideout.org |
 
 Only a game that runs on the matching game host can call the LMS from a browser.
-A call from any other origin fails the browser CORS check (the browser rule for calls between sites).
+A call from any other origin fails the browser CORS check.
 
 ## Request rules
 
@@ -40,75 +126,6 @@ A call from any other origin fails the browser CORS check (the browser rule for 
 - Do not send cookies. Do not send a CSRF token. The `token` is the only credential.
 - Every response is JSON with a `status` field. The value is `ok` or `error`. An error also has a `message`.
 
-## Start a game
-
-When the student begins to play, call this once.
-
-```
-POST https://LMS_HOST/game_attempts/start
-```
-
-Body:
-
-```json
-{ "token": "<token>" }
-```
-
-Success response, status 200:
-
-```json
-{ "status": "ok" }
-```
-
-Example:
-
-```js
-await fetch(`https://${LMS_HOST}/game_attempts/start`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ token })
-})
-```
-
-## Finish a game
-
-When the student finishes the game, call this once. You must call `start` first.
-
-```
-POST https://LMS_HOST/game_attempts/finish
-```
-
-Body:
-
-```json
-{
-  "token": "<token>",
-  "game_attempt": { "outcome": "win", "score": 100 }
-}
-```
-
-The `game_attempt` fields are:
-
-| Field | Type | Meaning |
-| --- | --- | --- |
-| `outcome` | string | The result of the play. |
-| `score` | integer | The score of the student. |
-
-Success response, status 200:
-
-```json
-{ "status": "ok" }
-```
-
-Example:
-
-```js
-await fetch(`https://${LMS_HOST}/game_attempts/finish`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ token, game_attempt: { outcome: "win", score: 100 } })
-})
-```
 
 ## Errors
 
@@ -118,17 +135,3 @@ If a call fails, it returns status 422.
 | --- | --- | --- |
 | `Invalid token` | The token is missing, changed, or not from the LMS. | Send the `token` from the page URL without any change. |
 | `Game attempt has not been started` | You called `finish` before `start`. | Call `start` first. |
-
-## Try it with curl
-
-Replace `<token>` with a token from a game page URL.
-
-```sh
-curl -X POST https://LMS_HOST/game_attempts/start \
-  -H "Content-Type: application/json" \
-  -d '{"token":"<token>"}'
-
-curl -X POST https://LMS_HOST/game_attempts/finish \
-  -H "Content-Type: application/json" \
-  -d '{"token":"<token>","game_attempt":{"outcome":"win","score":100}}'
-```

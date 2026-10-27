@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   direct :external_game do |slug, options|
     URI::HTTPS.build(
       host: Rails.configuration.x.external_games.host,
-      path: "/games/#{slug}",
+      path: "/#{slug}",
       query: options&.slice(:token)&.to_query.presence
     ).to_s
   end
