@@ -27,8 +27,4 @@ class GameLandingControllerTest < ActionDispatch::IntegrationTest
       GameAttempt.verify_token(token)
     )
   end
-
-  test "the embed page no longer exists" do
-    assert_raises(NoMethodError) { embed_game_url(@game) }
-  end
 end

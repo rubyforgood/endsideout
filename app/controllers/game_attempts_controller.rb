@@ -14,7 +14,7 @@ class GameAttemptsController < ApplicationController
   end
 
   def finish
-    if !@game_attempt.started?
+    unless @game_attempt.started?
       render json: { status: "error", message: "Game attempt has not been started" }, status: :unprocessable_entity
       return
     end

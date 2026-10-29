@@ -9,7 +9,7 @@ one:
   token: onetoken
 
 two:
-  outcome: expired
+  outcome: game_over
   started_at: 2026-08-29 11:53:38
   finished_at: 2026-08-29 11:53:38
   student: two

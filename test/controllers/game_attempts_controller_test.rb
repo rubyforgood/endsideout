@@ -7,7 +7,7 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
       game_id: game_attempts(:one).game_id
     )
 
-    post start_game_attempts_url, params: { token: token }
+    post start_game_attempts_url, params: { token: token }, as: :json
     assert_response :success
 
     response_json = JSON.parse(response.body)
@@ -32,7 +32,7 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
 
     assert_not attempt.finished?
 
-    post finish_game_attempts_url, params: { token: token, game_attempt: { outcome: "win", score: 100 } }
+    post finish_game_attempts_url, params: { token: token, game_attempt: { outcome: "win", score: 100 } }, as: :json
     assert_response :success
 
     response_json = JSON.parse(response.body)
@@ -46,7 +46,7 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
       game_id: game_attempts(:one).game_id
     )
 
-    post finish_game_attempts_url, params: { token: token, game_attempt: { outcome: "win", score: 100 } }
+    post finish_game_attempts_url, params: { token: token, game_attempt: { outcome: "win", score: 100 } }, as: :json
     assert_response :unprocessable_entity
 
     # record is created, but not started, so it should not be finished
@@ -65,14 +65,6 @@ class GameAttemptsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "error", response_json["status"]
     assert_equal "Invalid token", response_json["message"]
     assert_equal 0, GameAttempt.where(token: "not-a-real-token").count
-  end
-
-  test "accepts a JSON body" do
-    token = valid_token
-
-    post start_game_attempts_url, params: { token: token }, as: :json
-    assert_response :success
-    assert GameAttempt.find_by(token: token).started?
   end
 
   test "allows CORS requests from the games host" do
