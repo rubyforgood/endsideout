@@ -18,11 +18,21 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
     assert_select "summary", text: /Introduction to Health/
   end
 
-  test "shows links inside published modules" do
+  test "shows links and games inside published modules" do
     get student_homes_url
     assert_response :success
-    link = content_modules(:one).links.first
-    assert_select "a[target='_blank']", text: /#{link.title}/ if link
+    assert_select "li a[target='_blank'][href='#{links(:one).url}']", text: /#{links(:one).title}/
+    assert_select "li a[href='#{play_game_path(games(:one))}']:not([target])", text: games(:one).title
+  end
+
+  test "shows contents in position order" do
+    get student_homes_url
+    assert_equal [ games(:one).title, links(:one).title ], listed_titles
+
+    contents(:one).move_down
+
+    get student_homes_url
+    assert_equal [ links(:one).title, games(:one).title ], listed_titles
   end
 
   test "most recently published module has the open attribute" do
@@ -78,5 +88,11 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
 
     get student_homes_url(classroom_program_id: enrollment.id)
     assert_select "a[role='tab'][aria-selected='true'][href*='classroom_program_id=#{enrollment.id}']"
+  end
+
+  private
+
+  def listed_titles
+    css_select("details li a").map { |a| a.text.delete_suffix(" ↗") }
   end
 end

@@ -30,14 +30,8 @@
         </summary>
         <div class="collapse-content">
           <ul class="flex flex-col gap-2 pt-2">
-            <% classroom_module.content_module.links.each do |link| %>
-              <li>
-                <%= tag.a link.title + " ↗",
-                          href: safe_external_url(link.url),
-                          target: "_blank",
-                          rel: "noopener noreferrer",
-                          class: "link inline-flex items-center gap-1" %>
-              </li>
+            <% classroom_module.content_module.contents.each do |content| %>
+              <%= render "student_homes/contentables/#{content.contentable_name}", content: content %>
             <% end %>
           </ul>
         </div>

@@ -1,0 +1,8 @@
+<% link = content.contentable %>
+<li>
+  <%= tag.a link.title + " ↗",
+            href: safe_external_url(link.url),
+            target: "_blank",
+            rel: "noopener noreferrer",
+            class: "link inline-flex items-center gap-1" %>
+</li>

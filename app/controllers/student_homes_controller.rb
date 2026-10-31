@@ -9,7 +9,7 @@ class StudentHomesController < ApplicationController
       .order("programs.name")
     @active_program = @classroom_programs.find { |cp| cp.id.to_s == params[:classroom_program_id] } || @classroom_programs.first
     @published_modules = if @active_program
-      @active_program.classroom_modules.published.includes(content_module: :links)
+      @active_program.classroom_modules.published.includes(content_module: { contents: :contentable })
     else
       []
     end
