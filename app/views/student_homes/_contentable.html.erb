@@ -1,0 +1,16 @@
+<% case contentable %>
+<% when Link %>
+  <li>
+    <%= tag.a contentable.title + " ↗",
+              href: safe_external_url(contentable.url),
+              target: "_blank",
+              rel: "noopener noreferrer",
+              class: "link inline-flex items-center gap-1" %>
+  </li>
+<% when Game %>
+  <li>
+    <%= tag.a contentable.title, href: play_game_path(contentable), class: "link inline-flex items-center gap-1" %>
+  </li>
+<% else %>
+  <% raise "Invalid contentable type" %>
+<% end %>

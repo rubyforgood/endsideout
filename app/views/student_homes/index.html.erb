@@ -30,9 +30,7 @@
         </summary>
         <div class="collapse-content">
           <ul class="flex flex-col gap-2 pt-2">
-            <% classroom_module.content_module.contents.each do |content| %>
-              <%= render "student_homes/contentables/#{content.contentable_name}", content: content %>
-            <% end %>
+              <%= render partial: "student_homes/contentable", collection: classroom_module.content_module.contents.map(&:contentable) %>
           </ul>
         </div>
       <% end %>
