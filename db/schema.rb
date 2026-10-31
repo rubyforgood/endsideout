@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_31_181544) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_31_202333) do
   create_table "classroom_modules", force: :cascade do |t|
     t.integer "classroom_program_id", null: false
     t.integer "content_module_id", null: false
@@ -49,9 +49,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_181544) do
     t.datetime "created_at", null: false
     t.string "level", null: false
     t.string "name", null: false
-    t.integer "position"
+    t.integer "position", null: false
     t.integer "program_id", null: false
     t.datetime "updated_at", null: false
+    t.index ["program_id", "level", "position"], name: "index_content_modules_on_program_id_and_level_and_position"
     t.index ["program_id"], name: "index_content_modules_on_program_id"
   end
 
@@ -60,7 +61,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_181544) do
     t.integer "contentable_id", null: false
     t.string "contentable_type", null: false
     t.datetime "created_at", null: false
-    t.integer "position"
+    t.integer "position", null: false
     t.datetime "updated_at", null: false
     t.index ["content_module_id", "contentable_type", "contentable_id"], name: "index_contents_on_module_and_contentable", unique: true
     t.index ["content_module_id", "position"], name: "index_contents_on_content_module_id_and_position"

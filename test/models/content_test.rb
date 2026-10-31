@@ -31,6 +31,62 @@ class ContentTest < ActiveSupport::TestCase
     assert_equal 1, content.position
   end
 
+  test "move_up swaps position with the previous content" do
+    contents(:two).move_up
+
+    assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.reload.to_a
+    assert_equal [ 1, 2 ], content_modules(:one).contents.map(&:position)
+  end
+
+  test "move_down swaps position with the next content" do
+    contents(:one).move_down
+
+    assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.reload.to_a
+  end
+
+  test "move_up does nothing for the first content" do
+    contents(:one).move_up
+
+    assert_equal [ 1, 2 ], [ contents(:one).reload.position, contents(:two).reload.position ]
+  end
+
+  test "move_down does nothing for the last content" do
+    contents(:two).move_down
+
+    assert_equal [ 1, 2 ], [ contents(:one).reload.position, contents(:two).reload.position ]
+  end
+
+  test "moving ignores contents in other modules" do
+    other = create_module.contents.create!(contentable: games(:one))
+    order_before = content_modules(:one).contents.map(&:id)
+
+    other.move_up
+    other.move_down
+
+    assert_equal 1, other.reload.position
+    assert_equal order_before, content_modules(:one).contents.reload.map(&:id)
+  end
+
+  test "move works when positions have gaps" do
+    contents(:two).update!(position: 5)
+
+    contents(:two).move_up
+
+    assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.reload.to_a
+  end
+
+  test "move accepts up and down" do
+    contents(:one).move("down")
+    assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.reload.to_a
+
+    contents(:one).move("up")
+    assert_equal [ contents(:one), contents(:two) ], content_modules(:one).contents.reload.to_a
+  end
+
+  test "move rejects an unknown direction" do
+    assert_raises(ArgumentError) { contents(:one).move("sideways") }
+  end
+
   test "cannot add the same game to a module twice" do
     content_module = create_module
     content_module.contents.create!(contentable: games(:one))
