@@ -34,15 +34,15 @@ class Admin::CsvController < AdminController
 
   def import
     csv_file = params[:file]
-    return redirect_to school_students_path(@school), alert: "Choose a CSV file to import." if csv_file.blank?
+    return redirect_to admin_school_students_path(@school), alert: "Choose a CSV file to import." if csv_file.blank?
 
     csv = CSV.read(csv_file.path, headers: true)
     validate_rows!(csv)
     StudentCsvImporter.new(csv: csv, school_id: @school.id).import
 
-    redirect_to school_students_path(@school), notice: "Students were successfully imported."
+    redirect_to admin_school_students_path(@school), notice: "Students were successfully imported."
   rescue *IMPORT_ERRORS => error
-    redirect_to school_students_path(@school), alert: error.message
+    redirect_to admin_school_students_path(@school), alert: error.message
   end
 
   private

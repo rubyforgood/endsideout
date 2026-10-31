@@ -1,0 +1,59 @@
+require "test_helper"
+
+class Admin::StudentsControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @school = schools(:one)
+    @student = students(:one)
+    sign_in_as users(:one)
+  end
+
+  test "should get index" do
+    get admin_school_students_url(@school)
+    assert_response :success
+  end
+
+  test "index renders inside the students turbo frame" do
+    get admin_school_students_url(@school)
+
+    assert_select "turbo-frame##{ActionView::RecordIdentifier.dom_id(@school, :students)}"
+  end
+
+  test "should get new" do
+    get new_admin_school_student_url(@school)
+    assert_response :success
+  end
+
+  test "should create student" do
+    assert_difference("Student.count") do
+      post admin_school_students_url(@school), params: { student: { email: @student.email, first_name: @student.first_name, gender: @student.gender, grade_level: @student.grade_level, last_name: @student.last_name, classroom_id: @student.classroom_id } }
+    end
+
+    assert_redirected_to admin_school_path(@school, tab: "students")
+  end
+
+  test "should get edit" do
+    get edit_admin_student_url(@student)
+    assert_response :success
+  end
+
+  test "should update student" do
+    patch admin_student_url(@student), params: { student: { email: @student.email, first_name: @student.first_name, gender: @student.gender, grade_level: @student.grade_level, last_name: @student.last_name, school_id: @student.school_id } }
+    assert_redirected_to admin_school_path(@student.school_id, tab: "students")
+  end
+
+  test "can update a student's classroom" do
+    classroom = @school.classrooms.create!(name: "New Classroom", uuid: SecureRandom.urlsafe_base64(32))
+    assert_changes -> { @student.reload.classroom_id } do
+      patch admin_student_url(@student), params: { student: { classroom_id: classroom.id } }
+      assert_redirected_to admin_school_path(@student.school_id, tab: "students")
+    end
+  end
+
+  test "should destroy student" do
+    assert_difference("Student.count", -1) do
+      delete admin_student_url(@student)
+    end
+
+    assert_redirected_to admin_school_path(@school, tab: "students")
+  end
+end

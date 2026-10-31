@@ -6,15 +6,15 @@
     <div class="navbar-end">
       <ul class="menu menu-horizontal gap-1 p-0">
         <li>
-          <%= link_to "Schools", schools_path,
-                      class: "#{controller_path.start_with?("schools", "students", "classrooms") ? "active" : ""}" %>
+          <%= link_to "Schools", admin_schools_path,
+                      class: "#{controller_path.start_with?("admin/schools", "admin/students", "admin/classrooms") ? "active" : ""}" %>
         </li>
         <li>
-          <%= link_to "Content Modules", content_modules_path,
-                      class: "#{controller_path.start_with?("content_modules", "links") ? "active" : ""}" %>
+          <%= link_to "Content Modules", admin_content_modules_path,
+                      class: "#{controller_path.start_with?("admin/content_modules", "admin/links") ? "active" : ""}" %>
         </li>
       </ul>
-      <%= button_to "Log out", session_path, method: :delete, class: "btn btn-sm btn-ghost ml-2" %>
+      <%= button_to "Log out", admin_session_path, method: :delete, class: "btn btn-sm btn-ghost ml-2" %>
     </div>
   <% end %>
 </nav>

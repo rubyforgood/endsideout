@@ -1,7 +1,7 @@
 <tr id="<%= dom_id(classroom_module) %>">
   <td><%= classroom_module.content_module.name %></td>
   <td>
-    <%= form_with model: classroom_module, url: classroom_module_path(classroom_module),
+    <%= form_with model: classroom_module, url: admin_classroom_module_path(classroom_module),
           data: { controller: "publish-now" } do |form| %>
       <div class="flex items-center gap-2">
         <%= form.date_field :publish_on, value: classroom_module.publish_on, class: "input input-sm",
