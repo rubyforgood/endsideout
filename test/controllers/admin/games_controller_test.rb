@@ -3,7 +3,6 @@ require "test_helper"
 class Admin::GamesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @game = games(:one)
-    @content_module = content_modules(:one)
     sign_in_as users(:one)
   end
 
@@ -13,13 +12,15 @@ class Admin::GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_admin_game_url(content_module_id: @content_module.id)
+    get new_admin_game_url
     assert_response :success
   end
 
   test "should create game" do
-    assert_difference [ "Game.count", "Content.count" ] do
-      post admin_games_url, params: { game: { slug: "new-game", title: "New Game", content_module_id: @content_module.id } }
+    assert_difference "Game.count" do
+      assert_no_difference "Content.count" do
+        post admin_games_url, params: { game: { slug: "new-game", title: "New Game" } }
+      end
     end
 
     assert_redirected_to admin_games_url

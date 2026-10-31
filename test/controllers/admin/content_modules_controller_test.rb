@@ -45,17 +45,35 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "edit lists links ordered by position" do
-    @content_module.links.destroy_all
-    last_link = Link.create!(content_module: @content_module, title: "Last Link", url: "https://example.com/2", link_type: "survey", position: 2)
-    first_link = Link.create!(content_module: @content_module, title: "First Link", url: "https://example.com/1", link_type: "survey", position: 1)
-    Content.create!(content_module: @content_module, contentable: last_link)
-    Content.create!(content_module: @content_module, contentable: first_link)
+  test "edit lists links and games in content position order" do
+    contents(:one).update!(position: 2)
+    contents(:two).update!(position: 1)
 
     get edit_admin_content_module_url(@content_module)
 
-    hrefs = css_select("table tbody tr td:first-child a").map { |link| link["href"] }
-    assert_equal [ "https://example.com/1", "https://example.com/2" ], hrefs
+    titles = css_select("table tbody tr td:first-child").map { |cell| cell.text.strip }
+    assert_equal [ "Health Survey ↗", "Game 1" ], titles
+  end
+
+  test "edit offers only games not yet in the module" do
+    get edit_admin_content_module_url(@content_module)
+
+    assert_select "select[name='content[contentable_id]'] option", count: 1, text: games(:two).title
+  end
+
+  test "edit hides the add game form when every game is attached" do
+    Content.create!(content_module: @content_module, contentable: games(:two))
+
+    get edit_admin_content_module_url(@content_module)
+
+    assert_select "select[name='content[contentable_id]']", count: 0
+  end
+
+  test "index shows the contents count" do
+    get admin_content_modules_url(program_id: @content_module.program_id)
+
+    assert_select "th", text: "Contents"
+    assert_select "tbody tr", text: /#{@content_module.name}\s+#{@content_module.contents.count}/
   end
 
   test "should update content module" do

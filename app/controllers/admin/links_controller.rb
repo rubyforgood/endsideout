@@ -43,6 +43,6 @@ class Admin::LinksController < AdminController
     end
 
     def link_params
-      params.expect(link: [ :title, :url, :link_type, :position ])
+      params.expect(link: [ :title, :url, :link_type ])
     end
 end

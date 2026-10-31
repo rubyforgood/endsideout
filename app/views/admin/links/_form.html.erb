@@ -21,9 +21,6 @@
     <%= form.select :link_type, Link.link_types.keys.map { |t| [ t.humanize, t ] },
           { include_blank: "Select a type" }, class: "select w-full" %>
 
-    <%= form.label :position, class: "label" %>
-    <%= form.number_field :position, class: "input w-full" %>
-
     <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>

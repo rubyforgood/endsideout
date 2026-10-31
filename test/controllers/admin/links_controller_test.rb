@@ -15,7 +15,7 @@ class Admin::LinksControllerTest < ActionDispatch::IntegrationTest
   test "should create link" do
     assert_difference "Link.count" do
       post admin_content_module_links_url(@mod), params: {
-        link: { title: "New Survey", url: "https://example.com/new", link_type: "survey", position: 3 }
+        link: { title: "New Survey", url: "https://example.com/new", link_type: "survey" }
       }
     end
     assert_redirected_to edit_admin_content_module_url(@mod)
