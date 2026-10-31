@@ -57,6 +57,42 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
     assert_equal [ dom_id(first), dom_id(last) ], row_ids
   end
 
+  test "edit disables moving the first row up and the last row down" do
+    get edit_admin_content_module_url(@content_module)
+
+    assert_select "##{dom_id(contents(:one))} button[aria-label$='up'][disabled]", count: 1
+    assert_select "##{dom_id(contents(:one))} button[aria-label$='down'][disabled]", count: 0
+    assert_select "##{dom_id(contents(:two))} button[aria-label$='down'][disabled]", count: 1
+    assert_select "##{dom_id(contents(:two))} button[aria-label$='up'][disabled]", count: 0
+  end
+
+  test "index disables moving the first module up and the last module down within a level" do
+    first = @content_module
+    second = ContentModule.create!(program: first.program, level: first.level, name: "Second Module")
+
+    get admin_content_modules_url(program_id: first.program_id)
+
+    assert_select "##{dom_id(first)}" do
+      assert_select "button[aria-label='Move #{first.name} up'][disabled]", count: 1
+      assert_select "button[aria-label='Move #{first.name} down'][disabled]", count: 0
+    end
+    assert_select "##{dom_id(second)}" do
+      assert_select "button[aria-label='Move #{second.name} down'][disabled]", count: 1
+      assert_select "button[aria-label='Move #{second.name} up'][disabled]", count: 0
+    end
+  end
+
+  test "index disables both move buttons for the only module in a level" do
+    only = ContentModule.create!(program: programs(:one), level: "moderate", name: "Only Moderate")
+
+    get admin_content_modules_url(program_id: programs(:one).id)
+
+    assert_select "##{dom_id(only)}" do
+      assert_select "button[aria-label='Move #{only.name} up'][disabled]", count: 1
+      assert_select "button[aria-label='Move #{only.name} down'][disabled]", count: 1
+    end
+  end
+
   test "create appends the module and ignores a submitted position" do
     ContentModule.create!(program: programs(:one), level: "moderate", name: "Existing")
 
