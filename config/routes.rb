@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     end
     resources :content_modules, except: [ :show ] do
       resources :links, shallow: true, except: %i[index show destroy]
+      resources :games, only: %i[new create], module: :content_modules
       resources :contents, shallow: true, only: :destroy
     end
     resources :classroom_modules, only: %i[update]
