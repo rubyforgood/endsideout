@@ -18,6 +18,15 @@ class LinkTest < ActiveSupport::TestCase
     assert_includes link.errors[:url], "can't be blank"
   end
 
+  test "destroying a link destroys its content" do
+    content_id = contents(:two).id
+
+    assert_difference [ "Link.count", "Content.count" ], -1 do
+      links(:one).destroy!
+    end
+    assert_nil Content.find_by(id: content_id)
+  end
+
   test "is invalid without a link_type" do
     link = Link.new(content_module: content_modules(:one), title: "My Link", url: "https://example.com")
     assert_not link.valid?

@@ -2,7 +2,7 @@ class ContentModule < ApplicationRecord
   include Ordered
 
   belongs_to :program
-  has_many :contents, dependent: :destroy
+  has_many :contents, -> { ordered }, dependent: :destroy
   has_many :links, -> { ordered },
     through: :contents,
     source: :contentable,

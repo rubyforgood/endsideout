@@ -41,6 +41,13 @@ class ContentModuleTest < ActiveSupport::TestCase
     assert_equal [ games(:one) ], content_modules(:one).games.to_a
   end
 
+  test "returns contents ordered by position" do
+    contents(:one).update!(position: 2)
+    contents(:two).update!(position: 1)
+
+    assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.to_a
+  end
+
   test "cannot be destroyed when classroom modules exist" do
     content_module = ContentModule.create!(program: @program, level: "basic", name: "Assigned Module")
     classroom_program = classroom_programs(:one)
