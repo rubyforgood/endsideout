@@ -19,16 +19,20 @@ class LinkTest < ActiveSupport::TestCase
   end
 
   test "destroying a link destroys its content" do
-    content_id = contents(:two).id
+    link = Link.new(title: "My Link", url: "https://example.com", link_type: "survey")
+    content = content_modules(:one).contents.create!(contentable: link)
 
     assert_difference [ "Link.count", "Content.count" ], -1 do
-      links(:one).destroy!
+      link.destroy!
     end
-    assert_nil Content.find_by(id: content_id)
+    assert_nil Content.find_by(id: content.id)
   end
 
   test "finds its content module through its content" do
-    assert_equal content_modules(:one), links(:one).content_module
+    link = Link.new(title: "My Link", url: "https://example.com", link_type: "survey")
+    content_modules(:one).contents.create!(contentable: link)
+
+    assert_equal content_modules(:one), link.content_module
   end
 
   test "is invalid without a link_type" do

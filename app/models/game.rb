@@ -7,4 +7,6 @@ class Game < ApplicationRecord
 
   validates :title, :slug, presence: true
   validates :title, :slug, uniqueness: true
+
+  scope :available_for, ->(content_module) { where.not(id: content_module.games).order(:title) }
 end

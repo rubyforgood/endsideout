@@ -34,6 +34,7 @@ games_by_program = { programs.first => fruit_veggie_quiz, programs.last => sleep
 # The first module of each program and level has a survey then a game.
 # The second module of the basic level has a game then a survey.
 # Other modules have only a survey.
+# TODO: This is getting complex, we should extract this into a partial and make it more readable
 ContentModule.levels.keys.each do |level|
   programs.each do |program|
     game = games_by_program.fetch(program)

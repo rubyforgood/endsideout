@@ -12,11 +12,8 @@ class ContentModule < ApplicationRecord
   validates :name, :level, presence: true
 
   # A module that joins another program or level goes to the end of it.
+  # TODO: Consider if we just don't allow these types of edits to avoid this hidden callback behavior
   before_update :append_to_siblings, if: -> { program_id_changed? || level_changed? }
-
-  def available_games
-    Game.where.not(id: games).order(:title)
-  end
 
   private
 

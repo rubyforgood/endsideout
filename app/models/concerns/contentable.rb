@@ -1,8 +1,9 @@
-# A content owns its link, which is deleted together with it.
-# A game is shared across modules, so it is kept when a content is removed.
 module Contentable
   extend ActiveSupport::Concern
 
+  # Whether the content record owns this contentable, so the contentable is destroyed together with it.
+  #
+  # @return [Boolean]
   def owned_by_content?
     false
   end

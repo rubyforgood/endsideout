@@ -18,13 +18,33 @@ class GameTest < ActiveSupport::TestCase
   end
 
   test "destroying a game destroys all its contents" do
-    other_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Other Module")
-    other_module.contents.create!(contentable: games(:one))
+    game = Game.create!(title: "Shared Game", slug: "shared-game")
+    2.times do |i|
+      ContentModule.create!(program: programs(:one), level: "basic", name: "Module #{i}").contents.create!(contentable: game)
+    end
 
     assert_difference "Content.count", -2 do
-      games(:one).destroy!
+      game.destroy!
     end
-    assert_empty Content.where(contentable: games(:one))
+    assert_empty Content.where(contentable: game)
+  end
+
+  test "available_for returns games not in the module, ordered by title" do
+    content_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Module")
+    other_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Other Module")
+    in_module = Game.create!(title: "In Module", slug: "in-module").tap do
+      content_module.contents.create!(contentable: it)
+    end
+    in_other_module = Game.create!(title: "B In Other Module", slug: "in-other-module").tap do
+      other_module.contents.create!(contentable: it)
+    end
+    in_no_module = Game.create!(title: "A In No Module", slug: "in-no-module")
+
+
+    available = Game.available_for(content_module)
+
+    assert_not_includes available, in_module
+    assert_equal [ in_no_module, in_other_module ], available.where(id: [ in_module, in_other_module, in_no_module ]).to_a
   end
 
   test "destroying a game deletes its student attempts" do

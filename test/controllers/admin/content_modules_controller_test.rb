@@ -56,15 +56,16 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "edit lists links ordered by position" do
-    contents(:two).destroy!
-    @content_module.contents.create!(contentable: Link.new(title: "Last Link", url: "https://example.com/2", link_type: "survey"))
-    first = @content_module.contents.create!(contentable: Link.new(title: "First Link", url: "https://example.com/1", link_type: "survey"))
-    first.update!(position: 0)
+    content_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Ordered Module")
+    last, first = [
+      content_module.contents.create!(contentable: Link.new(title: "Last Link", url: "https://example.com/2", link_type: "survey",), position: 2),
+      content_module.contents.create!(contentable: Link.new(title: "First Link", url: "https://example.com/1", link_type: "survey"),  position: 1)
+    ]
 
-    get edit_admin_content_module_url(@content_module)
+    get edit_admin_content_module_url(content_module)
 
     hrefs = css_select("table tbody tr td:first-child a").map { |link| link["href"] }
-    assert_equal [ "https://example.com/1", "https://example.com/2" ], hrefs
+    assert_equal [ last.contentable.url, first.contentable.url ], hrefs
   end
 
   test "should update content module" do

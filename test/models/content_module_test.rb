@@ -36,26 +36,13 @@ class ContentModuleTest < ActiveSupport::TestCase
     end
   end
 
-  test "available games exclude games already in the module" do
-    assert_not_includes content_modules(:one).available_games, games(:one)
-  end
-
-  test "available games include games only in another module" do
-    other_module = ContentModule.create!(program: @program, level: "basic", name: "Other Module")
-    other_module.contents.create!(contentable: games(:two))
-
-    assert_includes content_modules(:one).available_games, games(:two)
-  end
-
-  test "available games include unattached games" do
-    assert_includes content_modules(:one).available_games, games(:two)
-  end
-
   test "returns contents ordered by position" do
-    contents(:one).update!(position: 2)
-    contents(:two).update!(position: 1)
-
-    assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.to_a
+    content_module = create_module("With Contents")
+    first, second = [
+      content_module.contents.create!(contentable: games(:one), position: 1),
+      content_module.contents.create!(contentable: games(:two), position: 2)
+    ]
+    assert_equal [ second, first ], content_module.contents.to_a
   end
 
   test "appends new modules after the highest position in their program and level" do
@@ -113,6 +100,7 @@ class ContentModuleTest < ActiveSupport::TestCase
   private
 
   # Defaults to a level no fixture uses, so positions start empty.
+  # TODO: This can drift based on the fixture file and cause unexpected behavior. We should consider a better way to handle this.
   def create_module(name, program: @program, level: "advanced", **attributes)
     ContentModule.create!(program: program, level: level, name: name, **attributes)
   end
