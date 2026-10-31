@@ -3,14 +3,15 @@ class Admin::LinksController < AdminController
   before_action :set_link, only: %i[edit update destroy]
 
   def new
-    @link = Link.new(content_module: @content_module)
+    @link = Link.new
   end
 
   def create
-    @link = Link.new(link_params.merge(content_module: @content_module))
+    @link = Link.new(link_params)
+
+    @link.build_content(content_module: @content_module)
 
     if @link.save
-      @content_module.contents.create!(contentable: @link)
       redirect_to edit_admin_content_module_path(@content_module), notice: "Link was successfully created."
     else
       render :new, status: :unprocessable_entity
@@ -29,8 +30,9 @@ class Admin::LinksController < AdminController
   end
 
   def destroy
+    content_module = @link.content_module
     @link.destroy!
-    redirect_to edit_admin_content_module_path(@link.content_module), notice: "Link was successfully deleted.", status: :see_other
+    redirect_to edit_admin_content_module_path(content_module), notice: "Link was successfully deleted.", status: :see_other
   end
 
   private
@@ -43,6 +45,6 @@ class Admin::LinksController < AdminController
     end
 
     def link_params
-      params.expect(link: [ :title, :url, :link_type, :position ])
+      params.expect(link: [ :title, :url, :link_type ])
     end
 end

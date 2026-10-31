@@ -49,6 +49,6 @@ class Admin::ContentModulesController < AdminController
     end
 
     def content_module_params
-      params.expect(content_module: [ :name, :program_id, :level, :position ])
+      params.expect(content_module: [ :name, :program_id, :level ])
     end
 end

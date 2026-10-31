@@ -12,17 +12,18 @@ class Admin::LinksControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should create link" do
-    assert_difference "Link.count" do
+  test "create adds the new link to the end of the module" do
+    assert_difference [ "Link.count", "@mod.contents.count" ], 1 do
       post admin_content_module_links_url(@mod), params: {
-        link: { title: "New Survey", url: "https://example.com/new", link_type: "survey", position: 3 }
+        link: { title: "New Survey", url: "https://example.com/new", link_type: "survey" }
       }
     end
     assert_redirected_to edit_admin_content_module_url(@mod)
+    assert_equal "New Survey", @mod.contents.last.contentable.title
   end
 
   test "should not create with missing title" do
-    assert_no_difference "Link.count" do
+    assert_no_difference [ "Link.count", "Content.count" ] do
       post admin_content_module_links_url(@mod), params: {
         link: { title: "", url: "https://example.com", link_type: "survey" }
       }

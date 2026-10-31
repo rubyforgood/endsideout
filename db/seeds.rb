@@ -16,13 +16,38 @@ end
 # Production should not have any seeded data for the content or schools
 return if Rails.env.production?
 
+fruit_veggie_quiz = Game.find_or_create_by!(slug: "fruit-veggie-quiz") do |game|
+  game.title = "Fruit and Veggie Quiz"
+  game.description = "Sort fruits and vegetables into the right food groups."
+end
+sleep_habits = Game.find_or_create_by!(slug: "sleep-habits") do |game|
+  game.title = "Sleep Habits"
+  game.description = "Pick the habits that help you get a good night's sleep."
+end
+# Intentionally not attached to any module so the "Add game" dropdown has an option.
+Game.find_or_create_by!(slug: "hydration-heroes") do |game|
+  game.title = "Hydration Heroes"
+  game.description = "Learn how much water your body needs each day."
+end
+games_by_program = { programs.first => fruit_veggie_quiz, programs.last => sleep_habits }
+
+# The first module of each program and level has a survey then a game.
+# The second module of the basic level has a game then a survey.
+# Other modules have only a survey.
 ContentModule.levels.keys.each do |level|
   programs.each do |program|
+    game = games_by_program.fetch(program)
     2.times do |i|
-      mod = program.content_modules.create!(name: "#{program.name} #{level.humanize} Module #{i + 1}", level: level, position: i + 1)
-      # TODO: Update this when the delegated types migration is completed
-      link = Link.new(title: "Survey #{i + 1}", url: "https://example.com/survey/#{program.id}-#{level}-#{i}", link_type: "survey", position: 1, content_module: mod)
-      mod.contents.create! contentable: link
+      mod = program.content_modules.create!(name: "#{program.name} #{level.humanize} Module #{i + 1}", level: level)
+      link = Link.new(title: "Survey #{i + 1}", url: "https://example.com/survey/#{program.id}-#{level}-#{i}", link_type: "survey")
+      contentables = if i.zero?
+        [ link, game ]
+      elsif level == "basic"
+        [ game, link ]
+      else
+        [ link ]
+      end
+      contentables.each { |contentable| mod.contents.create!(contentable: contentable) }
     end
   end
 end

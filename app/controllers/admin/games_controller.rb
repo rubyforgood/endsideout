@@ -6,8 +6,7 @@ class Admin::GamesController < AdminController
   end
 
   def new
-    @game = Game.new(content_module_id: params[:content_module_id])
-    @content_module = @game.content_module
+    @game = Game.new
   end
 
   def edit
@@ -18,7 +17,6 @@ class Admin::GamesController < AdminController
 
     respond_to do |format|
       if @game.save
-        Content.create!(content_module: @game.content_module, contentable: @game) if @game.content_module
         format.html { redirect_back(fallback_location: admin_games_path, notice: "Game was successfully created.") }
       else
         format.html { render :new, status: :unprocessable_content }
@@ -53,6 +51,6 @@ class Admin::GamesController < AdminController
     end
 
     def game_params
-      params.expect(game: [ :title, :slug, :content_module_id, :description ])
+      params.expect(game: [ :title, :slug, :description ])
     end
 end
