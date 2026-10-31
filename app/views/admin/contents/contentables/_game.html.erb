@@ -4,7 +4,7 @@
   <td>Game</td>
   <td>
     <div class="flex gap-2">
-      <%= render "admin/contents/move_buttons", content: content, title: game.title, first: first, last: last %>
+      <%= render "admin/shared/move_buttons", url: admin_content_position_path(content), title: game.title, first: first, last: last %>
       <%= link_to "Edit", edit_admin_game_path(game), class: "btn btn-xs btn-primary" %>
       <%= button_to "Remove", admin_content_path(content), method: :delete,
             data: { "turbo-confirm": "Remove this game from the module?" },

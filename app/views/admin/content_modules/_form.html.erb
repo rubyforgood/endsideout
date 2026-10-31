@@ -22,9 +22,6 @@
     <%= form.select :level, ContentModule.levels.keys.map { |l| [ l.humanize, l ] },
           { include_blank: "Select a level" }, class: "select w-full" %>
 
-    <%= form.label :position, class: "label" %>
-    <%= form.number_field :position, class: "input w-full" %>
-
     <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>

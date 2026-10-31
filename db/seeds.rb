@@ -19,7 +19,7 @@ return if Rails.env.production?
 ContentModule.levels.keys.each do |level|
   programs.each do |program|
     2.times do |i|
-      mod = program.content_modules.create!(name: "#{program.name} #{level.humanize} Module #{i + 1}", level: level, position: i + 1)
+      mod = program.content_modules.create!(name: "#{program.name} #{level.humanize} Module #{i + 1}", level: level)
       # TODO: Update this when the delegated types migration is completed
       link = Link.new(title: "Survey #{i + 1}", url: "https://example.com/survey/#{program.id}-#{level}-#{i}", link_type: "survey", position: 1, content_module: mod)
       mod.contents.create! contentable: link

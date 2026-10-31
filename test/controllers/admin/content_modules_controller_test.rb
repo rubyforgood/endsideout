@@ -25,7 +25,7 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
   test "should create content module" do
     assert_difference "ContentModule.count" do
       post admin_content_modules_url, params: {
-        content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate", position: 1 }
+        content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate" }
       }
     end
     assert_redirected_to admin_content_modules_url
@@ -84,6 +84,45 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
 
     assert_select "th", text: "Contents"
     assert_select "tbody tr", text: /#{@content_module.name}\s+#{@content_module.contents.count}/
+  end
+
+  test "index disables moving the first module up and the last module down within a level" do
+    second = ContentModule.create!(program: programs(:one), level: "basic", name: "Second Basic")
+    ContentModule.create!(program: programs(:one), level: "moderate", name: "Only Moderate")
+
+    get admin_content_modules_url(program_id: programs(:one).id)
+
+    assert_select "section", text: /Basic/ do
+      assert_select "tbody tr:first-child button[aria-label$='up'][disabled]", count: 1
+      assert_select "tbody tr:first-child button[aria-label$='down'][disabled]", count: 0
+      assert_select "tbody tr:last-child button[aria-label='Move #{second.name} down'][disabled]", count: 1
+      assert_select "tbody tr:last-child button[aria-label$='up'][disabled]", count: 0
+    end
+    assert_select "section", text: /Moderate/ do
+      assert_select "tbody tr button[disabled]", count: 2
+    end
+  end
+
+  test "index move buttons patch the module position" do
+    get admin_content_modules_url(program_id: @content_module.program_id)
+
+    assert_select "form[action='#{admin_content_module_position_path(@content_module)}'] button[aria-label='Move #{@content_module.name} up']"
+  end
+
+  test "create appends the module and ignores a submitted position" do
+    ContentModule.create!(program: programs(:one), level: "moderate", name: "Existing")
+
+    post admin_content_modules_url, params: {
+      content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate", position: 99 }
+    }
+
+    assert_equal 2, ContentModule.find_by!(name: "New Module").position
+  end
+
+  test "form has no position field" do
+    get new_admin_content_module_url
+
+    assert_select "input[name='content_module[position]']", count: 0
   end
 
   test "should update content module" do

@@ -34,12 +34,14 @@
             </tr>
           </thead>
           <tbody>
-            <% modules.each do |mod| %>
+            <% modules.each_with_index do |mod, index| %>
               <tr>
                 <td><%= mod.name %></td>
                 <td><%= mod.contents.size %></td>
                 <td>
                   <div class="flex gap-2">
+                    <%= render "admin/shared/move_buttons", url: admin_content_module_position_path(mod), title: mod.name,
+                          first: index.zero?, last: index == modules.size - 1 %>
                     <%= link_to "Edit", edit_admin_content_module_path(mod), class: "btn btn-sm btn-primary" %>
                     <%= button_to "Delete", admin_content_module_path(mod), method: :delete,
                           data: { "turbo-confirm": "Delete this module?" },

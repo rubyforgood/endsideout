@@ -16,4 +16,20 @@ class ContentModule < ApplicationRecord
   enum :level, { basic: "basic", moderate: "moderate", advanced: "advanced" }, validate: true
 
   validates :name, :level, presence: true
+
+  before_create :append_to_siblings
+  before_update :append_to_siblings, if: -> { program_id_changed? || level_changed? }
+
+  private
+
+  # Modules are ordered within one program and level, the same grouping the admin index shows.
+  def position_siblings
+    ContentModule.where(program_id: program_id, level: level)
+  end
+
+  # A module that joins another program or level goes to the end of it.
+  def append_to_siblings
+    self.position = nil if persisted?
+    super
+  end
 end

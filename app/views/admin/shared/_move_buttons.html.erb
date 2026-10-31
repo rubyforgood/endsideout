@@ -1,0 +1,5 @@
+<%# locals: (url:, title:, first:, last:) %>
+<%= button_to "↑", url, method: :patch, params: { direction: "up" },
+      disabled: first, class: "btn btn-xs", aria: { label: "Move #{title} up" } %>
+<%= button_to "↓", url, method: :patch, params: { direction: "down" },
+      disabled: last, class: "btn btn-xs", aria: { label: "Move #{title} down" } %>
