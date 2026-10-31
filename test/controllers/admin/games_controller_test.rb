@@ -35,7 +35,7 @@ class Admin::GamesControllerTest < ActionDispatch::IntegrationTest
   test "index shows how many modules use each game" do
     get admin_games_url
 
-    assert_select "tr", text: /#{@game.title}\s+#{@game.slug}\s+1/
+    assert_select "tr:has(a[href='#{admin_game_path(@game)}']) td:nth-child(3)", text: "1"
   end
 
   test "show lists the modules that use the game" do
