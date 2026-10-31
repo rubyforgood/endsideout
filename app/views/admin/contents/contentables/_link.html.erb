@@ -1,6 +1,6 @@
 <% link = content.contentable %>
 <tr>
-  <td><%= link_to "#{link.title} ↗", safe_external_url(link.url), target: "_blank", class: "link inline-flex items-center gap-1" %></td>
+  <td><%= link_to "#{link.title} ↗", safe_external_url(link.url), target: "_blank", rel: "noopener noreferrer", class: "link inline-flex items-center gap-1" %></td>
   <td><%= link.link_type.humanize %></td>
   <td>
     <div class="flex gap-2">

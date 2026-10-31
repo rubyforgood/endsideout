@@ -53,6 +53,7 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
 
     titles = css_select("table tbody tr td:first-child").map { |cell| cell.text.strip }
     assert_equal [ "Health Survey ↗", "Game 1" ], titles
+    assert_select "table a[target=_blank][rel='noopener noreferrer']", text: "Health Survey ↗"
   end
 
   test "edit offers only games not yet in the module" do
