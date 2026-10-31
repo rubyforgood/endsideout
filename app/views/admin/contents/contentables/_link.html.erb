@@ -4,6 +4,7 @@
   <td><%= link.link_type.humanize %></td>
   <td>
     <div class="flex gap-2">
+      <%= render "admin/contents/move_buttons", content: content, title: link.title, first: first, last: last %>
       <%= link_to "Edit", edit_admin_link_path(link), class: "btn btn-xs btn-primary" %>
       <%= button_to "Delete", admin_content_path(content), method: :delete,
             data: { "turbo-confirm": "Delete this link?" },

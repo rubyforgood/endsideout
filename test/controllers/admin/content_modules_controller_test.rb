@@ -56,6 +56,15 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
     assert_select "table a[target=_blank][rel='noopener noreferrer']", text: "Health Survey ↗"
   end
 
+  test "edit disables moving the first row up and the last row down" do
+    get edit_admin_content_module_url(@content_module)
+
+    assert_select "tbody tr:first-child button[aria-label$='up'][disabled]", count: 1
+    assert_select "tbody tr:first-child button[aria-label$='down'][disabled]", count: 0
+    assert_select "tbody tr:last-child button[aria-label$='down'][disabled]", count: 1
+    assert_select "tbody tr:last-child button[aria-label$='up'][disabled]", count: 0
+  end
+
   test "edit offers only games not yet in the module" do
     get edit_admin_content_module_url(@content_module)
 

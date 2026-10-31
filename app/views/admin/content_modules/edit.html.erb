@@ -42,8 +42,9 @@
               </tr>
             </thead>
             <tbody>
-              <% @contents.each do |content| %>
-                <%= render "admin/contents/contentables/#{content.contentable_name}", content: content %>
+              <% @contents.each_with_index do |content, index| %>
+                <%= render "admin/contents/contentables/#{content.contentable_name}", content: content,
+                      first: index.zero?, last: index == @contents.size - 1 %>
               <% end %>
             </tbody>
           </table>
