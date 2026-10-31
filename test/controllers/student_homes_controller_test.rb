@@ -18,11 +18,25 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
     assert_select "summary", text: /Introduction to Health/
   end
 
-  test "shows links inside published modules" do
+  test "links open in a new tab" do
     get student_homes_url
     assert_response :success
-    link = content_modules(:one).links.first
-    assert_select "a[target='_blank']", text: /#{link.title}/ if link
+    assert_select "li a[href='#{links(:one).url}'][target='_blank'][rel='noopener noreferrer']", text: /#{links(:one).title}/
+  end
+
+  test "games link to the play page in the same tab" do
+    get student_homes_url
+    assert_response :success
+    assert_select "li a[href='#{play_game_path(games(:one))}']:not([target])", text: games(:one).title
+  end
+
+  test "shows contents in position order" do
+    contents(:one).update!(position: 2)
+    contents(:two).update!(position: 1)
+
+    get student_homes_url
+    titles = listed_titles
+    assert_operator titles.index(links(:one).title), :<, titles.index(games(:one).title)
   end
 
   test "most recently published module has the open attribute" do
@@ -78,5 +92,12 @@ class StudentHomesControllerTest < ActionDispatch::IntegrationTest
 
     get student_homes_url(classroom_program_id: enrollment.id)
     assert_select "a[role='tab'][aria-selected='true'][href*='classroom_program_id=#{enrollment.id}']"
+  end
+
+  private
+
+  # The " ↗" suffix marks external links, so strip it to compare plain titles.
+  def listed_titles
+    css_select("details li a").map { |a| a.text.delete_suffix(" ↗") }
   end
 end
