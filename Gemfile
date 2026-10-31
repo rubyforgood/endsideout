@@ -70,7 +70,7 @@ group :test do
   gem "axe-core-capybara"
 end
 
-gem "tailwindcss-rails", "~> 4.6"
+gem "tailwindcss-rails", "~> 4.7"
 # Used for database seeding
 gem "faker", "~> 3.8"
 # Handles CORS for the game attempts API, which the games call from another origin
