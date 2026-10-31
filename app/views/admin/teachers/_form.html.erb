@@ -1,6 +1,6 @@
 <%= form_with(
   model: teacher,
-  url: teacher.persisted? ? teacher_path(teacher) : school_teachers_path(school)
+  url: teacher.persisted? ? admin_teacher_path(teacher) : admin_school_teachers_path(school)
 ) do |form| %>
   <div class="flex flex-col gap-2">
     <% if teacher.errors.any? %>

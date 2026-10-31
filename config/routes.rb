@@ -5,9 +5,25 @@ Rails.application.routes.draw do
     URI::HTTPS.build(host: "endsideoutgames.netlify.app", path: "/games/#{slug}").to_s
   end
 
-  resources :games
-  resource :session
-  resources :passwords, param: :token
+  namespace :admin do
+    resource :session
+    resources :passwords, param: :token
+    resources :games
+    resources :schools do
+      resources :students, shallow: true, except: [ :show ]
+      resources :classrooms, shallow: true, except: %i[destroy show] do
+        member { get :schedule }
+      end
+      resources :teachers, shallow: true, except: [ :show ]
+      get :csv_template, to: "csv#download"
+      post :csv_import, to: "csv#import"
+    end
+    resources :content_modules, except: [ :show ] do
+      resources :links, shallow: true, except: %i[index show]
+    end
+    resources :classroom_modules, only: %i[update]
+  end
+
   resource :student_session, only: %i[new create destroy]
   resources :student_homes, only: %i[index]
   resources :classroom_rosters, only: %i[show], param: :uuid
@@ -18,22 +34,7 @@ Rails.application.routes.draw do
     end
   end
 
-  scope :admin do
-    resources :schools do
-      resources :students, shallow: true, except: [ :show ]
-      resources :classrooms, shallow: true, except: %i[destroy show] do
-        member { get :schedule }
-      end
-      resources :teachers, shallow: true, except: [ :show ]
-      get :csv_template, to: "admin/csv#download"
-      post :csv_import, to: "admin/csv#import"
-    end
-    resources :content_modules, except: [ :show ] do
-      resources :links, shallow: true, except: %i[index show]
-    end
-    resources :classroom_modules, only: %i[update]
-  end
-  root to: "schools#index"
+  root to: "admin/schools#index"
 
   get "up" => "rails/health#show", as: :rails_health_check
 

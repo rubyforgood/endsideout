@@ -1,29 +1,29 @@
 require "test_helper"
 
-class TeachersControllerTest < ActionDispatch::IntegrationTest
+class Admin::TeachersControllerTest < ActionDispatch::IntegrationTest
   setup do
     @school = schools(:one)
     sign_in_as users(:one)
   end
 
   test "should get index" do
-    get school_teachers_url(@school)
+    get admin_school_teachers_url(@school)
     assert_response :success
   end
 
   test "index renders inside the teachers turbo frame" do
-    get school_teachers_url(@school)
+    get admin_school_teachers_url(@school)
 
     assert_select "turbo-frame##{ActionView::RecordIdentifier.dom_id(@school, :teachers)}"
   end
 
   test "should get new" do
-    get new_school_teacher_url(@school)
+    get new_admin_school_teacher_url(@school)
     assert_response :success
   end
   test "should create teacher" do
     assert_difference("Teacher.count") do
-      post school_teachers_url(@school), params: {
+      post admin_school_teachers_url(@school), params: {
         teacher: {
           name: "Ms. Frizzle",
           email: "frizzle@example.com"
@@ -31,27 +31,27 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
       }
     end
 
-    assert_redirected_to school_path(@school, tab: "teachers")
+    assert_redirected_to admin_school_path(@school, tab: "teachers")
   end
 
   test "should get edit" do
     teacher = teachers(:one)
 
-    get edit_teacher_url(teacher)
+    get edit_admin_teacher_url(teacher)
     assert_response :success
   end
 
   test "should update teacher" do
     teacher = teachers(:one)
 
-    patch teacher_url(teacher), params: {
+    patch admin_teacher_url(teacher), params: {
       teacher: {
         name: "Updated Teacher",
         email: "updated@example.com"
       }
     }
 
-    assert_redirected_to school_path(teacher.school, tab: "teachers")
+    assert_redirected_to admin_school_path(teacher.school, tab: "teachers")
     assert_equal "Updated Teacher", teacher.reload.name
   end
 
@@ -59,15 +59,15 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     teacher = teachers(:one)
 
     assert_difference("Teacher.count", -1) do
-      delete teacher_url(teacher)
+      delete admin_teacher_url(teacher)
     end
 
-    assert_redirected_to school_path(teacher.school, tab: "teachers")
+    assert_redirected_to admin_school_path(teacher.school, tab: "teachers")
   end
 
   test "should not create teacher without a name" do
     assert_no_difference("Teacher.count") do
-      post school_teachers_url(@school), params: {
+      post admin_school_teachers_url(@school), params: {
         teacher: {
           name: "",
           email: "teacher@example.com"
@@ -80,7 +80,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
   test "should not update teacher without a name" do
     teacher = teachers(:one)
 
-    patch teacher_url(teacher), params: {
+    patch admin_teacher_url(teacher), params: {
       teacher: {
         name: "",
         email: teacher.email
@@ -94,7 +94,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     classroom = classrooms(:one)
 
     assert_difference("Teacher.count") do
-      post school_teachers_url(@school), params: {
+      post admin_school_teachers_url(@school), params: {
         teacher: {
           name: "Ms. Frizzle",
           email: "frizzle@example.com",
@@ -105,7 +105,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
 
     teacher = Teacher.last
 
-    assert_redirected_to school_path(teacher.school, tab: "teachers")
+    assert_redirected_to admin_school_path(teacher.school, tab: "teachers")
     assert_equal [ classroom.id ], teacher.classrooms.reload.pluck(:id)
   end
 
@@ -113,7 +113,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     teacher = teachers(:two)
     classroom = classrooms(:two)
 
-    patch teacher_url(teacher), params: {
+    patch admin_teacher_url(teacher), params: {
       teacher: {
         name: teacher.name,
         email: teacher.email,
@@ -121,7 +121,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to school_path(teacher.school, tab: "teachers")
+    assert_redirected_to admin_school_path(teacher.school, tab: "teachers")
     assert_equal [ classroom.id ], teacher.classrooms.reload.pluck(:id)
   end
 
@@ -131,7 +131,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal teacher, classroom.teacher
 
-    patch teacher_url(teacher), params: {
+    patch admin_teacher_url(teacher), params: {
       teacher: {
         name: teacher.name,
         email: teacher.email,
@@ -139,7 +139,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to school_path(teacher.school, tab: "teachers")
+    assert_redirected_to admin_school_path(teacher.school, tab: "teachers")
     assert_empty teacher.classrooms.reload
     assert_nil classroom.reload.teacher
   end
@@ -151,7 +151,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
 
     assert_equal original_teacher, classroom.teacher
 
-    patch teacher_url(new_teacher), params: {
+    patch admin_teacher_url(new_teacher), params: {
       teacher: {
         name: new_teacher.name,
         email: new_teacher.email,
@@ -159,7 +159,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to school_path(new_teacher.school, tab: "teachers")
+    assert_redirected_to admin_school_path(new_teacher.school, tab: "teachers")
     assert_equal new_teacher, classroom.reload.teacher
     assert_empty original_teacher.classrooms.reload
     assert_equal [ classroom.id ], new_teacher.classrooms.reload.pluck(:id)
@@ -169,7 +169,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     teacher = teachers(:one)
     other_school_classroom = classrooms(:two)
 
-    patch teacher_url(teacher), params: {
+    patch admin_teacher_url(teacher), params: {
       teacher: {
         name: teacher.name,
         email: teacher.email,
@@ -186,7 +186,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     teacher = teachers(:one)
     classroom = classrooms(:one)
 
-    get edit_teacher_url(teacher)
+    get edit_admin_teacher_url(teacher)
 
     assert_response :success
     assert_match classroom.name, response.body
@@ -196,7 +196,7 @@ class TeachersControllerTest < ActionDispatch::IntegrationTest
     teacher = teachers(:one)
     classroom = classrooms(:one)
 
-    get school_teachers_url(@school)
+    get admin_school_teachers_url(@school)
 
     assert_response :success
     assert_match teacher.name, response.body

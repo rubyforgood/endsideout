@@ -2,9 +2,9 @@
 
 <nav class="breadcrumbs text-sm">
   <ul>
-    <li><%= link_to "All Schools", schools_path %></li>
-    <li><%= link_to @classroom.school.name, school_path(@classroom.school, tab: "classrooms") %></li>
-    <li><%= link_to "Edit Classroom", edit_classroom_path(@classroom) %></li>
+    <li><%= link_to "All Schools", admin_schools_path %></li>
+    <li><%= link_to @classroom.school.name, admin_school_path(@classroom.school, tab: "classrooms") %></li>
+    <li><%= link_to "Edit Classroom", edit_admin_classroom_path(@classroom) %></li>
     <li>Schedule</li>
   </ul>
 </nav>
@@ -16,7 +16,7 @@
 <% if @classroom_programs.any? %>
   <div role="tablist" class="tabs tabs-border mb-6">
     <% @classroom_programs.each do |enrollment| # herb:debug disable %>
-      <%= link_to schedule_classroom_path(@classroom, classroom_program_id: enrollment.id),
+      <%= link_to schedule_admin_classroom_path(@classroom, classroom_program_id: enrollment.id),
             role: "tab",
             aria: { selected: enrollment == @active_enrollment },
             class: "tab #{"tab-active" if enrollment == @active_enrollment}" do %>
@@ -49,5 +49,5 @@
     <% end %>
   <% end %>
 <% else %>
-  <p class="text-sm opacity-60">No program enrollments yet. <%= link_to "Edit the classroom", edit_classroom_path(@classroom), class: "link" %> to add programs.</p>
+  <p class="text-sm opacity-60">No program enrollments yet. <%= link_to "Edit the classroom", edit_admin_classroom_path(@classroom), class: "link" %> to add programs.</p>
 <% end %>

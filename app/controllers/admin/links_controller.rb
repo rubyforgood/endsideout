@@ -1,4 +1,4 @@
-class LinksController < AdminController
+class Admin::LinksController < AdminController
   before_action :set_content_module, only: %i[new create]
   before_action :set_link, only: %i[edit update destroy]
 
@@ -11,7 +11,7 @@ class LinksController < AdminController
 
     if @link.save
       @content_module.contents.create!(contentable: @link)
-      redirect_to edit_content_module_path(@content_module), notice: "Link was successfully created."
+      redirect_to edit_admin_content_module_path(@content_module), notice: "Link was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -22,7 +22,7 @@ class LinksController < AdminController
 
   def update
     if @link.update(link_params)
-      redirect_to edit_content_module_path(@link.content_module), notice: "Link was successfully updated."
+      redirect_to edit_admin_content_module_path(@link.content_module), notice: "Link was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -30,7 +30,7 @@ class LinksController < AdminController
 
   def destroy
     @link.destroy!
-    redirect_to edit_content_module_path(@link.content_module), notice: "Link was successfully deleted.", status: :see_other
+    redirect_to edit_admin_content_module_path(@link.content_module), notice: "Link was successfully deleted.", status: :see_other
   end
 
   private

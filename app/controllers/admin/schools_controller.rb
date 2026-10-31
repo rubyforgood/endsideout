@@ -1,4 +1,4 @@
-class SchoolsController < AdminController
+class Admin::SchoolsController < AdminController
   before_action :set_school, only: %i[ show edit update destroy ]
   helper_method :school_show_tabs
 
@@ -27,8 +27,8 @@ class SchoolsController < AdminController
 
     respond_to do |format|
       if @school.save
-        format.html { redirect_to @school, notice: "School was successfully created." }
-        format.json { render :show, status: :created, location: @school }
+        format.html { redirect_to [ :admin, @school ], notice: "School was successfully created." }
+        format.json { render :show, status: :created, location: [ :admin, @school ] }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @school.errors, status: :unprocessable_entity }
@@ -40,8 +40,8 @@ class SchoolsController < AdminController
   def update
     respond_to do |format|
       if @school.update(school_params)
-        format.html { redirect_to @school, notice: "School was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @school }
+        format.html { redirect_to [ :admin, @school ], notice: "School was successfully updated.", status: :see_other }
+        format.json { render :show, status: :ok, location: [ :admin, @school ] }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @school.errors, status: :unprocessable_entity }
@@ -54,7 +54,7 @@ class SchoolsController < AdminController
     @school.destroy!
 
     respond_to do |format|
-      format.html { redirect_to schools_path, notice: "School was successfully destroyed.", status: :see_other }
+      format.html { redirect_to admin_schools_path, notice: "School was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end

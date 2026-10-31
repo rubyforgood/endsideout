@@ -1,8 +1,8 @@
 <% content_for :title, "New classroom" %>
 <nav class="breadcrumbs text-sm">
   <ul>
-    <li><%= link_to "All Schools", schools_path %></li>
-    <li><%= link_to @school.name, school_path(@school, tab: "classrooms") %></li>
+    <li><%= link_to "All Schools", admin_schools_path %></li>
+    <li><%= link_to @school.name, admin_school_path(@school, tab: "classrooms") %></li>
     <li>New Classroom</li>
   </ul>
 </nav>
@@ -11,7 +11,7 @@
     <div class="card card-border bg-base-100 shadow-md">
       <div class="card-body">
         <h1 class="card-title">New Classroom</h1>
-        <%= render "form", classroom: @classroom, url: school_classrooms_path(@school), teachers: @teachers %>
+        <%= render "form", classroom: @classroom, url: admin_school_classrooms_path(@school), teachers: @teachers %>
       </div>
     </div>
   </div>

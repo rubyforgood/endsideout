@@ -7,14 +7,14 @@
       <h2 class="card-title">
         Login
       </h2>
-      <%= form_with url: session_path do |form| %>
+      <%= form_with url: admin_session_path do |form| %>
         <div class="flex flex-col gap-2">
 
           <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address], class: "input w-full" %>
           <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: "input w-full" %>
           <div class="card-actions flex-col gap-2">
             <%= form.submit "Sign in", class: "btn btn-primary w-full" %>
-            <%= link_to "Forgot password?", new_password_path, class: "btn btn-link" %>
+            <%= link_to "Forgot password?", new_admin_password_path, class: "btn btn-link" %>
           </div>
         </div>
       <% end %>

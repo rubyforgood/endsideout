@@ -1,4 +1,4 @@
-class ContentModulesController < AdminController
+class Admin::ContentModulesController < AdminController
   before_action :set_content_module, only: %i[edit update destroy]
 
   def index
@@ -18,7 +18,7 @@ class ContentModulesController < AdminController
     @content_module = ContentModule.new(content_module_params)
 
     if @content_module.save
-      redirect_to content_modules_path, notice: "Module was successfully created."
+      redirect_to admin_content_modules_path, notice: "Module was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class ContentModulesController < AdminController
 
   def update
     if @content_module.update(content_module_params)
-      redirect_to content_modules_path, notice: "Module was successfully updated."
+      redirect_to admin_content_modules_path, notice: "Module was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,9 +37,9 @@ class ContentModulesController < AdminController
 
   def destroy
     if @content_module.destroy
-      redirect_to content_modules_path, notice: "Module was successfully deleted.", status: :see_other
+      redirect_to admin_content_modules_path, notice: "Module was successfully deleted.", status: :see_other
     else
-      redirect_to content_modules_path, alert: "Cannot delete a module that has been assigned to classrooms."
+      redirect_to admin_content_modules_path, alert: "Cannot delete a module that has been assigned to classrooms."
     end
   end
 

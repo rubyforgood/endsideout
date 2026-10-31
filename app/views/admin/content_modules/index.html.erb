@@ -5,12 +5,12 @@
 
 <header class="flex justify-between items-center mb-4">
   <h1 class="text-2xl">Content Modules</h1>
-  <%= link_to "New module", new_content_module_path, class: "btn btn-primary" %>
+  <%= link_to "New module", new_admin_content_module_path, class: "btn btn-primary" %>
 </header>
 
 <div role="tablist" class="tabs tabs-border mb-6">
   <% @programs.each do |program| # herb:debug disable %>
-    <%= link_to content_modules_path(program_id: program.id),
+    <%= link_to admin_content_modules_path(program_id: program.id),
           role: "tab",
           aria: { selected: program == @active_program },
           class: "tab #{"tab-active" if program == @active_program}" do %>
@@ -40,8 +40,8 @@
                 <td><%= mod.links.size %></td>
                 <td>
                   <div class="flex gap-2">
-                    <%= link_to "Edit", edit_content_module_path(mod), class: "btn btn-sm btn-primary" %>
-                    <%= button_to "Delete", content_module_path(mod), method: :delete,
+                    <%= link_to "Edit", edit_admin_content_module_path(mod), class: "btn btn-sm btn-primary" %>
+                    <%= button_to "Delete", admin_content_module_path(mod), method: :delete,
                           data: { "turbo-confirm": "Delete this module?" },
                           class: "btn btn-sm btn-error" %>
                   </div>

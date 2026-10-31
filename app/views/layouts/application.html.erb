@@ -24,7 +24,7 @@
   </head>
 
   <body>
-    <% if controller.is_a?(AdminController) %>
+    <% if controller.class.name.start_with?("Admin::") || controller.is_a?(AdminController) %>
       <%= render "shared/admin_nav" %>
     <% end %>
     <main class="container mx-auto p-5">

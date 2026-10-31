@@ -1,4 +1,4 @@
-class TeachersController < AdminController
+class Admin::TeachersController < AdminController
   before_action :set_school, only: %i[index new create]
   before_action :set_teacher, only: %i[edit update destroy]
 
@@ -21,7 +21,7 @@ class TeachersController < AdminController
     @classrooms = @school.classrooms
     respond_to do |format|
       if @teacher.save
-        format.html { redirect_to school_url(@school, tab: "teachers"), notice: "Teacher was successfully created." }
+        format.html { redirect_to admin_school_url(@school, tab: "teachers"), notice: "Teacher was successfully created." }
       else
         format.html { render :new, status: :unprocessable_entity }
       end
@@ -34,7 +34,7 @@ class TeachersController < AdminController
 
     respond_to do |format|
       if @teacher.update(teacher_params)
-        format.html { redirect_to school_url(@school, tab: "teachers"), notice: "Teacher was successfully updated.", status: :see_other }
+        format.html { redirect_to admin_school_url(@school, tab: "teachers"), notice: "Teacher was successfully updated.", status: :see_other }
       else
         format.html { render :edit, status: :unprocessable_entity }
       end
@@ -45,7 +45,7 @@ class TeachersController < AdminController
     @teacher.destroy!
 
     respond_to do |format|
-      format.html { redirect_to school_url(@teacher.school, tab: "teachers"), notice: "Teacher was successfully destroyed.", status: :see_other }
+      format.html { redirect_to admin_school_url(@teacher.school, tab: "teachers"), notice: "Teacher was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end
