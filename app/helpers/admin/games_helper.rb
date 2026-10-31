@@ -1,8 +1,13 @@
 module Admin::GamesHelper
   def delete_game_confirmation(game)
     module_count = game.contents.size
-    return "Delete this game?" if module_count.zero?
+    attempt_count = game.attempts_count
 
-    "Delete this game? It will be removed from #{pluralize(module_count, "module")}."
+    consequences = []
+    consequences << "It will be removed from #{pluralize(module_count, "module")}" if module_count.positive?
+    consequences << "#{pluralize(attempt_count, "student attempt")} will be deleted" if attempt_count.positive?
+    return "Delete this game?" if consequences.empty?
+
+    "Delete this game? #{consequences.join(" and ")}."
   end
 end

@@ -2,7 +2,7 @@ class Admin::GamesController < AdminController
   before_action :set_game, only: %i[ show edit update destroy ]
 
   def index
-    @games = Game.includes(:contents).order(:title)
+    @games = Game.includes(:contents).with_attempt_counts.order(:title)
   end
 
   def show

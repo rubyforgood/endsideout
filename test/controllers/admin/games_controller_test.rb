@@ -54,7 +54,7 @@ class Admin::GamesControllerTest < ActionDispatch::IntegrationTest
     get admin_game_url(@game)
 
     assert_select "form[action=?] button[data-turbo-confirm=?]", admin_game_path(@game),
-      "Delete this game? It will be removed from 1 module."
+      "Delete this game? It will be removed from 1 module and 1 student attempt will be deleted."
   end
 
   test "should get edit" do
