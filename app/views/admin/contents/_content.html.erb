@@ -1,0 +1,19 @@
+<%# locals: (content:) %>
+<% contentable = content.contentable %>
+<%= tag.tr id: dom_id(content) do %>
+  <%= render "admin/contents/contentables/#{content.contentable_name}", contentable: contentable %>
+  <td>
+    <div class="flex gap-2">
+      <%= link_to "Edit", edit_polymorphic_path([:admin, contentable]), class: "btn btn-xs btn-primary" %>
+      <% if contentable.owned_by_content? %>
+        <%= button_to "Delete", admin_content_path(content), method: :delete,
+              data: { "turbo-confirm": "Delete this link? It will be removed from the module and deleted." },
+              class: "btn btn-xs btn-error" %>
+      <% else %>
+        <%= button_to "Remove", admin_content_path(content), method: :delete,
+              data: { "turbo-confirm": "Remove this game from the module? The game itself is kept." },
+              class: "btn btn-xs btn-error" %>
+      <% end %>
+    </div>
+  </td>
+<% end %>

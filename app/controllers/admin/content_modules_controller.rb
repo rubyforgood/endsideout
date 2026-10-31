@@ -6,7 +6,7 @@ class Admin::ContentModulesController < AdminController
     @active_program = @programs.find { |p| p.id.to_s == params[:program_id] } || @programs.first
     @modules_by_level = @active_program
       .content_modules.ordered
-      .includes(:links)
+      .includes(:contents)
       .group_by(&:level)
   end
 
@@ -25,6 +25,7 @@ class Admin::ContentModulesController < AdminController
   end
 
   def edit
+    @contents = @content_module.contents.includes(:contentable)
   end
 
   def update
