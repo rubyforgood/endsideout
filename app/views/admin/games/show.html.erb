@@ -1,15 +1,45 @@
-<% content_for :title, "Showing game" %>
+<% content_for :title, @game.title %>
 
-<div class="md:w-2/3 w-full">
-  <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+<p style="color: green"><%= notice %></p>
+<p style="color: red"><%= alert %></p>
+
+<nav class="breadcrumbs text-sm">
+  <ul>
+    <li><%= link_to "Games", admin_games_path %></li>
+    <li><%= @game.title %></li>
+  </ul>
+</nav>
+
+<header class="flex items-center justify-between mb-4">
+  <h1 class="text-2xl"><%= @game.title %></h1>
+  <div class="flex gap-2">
+    <%= link_to "Edit this game", edit_admin_game_path(@game), class: "btn btn-primary" %>
+    <%= button_to "Delete this game", [:admin, @game], method: :delete,
+          data: { "turbo-confirm": delete_game_confirmation(@game) },
+          class: "btn btn-error" %>
+  </div>
+</header>
+
+<dl class="mb-8 space-y-4">
+  <div>
+    <dt class="font-semibold">Slug</dt>
+    <dd><%= @game.slug %></dd>
+  </div>
+  <div>
+    <dt class="font-semibold">Description</dt>
+    <dd><%= @game.description.presence || "No description." %></dd>
+  </div>
+</dl>
+
+<section>
+  <h2 class="text-lg font-semibold mb-2">Modules</h2>
+  <% if @content_modules.any? %>
+    <ul class="list-disc pl-6">
+      <% @content_modules.each do |content_module| %>
+        <li><%= link_to content_module.name, edit_admin_content_module_path(content_module), class: "link" %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-sm opacity-60">Not in any module yet.</p>
   <% end %>
-
-  <h1 class="font-bold text-4xl">Showing game</h1>
-
-  <%= render @game %>
-
-  <%= link_to "Edit this game", edit_admin_game_path(@game), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to games", admin_games_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this game", [:admin, @game], method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
-</div>
+</section>

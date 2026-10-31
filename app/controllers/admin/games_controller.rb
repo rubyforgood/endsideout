@@ -2,7 +2,11 @@ class Admin::GamesController < AdminController
   before_action :set_game, only: %i[ show edit update destroy ]
 
   def index
-    @games = Game.all
+    @games = Game.includes(:contents).order(:title)
+  end
+
+  def show
+    @content_modules = @game.content_modules.order(:name)
   end
 
   def new
@@ -17,7 +21,7 @@ class Admin::GamesController < AdminController
 
     respond_to do |format|
       if @game.save
-        format.html { redirect_back(fallback_location: admin_games_path, notice: "Game was successfully created.") }
+        format.html { redirect_to admin_games_path, notice: "Game was successfully created." }
       else
         format.html { render :new, status: :unprocessable_content }
       end

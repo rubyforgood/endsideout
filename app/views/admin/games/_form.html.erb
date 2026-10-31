@@ -17,6 +17,9 @@
     <%= form.label :slug, "Slug", class: "label" %>
     <%= form.text_field :slug, class: "input w-full" %>
 
+    <%= form.label :description, class: "label" %>
+    <%= form.text_area :description, rows: 4, class: "textarea w-full" %>
+
     <%= form.submit class: "btn btn-primary" %>
   </div>
 <% end %>
