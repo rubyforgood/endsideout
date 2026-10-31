@@ -28,17 +28,12 @@ class ContentModuleTest < ActiveSupport::TestCase
 
   test "destroys associated links" do
     content_module = ContentModule.create!(program: @program, level: "basic", name: "With Links")
-    link = Link.create!(content_module: content_module, title: "A Link", url: "https://example.com", link_type: "survey")
-    Content.create!(content_module: content_module, contentable: link)
+    link = Link.new(title: "A Link", url: "https://example.com", link_type: "survey")
+    content_module.contents.create!(contentable: link)
 
     assert_difference "Link.count", -1 do
       content_module.destroy!
     end
-  end
-
-  test "exposes delegated contentables" do
-    assert_equal [ links(:one) ], content_modules(:one).links.to_a
-    assert_equal [ games(:one) ], content_modules(:one).games.to_a
   end
 
   test "returns contents ordered by position" do

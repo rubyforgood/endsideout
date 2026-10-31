@@ -2,19 +2,18 @@ require "test_helper"
 
 class GameTest < ActiveSupport::TestCase
   test "should not save game without title" do
-    game = Game.new(slug: "test-slug", content_module: ContentModule.new)
+    game = Game.new(slug: "test-slug")
     assert_not game.save, "Saved the game without a title"
   end
 
   test "should not save game without slug" do
-    game = Game.new(title: "Test Game", content_module: ContentModule.new)
+    game = Game.new(title: "Test Game")
     assert_not game.save, "Saved the game without a slug"
   end
 
   test "should not save game with duplicate title" do
-    content_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Test Module")
-    Game.create!(title: "Test Game", slug: "test-slug", content_module: content_module)
-    duplicate_game = Game.new(title: "Test Game", slug: "another-slug", content_module: content_module)
+    Game.create!(title: "Test Game", slug: "test-slug")
+    duplicate_game = Game.new(title: "Test Game", slug: "another-slug")
     assert_not duplicate_game.save, "Saved the game with a duplicate title"
   end
 
@@ -29,9 +28,8 @@ class GameTest < ActiveSupport::TestCase
   end
 
   test "should not save game with duplicate slug" do
-    content_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Test Module")
-    Game.create!(title: "Test Game", slug: "test-slug", content_module: content_module)
-    duplicate_game = Game.new(title: "Another Game", slug: "test-slug", content_module: content_module)
+    Game.create!(title: "Test Game", slug: "test-slug")
+    duplicate_game = Game.new(title: "Another Game", slug: "test-slug")
     assert_not duplicate_game.save, "Saved the game with a duplicate slug"
   end
 end

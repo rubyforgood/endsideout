@@ -2,18 +2,18 @@ require "test_helper"
 
 class LinkTest < ActiveSupport::TestCase
   test "is valid with required fields" do
-    link = Link.new(content_module: content_modules(:one), title: "My Link", url: "https://example.com", link_type: "survey")
+    link = Link.new(title: "My Link", url: "https://example.com", link_type: "survey")
     assert link.valid?
   end
 
   test "is invalid without a title" do
-    link = Link.new(content_module: content_modules(:one), url: "https://example.com", link_type: "survey")
+    link = Link.new(url: "https://example.com", link_type: "survey")
     assert_not link.valid?
     assert_includes link.errors[:title], "can't be blank"
   end
 
   test "is invalid without a url" do
-    link = Link.new(content_module: content_modules(:one), title: "My Link", link_type: "survey")
+    link = Link.new(title: "My Link", link_type: "survey")
     assert_not link.valid?
     assert_includes link.errors[:url], "can't be blank"
   end
@@ -27,8 +27,12 @@ class LinkTest < ActiveSupport::TestCase
     assert_nil Content.find_by(id: content_id)
   end
 
+  test "finds its content module through its content" do
+    assert_equal content_modules(:one), links(:one).content_module
+  end
+
   test "is invalid without a link_type" do
-    link = Link.new(content_module: content_modules(:one), title: "My Link", url: "https://example.com")
+    link = Link.new(title: "My Link", url: "https://example.com")
     assert_not link.valid?
   end
 end

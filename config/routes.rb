@@ -24,7 +24,7 @@ Rails.application.routes.draw do
     end
     resources :content_modules, except: [ :show ] do
       resource :position, only: :update, module: :content_modules
-      resources :links, shallow: true, except: %i[index show]
+      resources :links, shallow: true, except: %i[index show destroy]
       resources :contents, shallow: true, only: %i[create destroy] do
         resource :position, only: :update, module: :contents
       end

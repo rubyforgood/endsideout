@@ -1,5 +1,4 @@
 class Game < ApplicationRecord
-  belongs_to :content_module, optional: true
   has_many :contents, as: :contentable, dependent: :destroy
   has_many :game_attempts, dependent: :destroy
 

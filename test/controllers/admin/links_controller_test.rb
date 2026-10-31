@@ -21,8 +21,17 @@ class Admin::LinksControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_admin_content_module_url(@mod)
   end
 
+  test "should create a content in the module along with the link" do
+    assert_difference -> { @mod.contents.count }, 1 do
+      post admin_content_module_links_url(@mod), params: {
+        link: { title: "New Survey", url: "https://example.com/new", link_type: "survey" }
+      }
+    end
+    assert_equal "New Survey", @mod.contents.last.contentable.title
+  end
+
   test "should not create with missing title" do
-    assert_no_difference "Link.count" do
+    assert_no_difference [ "Link.count", "Content.count" ] do
       post admin_content_module_links_url(@mod), params: {
         link: { title: "", url: "https://example.com", link_type: "survey" }
       }
@@ -39,12 +48,5 @@ class Admin::LinksControllerTest < ActionDispatch::IntegrationTest
     patch admin_link_url(@link), params: { link: { title: "Updated Title" } }
     assert_redirected_to edit_admin_content_module_url(@mod)
     assert_equal "Updated Title", @link.reload.title
-  end
-
-  test "should destroy link" do
-    assert_difference "Link.count", -1 do
-      delete admin_link_url(@link)
-    end
-    assert_redirected_to edit_admin_content_module_url(@mod)
   end
 end
