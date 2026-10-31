@@ -27,6 +27,13 @@ class GameTest < ActiveSupport::TestCase
     assert_empty Content.where(contentable: games(:one))
   end
 
+  test "not_in excludes games attached to the module and includes unattached games" do
+    available = Game.not_in(content_modules(:one))
+
+    assert_not_includes available, games(:one)
+    assert_includes available, games(:two)
+  end
+
   test "should not save game with duplicate slug" do
     Game.create!(title: "Test Game", slug: "test-slug")
     duplicate_game = Game.new(title: "Another Game", slug: "test-slug")

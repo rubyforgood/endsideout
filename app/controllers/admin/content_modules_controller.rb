@@ -26,7 +26,7 @@ class Admin::ContentModulesController < AdminController
 
   def edit
     @contents = @content_module.contents.includes(:contentable)
-    @available_games = Game.where.not(id: @content_module.contents.where(contentable_type: "Game").select(:contentable_id)).order(:title)
+    @available_games = Game.not_in(@content_module).order(:title)
   end
 
   def update
