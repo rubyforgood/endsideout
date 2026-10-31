@@ -28,6 +28,13 @@
                       {}, class: "select select-sm", aria: { label: "Game" } %>
                 <%= form.submit "Add game", class: "btn btn-sm btn-primary" %>
               <% end %>
+            <% elsif Game.none? %>
+              <p class="text-sm opacity-60">
+                No games yet.
+                <%= link_to "Create a game", new_admin_game_path, class: "link" %>
+              </p>
+            <% else %>
+              <p class="text-sm opacity-60">All games are in this module.</p>
             <% end %>
             <%= link_to "Add link", new_admin_content_module_link_path(@content_module), class: "btn btn-sm btn-primary" %>
           </div>

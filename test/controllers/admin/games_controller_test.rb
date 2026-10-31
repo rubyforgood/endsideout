@@ -11,6 +11,12 @@ class Admin::GamesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "index marks the Games nav link as active" do
+    get admin_games_url
+
+    assert_select "nav a.active", text: "Games"
+  end
+
   test "should get new" do
     get new_admin_game_url
     assert_response :success

@@ -77,6 +77,18 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
     get edit_admin_content_module_url(@content_module)
 
     assert_select "select[name='content[contentable_id]']", count: 0
+    assert_select "p", text: /All games are in this module\./
+  end
+
+  test "edit links to creating a game when no games exist" do
+    Content.where(contentable_type: "Game").destroy_all
+    Game.destroy_all
+
+    get edit_admin_content_module_url(@content_module)
+
+    assert_select "select[name='content[contentable_id]']", count: 0
+    assert_select "p", text: /No games yet/
+    assert_select "a.link[href='#{new_admin_game_path}']", text: "Create a game"
   end
 
   test "index shows the contents count" do

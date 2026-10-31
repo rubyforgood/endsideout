@@ -13,6 +13,10 @@
           <%= link_to "Content Modules", admin_content_modules_path,
                       class: "#{controller_path.start_with?("admin/content_modules", "admin/links", "admin/contents") ? "active" : ""}" %>
         </li>
+        <li>
+          <%= link_to "Games", admin_games_path,
+                      class: "#{controller_path.start_with?("admin/games") ? "active" : ""}" %>
+        </li>
       </ul>
       <%= button_to "Log out", admin_session_path, method: :delete, class: "btn btn-sm btn-ghost ml-2" %>
     </div>
