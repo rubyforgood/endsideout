@@ -26,6 +26,8 @@ Curriculum is delivered through **schools** and their **classrooms**. A classroo
 
 See [Architecture Decision Records (ADRs)](docs/adrs/README.md) for architectural decisions and guidelines.
 
+See [Game API](docs/game-api.md) for how games report start and finish to the LMS.
+
 ## Getting Started 🛠️
 
 Built on **Ruby on Rails 8** with Hotwire, Tailwind, SQLite, and the Solid stack (Queue/Cache/Cable), deployed with Kamal.

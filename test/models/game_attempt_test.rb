@@ -9,19 +9,19 @@ class GameAttemptTest < ActiveSupport::TestCase
     attempt.start!
 
     assert attempt.started?
+    refute attempt.finished?
   end
 
-  test "can complete a game attempt" do
+  test "can finish a game attempt" do
     attempt = GameAttempt.create(student: students(:one), game: games(:one))
     attempt.start!
 
     refute attempt.finished?
 
-    attempt.finish!("completed")
+    attempt.finish!(outcome: "win", score: 100)
 
     assert attempt.finished?
   end
-
 
   test "new game attempts require a token" do
     attempt = GameAttempt.new(student: students(:one), game: games(:one))

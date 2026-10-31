@@ -73,3 +73,5 @@ end
 gem "tailwindcss-rails", "~> 4.6"
 # Used for database seeding
 gem "faker", "~> 3.8"
+# Handles CORS for the game attempts API, which the games call from another origin
+gem "rack-cors", "~> 3.0"

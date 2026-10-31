@@ -1,5 +1,12 @@
 class GameAttemptsController < ApplicationController
+  # Games run on another origin and have no Rails session. The signed token is the credential.
+  skip_forgery_protection
+
   before_action :game_attempt_from_token, only: %i[start finish]
+
+  rescue_from ActiveSupport::MessageVerifier::InvalidSignature do
+    render json: { status: "error", message: "Invalid token" }, status: :unprocessable_entity
+  end
 
   def start
     @game_attempt.start!
@@ -7,13 +14,12 @@ class GameAttemptsController < ApplicationController
   end
 
   def finish
-    if !@game_attempt.started?
+    unless @game_attempt.started?
       render json: { status: "error", message: "Game attempt has not been started" }, status: :unprocessable_entity
       return
     end
 
-    if @game_attempt.update(game_attempt_params)
-      @game_attempt.finish!
+    if @game_attempt.finish!(game_attempt_params)
       render json: { status: "ok" }
     end
   end

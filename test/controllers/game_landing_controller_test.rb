@@ -13,21 +13,13 @@ class GameLandingControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to new_student_session_url
   end
 
-  test "show generates a game attempt token and embeds the game" do
+  test "show generates a game attempt token and embeds the external game" do
     get play_game_url(@game)
     assert_response :success
 
-    iframe_src = assert_select("iframe").first["src"]
-    token = Rack::Utils.parse_nested_query(URI(iframe_src).query)["token"]
-    assert_equal(
-      { "student_id" => @student.id, "game_id" => @game.id },
-      GameAttempt.verify_token(token)
-    )
-  end
-
-  test "embed renders the quiz mount point" do
-    get embed_game_url(@game, token: "some-token")
-    assert_response :success
-    assert_select "[data-controller='quiz']"
+    iframe_src = URI(assert_select("iframe").first["src"])
+    assert_equal Rails.configuration.x.external_games.host, iframe_src.host
+    assert_includes iframe_src.path, @game.slug
+    assert_includes iframe_src.query, "token="
   end
 end
