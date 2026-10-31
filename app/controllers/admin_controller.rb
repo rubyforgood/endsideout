@@ -2,5 +2,4 @@
 
 class AdminController < ApplicationController
   include Authentication
-  layout "application"
 end
