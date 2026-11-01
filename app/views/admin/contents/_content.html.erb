@@ -1,9 +1,11 @@
-<%# locals: (content:) %>
+<%# locals: (content:, content_iteration:) %>
 <% contentable = content.contentable %>
 <%= tag.tr id: dom_id(content) do %>
   <%= render "admin/contents/contentables/#{content.contentable_name}", contentable: contentable %>
   <td>
     <div class="flex gap-2">
+      <%= render "admin/shared/move_buttons", url: admin_content_position_path(content), name: contentable.title,
+            is_first: content_iteration.first?, is_last: content_iteration.last? %>
       <%= link_to "Edit", edit_polymorphic_path([:admin, contentable]), class: "btn btn-xs btn-primary" %>
       <% if contentable.owned_by_content? %>
         <%= button_to "Delete", admin_content_path(content), method: :delete,
