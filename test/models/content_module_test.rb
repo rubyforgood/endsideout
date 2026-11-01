@@ -88,6 +88,17 @@ class ContentModuleTest < ActiveSupport::TestCase
     assert_equal 1, first.reload.position
   end
 
+  test "moving ignores modules in other levels and programs" do
+    only = create_module("Only")
+    create_module("Moderate", level: "moderate")
+    create_module("Other", program: programs(:two))
+
+    only.move_up
+    only.move_down
+
+    assert_equal 1, only.reload.position
+  end
+
   test "cannot be destroyed when classroom modules exist" do
     content_module = ContentModule.create!(program: @program, level: "basic", name: "Assigned Module")
     classroom_program = classroom_programs(:one)
