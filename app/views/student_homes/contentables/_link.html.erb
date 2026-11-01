@@ -1,0 +1,3 @@
+<%# locals: (contentable:) %>
+<%= link_to "#{contentable.title} ↗", safe_external_url(contentable.url),
+      target: "_blank", rel: "noopener noreferrer", class: "link inline-flex items-center gap-1" %>
