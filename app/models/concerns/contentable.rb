@@ -1,7 +1,10 @@
 module Contentable
   extend ActiveSupport::Concern
 
-  included do
-    has_one :content, as: :contentable
+  # Whether the content record owns this contentable, so the contentable is destroyed together with it.
+  #
+  # @return [Boolean]
+  def owned_by_content?
+    false
   end
 end

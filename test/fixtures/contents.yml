@@ -2,10 +2,10 @@
 
 one:
   content_module: one
-  contentable_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
-  contentable_type: Game
+  contentable: one (Game)
+  position: 1
 
 two:
   content_module: one
-  contentable_id: <%= ActiveRecord::FixtureSet.identify(:one) %>
-  contentable_type: Link
+  contentable: one (Link)
+  position: 2

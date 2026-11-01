@@ -25,10 +25,20 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
   test "should create content module" do
     assert_difference "ContentModule.count" do
       post admin_content_modules_url, params: {
-        content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate", position: 1 }
+        content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate" }
       }
     end
     assert_redirected_to admin_content_modules_url
+  end
+
+  test "create appends the module and ignores a submitted position" do
+    ContentModule.create!(program: programs(:one), level: "moderate", name: "Existing")
+
+    post admin_content_modules_url, params: {
+      content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate", position: 99 }
+    }
+
+    assert_equal 2, ContentModule.find_by!(name: "New Module").position
   end
 
   test "should not create with missing name" do
@@ -46,16 +56,16 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "edit lists links ordered by position" do
-    @content_module.links.destroy_all
-    last_link = Link.create!(content_module: @content_module, title: "Last Link", url: "https://example.com/2", link_type: "survey", position: 2)
-    first_link = Link.create!(content_module: @content_module, title: "First Link", url: "https://example.com/1", link_type: "survey", position: 1)
-    Content.create!(content_module: @content_module, contentable: last_link)
-    Content.create!(content_module: @content_module, contentable: first_link)
+    content_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Ordered Module")
+    last, first = [
+      content_module.contents.create!(contentable: Link.new(title: "Last Link", url: "https://example.com/2", link_type: "survey",), position: 2),
+      content_module.contents.create!(contentable: Link.new(title: "First Link", url: "https://example.com/1", link_type: "survey"),  position: 1)
+    ]
 
-    get edit_admin_content_module_url(@content_module)
+    get edit_admin_content_module_url(content_module)
 
     hrefs = css_select("table tbody tr td:first-child a").map { |link| link["href"] }
-    assert_equal [ "https://example.com/1", "https://example.com/2" ], hrefs
+    assert_equal [ last.contentable.url, first.contentable.url ], hrefs
   end
 
   test "should update content module" do

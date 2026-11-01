@@ -1,6 +1,4 @@
 one:
-  content_module: one
   title: Health Survey
   url: https://example.com/survey/1
   link_type: survey
-  position: 1
