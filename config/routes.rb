@@ -23,7 +23,8 @@ Rails.application.routes.draw do
       post :csv_import, to: "csv#import"
     end
     resources :content_modules, except: [ :show ] do
-      resources :links, shallow: true, except: %i[index show]
+      resources :links, shallow: true, except: %i[index show destroy]
+      resources :contents, shallow: true, only: :destroy
     end
     resources :classroom_modules, only: %i[update]
   end

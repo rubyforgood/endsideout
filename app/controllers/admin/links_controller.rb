@@ -1,6 +1,6 @@
 class Admin::LinksController < AdminController
   before_action :set_content_module, only: %i[new create]
-  before_action :set_link, only: %i[edit update destroy]
+  before_action :set_link, only: %i[edit update]
 
   def new
     @link = Link.new
@@ -27,12 +27,6 @@ class Admin::LinksController < AdminController
     else
       render :edit, status: :unprocessable_entity
     end
-  end
-
-  def destroy
-    content_module = @link.content_module
-    @link.destroy!
-    redirect_to edit_admin_content_module_path(content_module), notice: "Link was successfully deleted.", status: :see_other
   end
 
   private

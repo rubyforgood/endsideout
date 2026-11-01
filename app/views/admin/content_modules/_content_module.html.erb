@@ -1,0 +1,13 @@
+<%# locals: (content_module:) %>
+<%= tag.tr id: dom_id(content_module) do %>
+  <td><%= content_module.name %></td>
+  <td><%= content_module.contents.size %></td>
+  <td>
+    <div class="flex gap-2">
+      <%= link_to "Edit", edit_admin_content_module_path(content_module), class: "btn btn-sm btn-primary" %>
+      <%= button_to "Delete", admin_content_module_path(content_module), method: :delete,
+            data: { "turbo-confirm": "Delete this module?" },
+            class: "btn btn-sm btn-error" %>
+    </div>
+  </td>
+<% end %>

@@ -31,16 +31,6 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to admin_content_modules_url
   end
 
-  test "create appends the module and ignores a submitted position" do
-    ContentModule.create!(program: programs(:one), level: "moderate", name: "Existing")
-
-    post admin_content_modules_url, params: {
-      content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate", position: 99 }
-    }
-
-    assert_equal 2, ContentModule.find_by!(name: "New Module").position
-  end
-
   test "should not create with missing name" do
     assert_no_difference "ContentModule.count" do
       post admin_content_modules_url, params: {
@@ -57,15 +47,24 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
 
   test "edit lists links ordered by position" do
     content_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Ordered Module")
-    last, first = [
-      content_module.contents.create!(contentable: Link.new(title: "Last Link", url: "https://example.com/2", link_type: "survey",), position: 2),
-      content_module.contents.create!(contentable: Link.new(title: "First Link", url: "https://example.com/1", link_type: "survey"),  position: 1)
-    ]
+    last = content_module.contents.create!(contentable: Link.new(title: "Last Link", url: "https://example.com/2", link_type: "survey"))
+    first = content_module.contents.create!(contentable: Link.new(title: "First Link", url: "https://example.com/1", link_type: "survey"))
+    first.move(:up)
 
     get edit_admin_content_module_url(content_module)
 
-    hrefs = css_select("table tbody tr td:first-child a").map { |link| link["href"] }
-    assert_equal [ last.contentable.url, first.contentable.url ], hrefs
+    row_ids = css_select("tbody tr").map { |row| row["id"] }
+    assert_equal [ dom_id(first), dom_id(last) ], row_ids
+  end
+
+  test "create appends the module and ignores a submitted position" do
+    ContentModule.create!(program: programs(:one), level: "moderate", name: "Existing")
+
+    post admin_content_modules_url, params: {
+      content_module: { name: "New Module", program_id: programs(:one).id, level: "moderate", position: 99 }
+    }
+
+    assert_equal 2, ContentModule.find_by!(name: "New Module").position
   end
 
   test "should update content module" do

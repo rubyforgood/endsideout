@@ -41,11 +41,4 @@ class Admin::LinksControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_admin_content_module_url(@mod)
     assert_equal "Updated Title", @link.reload.title
   end
-
-  test "should destroy link" do
-    assert_difference "Link.count", -1 do
-      delete admin_link_url(@link)
-    end
-    assert_redirected_to edit_admin_content_module_url(@mod)
-  end
 end
