@@ -21,7 +21,7 @@
       </thead>
       <tbody>
         <% @games.each do |game| %>
-          <tr>
+          <%= tag.tr id: dom_id(game) do %>
             <td><%= link_to game.title, [:admin, game], class: "link" %></td>
             <td><%= game.slug %></td>
             <td><%= game.content_modules.size %></td>
@@ -33,7 +33,7 @@
                       class: "btn btn-sm btn-error" %>
               </div>
             </td>
-          </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>

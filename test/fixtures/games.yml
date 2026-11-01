@@ -1,15 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-# Fixtures skip counter_cache callbacks, so game_attempts_count must match
-# the number of attempts per game in game_attempts.yml.
 one:
   title: Game 1
   slug: game-1
   description: MyText
-  game_attempts_count: 1
 
 two:
   title: Game 2
   slug: game-2
   description: MyText
-  game_attempts_count: 1

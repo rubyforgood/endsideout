@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_31_202941) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_31_202333) do
   create_table "classroom_modules", force: :cascade do |t|
     t.integer "classroom_program_id", null: false
     t.integer "content_module_id", null: false
@@ -87,7 +87,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_31_202941) do
   create_table "games", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.text "description"
-    t.integer "game_attempts_count", default: 0, null: false
     t.string "slug", null: false
     t.string "title", null: false
     t.datetime "updated_at", null: false

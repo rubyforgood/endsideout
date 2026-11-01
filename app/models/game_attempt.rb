@@ -1,6 +1,6 @@
 class GameAttempt < ApplicationRecord
   belongs_to :student
-  belongs_to :game, counter_cache: true
+  belongs_to :game
 
   validates :student_id, :game_id, presence: true
   validates :token, presence: true, uniqueness: true

@@ -28,12 +28,4 @@ class GameAttemptTest < ActiveSupport::TestCase
     assert_not attempt.valid?
     assert_includes attempt.errors[:token], "can't be blank"
   end
-
-  test "creating an attempt increments the game's attempt count" do
-    game = games(:one)
-
-    assert_difference -> { game.reload.game_attempts_count }, 1 do
-      GameAttempt.create!(student: students(:one), game: game, token: "counter-token")
-    end
-  end
 end

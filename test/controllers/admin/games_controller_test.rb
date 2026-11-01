@@ -33,27 +33,40 @@ class Admin::GamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "index shows how many modules use each game" do
+    game = create_game
+    2.times { |i| create_module("Module #{i}").contents.create!(contentable: game) }
+
     get admin_games_url
 
-    assert_select "tr:has(a[href='#{admin_game_path(@game)}']) td:nth-child(3)", text: "1"
+    assert_select "##{dom_id(game)} td", text: "2"
   end
 
   test "show lists the modules that use the game" do
-    get admin_game_url(@game)
+    game = create_game
+    content_module = create_module("Listed Module")
+    content_module.contents.create!(contentable: game)
 
-    assert_select "a[href=?]", edit_admin_content_module_path(content_modules(:one)), text: content_modules(:one).name
+    get admin_game_url(game)
+
+    assert_select "a[href=?]", edit_admin_content_module_path(content_module), text: "Listed Module"
   end
 
   test "show says when the game is in no module" do
-    get admin_game_url(games(:two))
+    game = create_game
+
+    get admin_game_url(game)
 
     assert_select "p", text: "Not in any module yet."
   end
 
   test "delete confirmation warns when the game is in modules" do
-    get admin_game_url(@game)
+    game = create_game
+    create_module("Module").contents.create!(contentable: game)
+    GameAttempt.create!(game: game, student: students(:one), token: "attempt-token")
 
-    assert_select "form[action=?] button[data-turbo-confirm=?]", admin_game_path(@game),
+    get admin_game_url(game)
+
+    assert_select "form[action=?] button[data-turbo-confirm=?]", admin_game_path(game),
       "Delete this game? It will be removed from 1 module and 1 student attempt will be deleted."
   end
 
@@ -73,5 +86,15 @@ class Admin::GamesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to admin_games_url
+  end
+
+  private
+
+  def create_game
+    Game.create!(title: "Test Game", slug: "test-game")
+  end
+
+  def create_module(name)
+    ContentModule.create!(program: programs(:one), level: "basic", name: name)
   end
 end
