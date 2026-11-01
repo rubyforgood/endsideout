@@ -23,7 +23,7 @@ class Admin::ContentModules::GamesController < AdminController
     end
 
     def load_game_options
-      @available_games = @content_module.available_games
+      @available_games = Game.available_for(@content_module)
       @any_games = Game.exists?
     end
 

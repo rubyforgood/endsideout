@@ -2,16 +2,21 @@ require "test_helper"
 
 class Admin::ContentModules::GamesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @content_module = content_modules(:one)
+    @content_module = ContentModule.create! name: "Module", program: programs(:one), level: :basic
     sign_in_as users(:one)
   end
 
   test "new offers only games not yet in the module" do
+    @content_module.contents.create! contentable: games(:one)
+    expected_games = Game.all - [ games(:one) ]
+
     get new_admin_content_module_game_url(@content_module)
 
     assert_response :success
     assert_select "form[action='#{admin_content_module_games_path(@content_module)}']" do
-      assert_select "select[name='content[contentable_id]'] option", text: games(:two).title, count: 1
+      expected_games.each do |game|
+        assert_select "select[name='content[contentable_id]'] option", text: game.title, count: 1
+      end
       assert_select "select[name='content[contentable_id]'] option", text: games(:one).title, count: 0
     end
   end
@@ -23,7 +28,7 @@ class Admin::ContentModules::GamesControllerTest < ActionDispatch::IntegrationTe
   end
 
   test "new explains when every game is attached" do
-    Content.create!(content_module: @content_module, contentable: games(:two))
+    Game.all.each { |game| @content_module.contents.create! contentable: game }
 
     get new_admin_content_module_game_url(@content_module)
 
@@ -53,7 +58,7 @@ class Admin::ContentModules::GamesControllerTest < ActionDispatch::IntegrationTe
   end
 
   test "create attaches an existing game to the module" do
-    game = games(:two)
+    game = games(:one)
 
     assert_difference -> { @content_module.contents.count }, 1 do
       post admin_content_module_games_url(@content_module), params: { content: { contentable_id: game.id } }
@@ -64,6 +69,7 @@ class Admin::ContentModules::GamesControllerTest < ActionDispatch::IntegrationTe
   end
 
   test "create does not attach the same game twice" do
+    @content_module.contents.create! contentable: games(:one)
     assert_no_difference "Content.count" do
       post admin_content_module_games_url(@content_module), params: { content: { contentable_id: games(:one).id } }
     end
