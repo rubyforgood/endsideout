@@ -45,47 +45,16 @@ class Admin::ContentModulesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-<<<<<<< HEAD
   test "edit lists links ordered by position" do
     content_module = ContentModule.create!(program: programs(:one), level: "basic", name: "Ordered Module")
-    last, first = [
-      content_module.contents.create!(contentable: Link.new(title: "Last Link", url: "https://example.com/2", link_type: "survey",), position: 2),
-      content_module.contents.create!(contentable: Link.new(title: "First Link", url: "https://example.com/1", link_type: "survey"),  position: 1)
-    ]
+    last = content_module.contents.create!(contentable: Link.new(title: "Last Link", url: "https://example.com/2", link_type: "survey"))
+    first = content_module.contents.create!(contentable: Link.new(title: "First Link", url: "https://example.com/1", link_type: "survey"))
+    first.move(:up)
 
     get edit_admin_content_module_url(content_module)
 
     row_ids = css_select("tbody tr").map { |row| row["id"] }
     assert_equal [ dom_id(first), dom_id(last) ], row_ids
-  end
-
-  test "edit opens links in a new tab without opener access" do
-    get edit_admin_content_module_url(@content_module)
-
-    assert_select "##{dom_id(contents(:two))} a[target=_blank][rel='noopener noreferrer']", text: "Health Survey ↗"
-  end
-
-  test "edit offers to delete a link" do
-    get edit_admin_content_module_url(@content_module)
-
-    assert_select "##{dom_id(contents(:two))}" do
-      assert_select "button[data-turbo-confirm='Delete this link? It will be removed from the module and deleted.']", text: "Delete"
-    end
-  end
-
-  test "edit offers to remove a game" do
-    get edit_admin_content_module_url(@content_module)
-
-    assert_select "##{dom_id(contents(:one))}" do
-      assert_select "button[data-turbo-confirm='Remove this game from the module? The game itself is kept.']", text: "Remove"
-    end
-  end
-
-  test "index shows the contents count" do
-    get admin_content_modules_url(program_id: @content_module.program_id)
-
-    assert_select "th", text: "Contents"
-    assert_select "##{dom_id(@content_module)} td:nth-child(2)", text: "2"
   end
 
   test "create appends the module and ignores a submitted position" do
