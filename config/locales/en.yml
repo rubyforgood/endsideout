@@ -29,3 +29,8 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    attributes:
+      content:
+        contentable: "Game"
+        contentable_id: "Game"

@@ -39,9 +39,10 @@ class ContentModuleTest < ActiveSupport::TestCase
   test "returns contents ordered by position" do
     content_module = create_module("With Contents")
     first, second = [
-      content_module.contents.create!(contentable: games(:one), position: 1),
-      content_module.contents.create!(contentable: games(:two), position: 2)
+      content_module.contents.create!(contentable: games(:one)),
+      content_module.contents.create!(contentable: games(:two))
     ]
+    second.move_up
     assert_equal [ second, first ], content_module.contents.to_a
   end
 

@@ -1,0 +1,45 @@
+<% content_for :title, "Add Game" %>
+
+<nav class="breadcrumbs text-sm">
+  <ul>
+    <li><%= link_to "Content Modules", admin_content_modules_path %></li>
+    <li><%= link_to @content_module.name, edit_admin_content_module_path(@content_module) %></li>
+    <li>Add Game</li>
+  </ul>
+</nav>
+<section class="py-10 flex items-center justify-center">
+  <div class="card card-border bg-base-100 shadow-md w-96">
+    <div class="card-body">
+      <h1 class="card-title">Add Game</h1>
+      <% if @available_games.any? %>
+        <%= form_with model: @content, url: admin_content_module_games_path(@content_module) do |form| %>
+          <div class="flex flex-col gap-2">
+            <% if @content.errors.any? %>
+              <div style="color: red">
+                <h2><%= pluralize(@content.errors.count, "error") %> prohibited this game from being added:</h2>
+                <ul>
+                  <% @content.errors.each do |error| %>
+                    <li><%= error.full_message %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+
+            <%= form.label :contentable_id, "Game", class: "label" %>
+            <%= form.collection_select :contentable_id, @available_games, :id, :title,
+                  { include_blank: "Select a game" }, class: "select w-full" %>
+            <%= form.submit "Add game", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      <% elsif @any_games %>
+        <p class="text-sm opacity-60">All games are in this module.</p>
+      <% else %>
+        <p class="text-sm opacity-60">
+          No games yet.
+          <%= link_to "Create a game", new_admin_game_path, class: "link" %>
+        </p>
+      <% end %>
+      <%= link_to "Back to module", edit_admin_content_module_path(@content_module), class: "link text-sm" %>
+    </div>
+  </div>
+</section>
