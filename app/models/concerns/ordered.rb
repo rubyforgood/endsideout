@@ -3,7 +3,7 @@
 module Ordered
   extend ActiveSupport::Concern
 
-  DIRECTIONS = %w[up down].freeze
+  DIRECTIONS = %i[up down].freeze
 
   included do
     scope :ordered, -> { order(:position) }
@@ -11,10 +11,11 @@ module Ordered
     before_create :append_to_siblings
   end
 
+  # @param [:up, :down] direction
   def move(direction)
     case direction
-    when "up" then move_up
-    when "down" then move_down
+    when :up then move_up
+    when :down then move_down
     else raise ArgumentError, "Unknown direction: #{direction.inspect}"
     end
   end

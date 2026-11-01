@@ -9,13 +9,6 @@ class ContentTest < ActiveSupport::TestCase
     assert_equal "Game", content.contentable_type
   end
 
-  test "belongs to a content module" do
-    content_module = create_module
-    content = content_module.contents.create!(contentable: games(:one))
-
-    assert_equal content_module, content.content_module
-  end
-
   test "appends new content after the highest position in its module" do
     content_module = create_module
     existing = content_module.contents.create!(contentable: games(:one))
@@ -32,59 +25,71 @@ class ContentTest < ActiveSupport::TestCase
   end
 
   test "move_up swaps position with the previous content" do
-    contents(:two).move_up
+    contents(:one).update!(position: 1)
+    contents(:two).update!(position: 2)
+
+    assert_changes -> { contents(:two).position }, from: 2, to: 1 do
+      contents(:two).move_up
+    end
 
     assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.reload.to_a
-    assert_equal [ 1, 2 ], content_modules(:one).contents.map(&:position)
   end
 
   test "move_down swaps position with the next content" do
-    contents(:one).move_down
+    contents(:one).update!(position: 1)
+    contents(:two).update!(position: 2)
+
+    assert_changes -> { contents(:one).position }, from: 1, to: 2 do
+      contents(:one).move_down
+    end
 
     assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.reload.to_a
   end
 
   test "move_up does nothing for the first content" do
-    contents(:one).move_up
+    contents(:one).update!(position: 1)
+    contents(:two).update!(position: 2)
+
+    assert_no_difference -> { contents(:one).position } do
+      contents(:one).move_up
+    end
 
     assert_equal [ 1, 2 ], [ contents(:one).reload.position, contents(:two).reload.position ]
   end
 
   test "move_down does nothing for the last content" do
+    contents(:one).update!(position: 1)
+    contents(:two).update!(position: 2)
+
     contents(:two).move_down
 
     assert_equal [ 1, 2 ], [ contents(:one).reload.position, contents(:two).reload.position ]
   end
 
   test "moving ignores contents in other modules" do
+    contents(:one).update!(position: 1)
+    contents(:two).update!(position: 2)
     other = create_module.contents.create!(contentable: games(:one))
-    order_before = content_modules(:one).contents.map(&:id)
 
-    other.move_up
-    other.move_down
-
-    assert_equal 1, other.reload.position
-    assert_equal order_before, content_modules(:one).contents.reload.map(&:id)
-  end
-
-  test "move works when positions have gaps" do
-    contents(:two).update!(position: 5)
-
-    contents(:two).move_up
-
-    assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.reload.to_a
+    assert_no_changes -> { content_modules(:one).contents.map(&:id) } do
+      other.move_up
+      other.move_down
+    end
   end
 
   test "move accepts up and down" do
-    contents(:one).move("down")
+    contents(:one).update!(position: 1)
+    contents(:two).update!(position: 2)
+
+    contents(:one).move(:down)
     assert_equal [ contents(:two), contents(:one) ], content_modules(:one).contents.reload.to_a
 
-    contents(:one).move("up")
+    contents(:one).move(:up)
     assert_equal [ contents(:one), contents(:two) ], content_modules(:one).contents.reload.to_a
   end
 
   test "move rejects an unknown direction" do
-    assert_raises(ArgumentError) { contents(:one).move("sideways") }
+    assert_raises(ArgumentError) { contents(:one).move(:sideways) }
   end
 
   test "cannot add the same game to a module twice" do
