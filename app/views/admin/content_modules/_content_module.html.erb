@@ -5,7 +5,7 @@
   <td>
     <div class="flex gap-2">
       <%= render "admin/shared/move_buttons", url: admin_content_module_position_path(content_module), name: content_module.name,
-            first: content_module_iteration.first?, last: content_module_iteration.last? %>
+            is_first: content_module_iteration.first?, is_last: content_module_iteration.last? %>
       <%= link_to "Edit", edit_admin_content_module_path(content_module), class: "btn btn-sm btn-primary" %>
       <%= button_to "Delete", admin_content_module_path(content_module), method: :delete,
             data: { "turbo-confirm": "Delete this module?" },

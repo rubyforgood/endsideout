@@ -3,6 +3,8 @@ require "test_helper"
 class Admin::ContentModules::PositionsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @program = programs(:one)
+    ClassroomModule.where(content_module: @program.content_modules).destroy_all
+    @program.content_modules.destroy_all
     @first = create_module("First")
     @second = create_module("Second")
     sign_in_as users(:one)
@@ -47,12 +49,11 @@ class Admin::ContentModules::PositionsControllerTest < ActionDispatch::Integrati
 
   private
 
-  # "advanced" is used because no fixture uses that level, so positions start empty.
   def create_module(name)
     ContentModule.create!(program: @program, level: "advanced", name: name)
   end
 
   def ordered_ids
-    @program.content_modules.advanced.ordered.map(&:id)
+    @program.content_modules.ordered.map(&:id)
   end
 end

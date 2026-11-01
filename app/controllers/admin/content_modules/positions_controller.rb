@@ -1,6 +1,6 @@
 class Admin::ContentModules::PositionsController < AdminController
   def update
-    direction = params.expect(:direction)
+    direction = params.expect(:direction).to_sym
     return head :unprocessable_entity unless Ordered::DIRECTIONS.include?(direction)
 
     content_module = ContentModule.find(params.expect(:content_module_id))

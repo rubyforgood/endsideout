@@ -5,7 +5,7 @@
   <td>
     <div class="flex gap-2">
       <%= render "admin/shared/move_buttons", url: admin_content_position_path(content), name: contentable.title,
-            first: content_iteration.first?, last: content_iteration.last? %>
+            is_first: content_iteration.first?, is_last: content_iteration.last? %>
       <%= link_to "Edit", edit_polymorphic_path([:admin, contentable]), class: "btn btn-xs btn-primary" %>
       <% if contentable.owned_by_content? %>
         <%= button_to "Delete", admin_content_path(content), method: :delete,
